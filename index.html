@@ -238,37 +238,111 @@
             line-height: 22px;
         }
 
-        /* --- Custom Birthday Window Styles --- */
+        /* --- Custom Window Styles --- */
         #birthday-window {
-            /* FIX: top: 50% untuk penempatan yang sempurna di tengah */
             width: 70vw; 
             max-width: 700px; 
             height: 75vh; 
             max-height: 750px; 
             
             position: absolute;
-            top: 50%; /* Dibuat sempurna di tengah */
+            top: 50%; 
             left: 50%;
-            transform: translate(-50%, -50%); /* Center the window */
+            transform: translate(-50%, -50%); 
             z-index: 20; 
             display: none; 
             flex-direction: column; 
-            min-width: 300px; /* Tambahan: Mencegah terlalu kecil di mobile */
+            min-width: 300px; 
         }
         
-        /* --- Custom Music Window Styles --- */
+        /* --- Custom Music Window Styles (Terpusat dan Ramping) --- */
         #music-window {
-            width: 300px; /* Lebar lebih kecil */
+            width: 350px; 
             max-width: 90%; 
-            height: 150px; /* Tinggi kecil */
             
             position: absolute;
-            top: 60px; /* Penempatan default di desktop */
-            left: 100px;
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
             z-index: 20; 
             display: none; 
             flex-direction: column; 
         }
+        
+        .music-player-body {
+            /* Warna latar belakang cerah untuk kontras (simulasi CRT) */
+            background-color: #eeeeee; 
+            padding: 10px 15px;
+        }
+
+        /* Gaya Tombol Putar Tengah */
+        .play-button-center {
+            width: 40px;
+            height: 40px;
+            background-color: #c0c0c0;
+            border-style: solid;
+            border-width: 2px;
+            border-color: #ffffff #000000 #000000 #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 20px;
+            line-height: 1;
+        }
+        .play-button-center:active {
+            border-color: #000000 #ffffff #ffffff #000000;
+            box-shadow: inset 1px 1px 0 #000000;
+        }
+
+        /* Gaya Slider (Simulasi) */
+        .slider-container {
+            height: 10px;
+            background-color: #c0c0c0;
+            border: 2px solid #808080;
+            margin: 0 5px;
+            position: relative;
+            cursor: pointer;
+        }
+        .slider-fill {
+            height: 100%;
+            /* Menggunakan div terpisah untuk thumb agar tidak mengganggu layout */
+            background-color: #000000; 
+            position: relative;
+        }
+        
+        .slider-thumb {
+            position: absolute;
+            top: -2px; 
+            right: -6px; /* Offset to place it correctly on the black fill */
+            width: 10px;
+            height: 14px;
+            background-color: #c0c0c0;
+            border-style: solid;
+            border-width: 1px;
+            border-color: #ffffff #000000 #000000 #ffffff;
+            cursor: pointer;
+            box-shadow: 1px 1px 0 #000000;
+        }
+        .slider-thumb:active {
+             border-color: #000000 #ffffff #ffffff #000000;
+        }
+
+        
+        /* Gaya Bar Waktu (Simulasi Bar Pemutaran) */
+        .time-bar-container {
+            background-color: #ffffff;
+            height: 4px;
+            margin-top: 5px;
+            position: relative;
+            border: 1px solid #808080;
+        }
+        .time-bar-progress {
+            height: 100%;
+            width: 0%; /* Diatur oleh JS */
+            background-color: #000080;
+        }
+
 
         /* Gaya Menu Bar sederhana */
         .menu-bar {
@@ -372,7 +446,10 @@
                 /* Lebih kecil di mobile */
                 width: 95%; 
                 height: 85vh; /* Menggunakan vh untuk memastikan tidak terpotong */
-                top: 50%; /* FIX: Sempurna di tengah untuk mobile */
+                top: 50%; /* Sempurna di tengah untuk mobile */
+            }
+             #music-window {
+                width: 95%; /* Lebih kecil di mobile */
             }
         }
     </style>
@@ -469,11 +546,11 @@ Love and best wishes,
             </div>
         </div>
         
-        <!-- MUSIC PLAYER WINDOW (music.mp3) -->
+        <!-- MUSIC PLAYER WINDOW (music.mp3) - Gaya Mirip Gambar -->
         <div id="music-window" class="w95-base">
             <!-- Title Bar -->
             <div class="w95-title-bar">
-                <div class="title-bar-text">Media Player - music.mp3</div>
+                <div class="title-bar-text">MUSIC_PLAYER.EXE</div>
                 <div class="flex">
                     <div class="w95-button" style="width: 14px; height: 14px; font-size: 12px; padding: 0;">_</div>
                     <div class="w95-button" style="width: 14px; height: 14px; font-size: 12px; padding: 0; margin-left: 2px;">&#9744;</div>
@@ -481,21 +558,52 @@ Love and best wishes,
                 </div>
             </div>
 
-            <!-- Window Content -->
-            <div class="p-3 w95-raised flex flex-col justify-center items-center h-full">
-                <!-- Status Display -->
-                <div id="playbackStatus" class="w95-sunken w-full p-2 mb-3 text-center text-sm font-bold h-8 flex items-center justify-center bg-white">
-                    SIAP
+            <!-- Elemen Audio untuk pemutaran musik (simulasi hbd.mp3) -->
+            <!-- Menggunakan SoundHelix Song 1 sebagai placeholder MP3 royalty-free -->
+            <audio id="hbdAudio" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" preload="auto" loop></audio>
+
+
+            <!-- Window Content (Background Putih/Cerah) -->
+            <div class="music-player-body flex flex-col items-center">
+                <!-- Status/Judul Lagu -->
+                <div class="text-center mb-3">
+                    <!-- Judul file sesuai permintaan pengguna -->
+                    <p id="trackTitle" class="font-bold text-sm">hbd.mp3</p>
+                    <p class="text-xs">Ulang Tahun Klasik</p>
+                </div>
+                
+                <!-- Tombol Putar (Ikon Tengah) -->
+                <div id="playPauseButton" class="play-button-center mb-5" onclick="togglePlayback()">
+                    <span id="playIcon">▶</span> 
                 </div>
 
-                <!-- Controls -->
-                <div class="flex gap-2">
-                    <button class="w95-button px-3 py-1" onclick="togglePlayback()">
-                        <span id="playIcon">▶</span> PUTAR
-                    </button>
-                    <button class="w95-button px-3 py-1" onclick="closeMusicWindow()">
-                        TUTUP
-                    </button>
+                <!-- Waktu Pemutaran -->
+                <div class="flex justify-between w-full text-xs mb-1">
+                    <span id="currentTimeDisplay">00:00</span>
+                    <span id="durationDisplay">00:00</span>
+                </div>
+                
+                <!-- Bar Waktu (Time Bar) -->
+                <div class="time-bar-container w-full mb-5">
+                    <div id="timeBarProgress" class="time-bar-progress"></div>
+                </div>
+
+                <!-- Kontrol Volume -->
+                <div class="flex items-center w-full">
+                    <!-- Ikon Speaker -->
+                    <span class="text-xl mr-2">🔊</span>
+                    
+                    <!-- Slider Volume (Fungsional) -->
+                    <div id="volumeSliderContainer" class="slider-container flex-grow">
+                        <div id="volumeSliderFill" class="slider-fill" style="width: 70%;">
+                            <div class="slider-thumb" id="volumeSliderThumb"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Status Bar di Bawah (Fungsional) -->
+                <div class="w95-sunken w-full mt-4 text-center text-xs p-1" style="height: 20px; line-height: 14px;">
+                    <span id="playbackStatus">READY</span>
                 </div>
             </div>
         </div>
@@ -550,7 +658,7 @@ Love and best wishes,
             <div class="w95-button w95-sunken mr-2 flex items-center" 
                 onclick="alert('GameTerbaik.exe: Sedang tidak aktif. Silakan main Solitaire.')"
                 style="height: 25px; line-height: 22px; padding: 0 4px;">
-                <img src="https://placehold.co/16x16/c0c0c0/000?text=G" onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2IiBmaWxsPSIjYzBjMGMwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZpbGw9IiMwMDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJjZW50cmFsIiBmb250LXNpemU9IjEycHgiIGZvbnQtZmFtaWx5PSJpbnRlciI+RzwvdGV4dD48L3N2Zz4='" alt="Icon" class="mr-1 border border-black">
+                <img src="https://placehold.co/16x16/c0c0c0/000?text=G" onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2IiBmaWxsPSIjYzBjMGMwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZpbGw9IiMwMDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJjZW50cmFsIiBmb250LXNpemU9IjEycHgiIGZvbnQtZmFtaWx5PSJpbnRlciI+RzwvdHRleHQ+PC9zdmc+'" alt="Icon" class="mr-1 border border-black">
                 GameTerbaik
             </div>
 
@@ -572,8 +680,24 @@ Love and best wishes,
         const totalDuration = 5000; // 5 detik waktu loading
         const updateInterval = 50; // Update setiap 50ms
         
+        // Elemen Audio
+        const hbdAudio = document.getElementById('hbdAudio');
+        
         let isPlaying = false; // State untuk pemutar musik
+        let isDraggingVolume = false; // State untuk drag volume
+        let isDraggingTime = false; // State untuk drag waktu
 
+        /**
+         * Mengubah detik menjadi format MM:SS.
+         * @param {number} totalSeconds - Jumlah detik.
+         * @returns {string} Format waktu MM:SS.
+         */
+        function formatTime(totalSeconds) {
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = Math.floor(totalSeconds % 60);
+            return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+        
         /**
          * Simulates the loading process by incrementally updating the progress bar.
          */
@@ -617,6 +741,11 @@ Love and best wishes,
                 
                 // Secara otomatis buka jendela ulang tahun setelah loading selesai
                 openBirthdayWindow();
+                
+                // Inisialisasi Audio dan Slider setelah DOM dimuat
+                setupVolumeSlider();
+                setupTimeBar();
+                setupAudioListeners();
             }, 500);
         }
         
@@ -650,28 +779,222 @@ Love and best wishes,
         function closeMusicWindow() {
             const musicWindow = document.getElementById('music-window');
             musicWindow.style.display = 'none';
-            // Reset playback when closing
+            // Stop playback when closing
+            if (isPlaying) {
+                hbdAudio.pause();
+            }
             isPlaying = false;
-            document.getElementById('playbackStatus').textContent = 'SIAP';
+            document.getElementById('playbackStatus').textContent = 'READY';
             document.getElementById('playIcon').textContent = '▶';
         }
         
         /**
-         * Toggles the simulated music playback status.
+         * Toggles the actual music playback status.
          */
         function togglePlayback() {
             const statusElement = document.getElementById('playbackStatus');
             const iconElement = document.getElementById('playIcon');
+            const trackTitle = document.getElementById('trackTitle');
             
             isPlaying = !isPlaying;
             
             if (isPlaying) {
-                statusElement.textContent = 'MEMUTAR: Best Song Ever.wav';
+                hbdAudio.play().catch(error => {
+                    // Tangani jika pemutaran gagal (misalnya, karena pembatasan browser tanpa interaksi pengguna)
+                    console.error("Gagal memutar audio:", error);
+                    statusElement.textContent = 'ERROR MEMUTAR';
+                    isPlaying = false;
+                    iconElement.textContent = '▶';
+                });
+                statusElement.textContent = 'MEMUTAR';
                 iconElement.textContent = '■'; // Stop icon
+                trackTitle.textContent = 'hbd.mp3';
             } else {
+                hbdAudio.pause();
                 statusElement.textContent = 'DIJEDA';
                 iconElement.textContent = '▶'; // Play icon
+                trackTitle.textContent = 'DIJEDA';
             }
+        }
+        
+        /**
+         * Mengatur logika interaksi Volume Slider (sekarang fungsional).
+         */
+        function setupVolumeSlider() {
+            const sliderContainer = document.getElementById('volumeSliderContainer');
+            const sliderFill = document.getElementById('volumeSliderFill');
+            
+            if (!sliderContainer || !sliderFill) return;
+
+            // Atur volume awal elemen audio sesuai visual (70%)
+            hbdAudio.volume = 0.7;
+
+            /**
+             * Menghitung volume berdasarkan posisi mouse/touch.
+             * @param {number} clientX - Posisi X (mouse/touch) di viewport.
+             */
+            const handleVolumeChange = (clientX) => {
+                const rect = sliderContainer.getBoundingClientRect();
+                // Hitung posisi relatif X di dalam slider container
+                let newVolumePx = clientX - rect.left;
+                
+                // Batasi nilai antara 0 dan lebar container
+                if (newVolumePx < 0) newVolumePx = 0;
+                if (newVolumePx > rect.width) newVolumePx = rect.width;
+
+                // Konversi ke persentase (0.0 hingga 1.0)
+                const volumeRatio = newVolumePx / rect.width;
+
+                // Terapkan ke elemen visual
+                sliderFill.style.width = (volumeRatio * 100) + '%';
+                
+                // Terapkan ke volume audio aktual
+                hbdAudio.volume = volumeRatio;
+                
+                // Opsional: Perbarui status teks (misalnya, di status bar)
+                const volumeLevel = Math.round(volumeRatio * 100);
+                document.getElementById('playbackStatus').textContent = `Volume: ${volumeLevel}%`;
+            };
+
+            // --- Mouse Events ---
+            sliderContainer.addEventListener('mousedown', (e) => {
+                isDraggingVolume = true;
+                handleVolumeChange(e.clientX);
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (isDraggingVolume) {
+                    e.preventDefault(); // Mencegah pemilihan teks
+                    handleVolumeChange(e.clientX);
+                }
+            });
+
+            document.addEventListener('mouseup', () => {
+                isDraggingVolume = false;
+                // Kembalikan status bar jika tidak sedang diputar
+                if (!hbdAudio.paused) {
+                    document.getElementById('playbackStatus').textContent = 'MEMUTAR';
+                }
+            });
+
+            // --- Touch Events (Untuk Mobile Responsiveness) ---
+            sliderContainer.addEventListener('touchstart', (e) => {
+                isDraggingVolume = true;
+                e.preventDefault();
+                const touch = e.touches[0];
+                handleVolumeChange(touch.clientX);
+            }, { passive: false });
+
+            document.addEventListener('touchmove', (e) => {
+                if (isDraggingVolume) {
+                    e.preventDefault();
+                    const touch = e.touches[0];
+                    handleVolumeChange(touch.clientX);
+                }
+            }, { passive: false });
+
+            document.addEventListener('touchend', () => {
+                isDraggingVolume = false;
+                if (!hbdAudio.paused) {
+                    document.getElementById('playbackStatus').textContent = 'MEMUTAR';
+                }
+            });
+        }
+        
+        /**
+         * Mengatur logika interaksi Bar Waktu.
+         */
+        function setupTimeBar() {
+            const timeBarContainer = document.querySelector('.time-bar-container');
+            
+            const handleTimeChange = (clientX) => {
+                const rect = timeBarContainer.getBoundingClientRect();
+                let newTimePx = clientX - rect.left;
+                
+                if (newTimePx < 0) newTimePx = 0;
+                if (newTimePx > rect.width) newTimePx = rect.width;
+
+                const timeRatio = newTimePx / rect.width;
+                
+                if (hbdAudio.duration) {
+                    hbdAudio.currentTime = hbdAudio.duration * timeRatio;
+                }
+            };
+            
+            // --- Mouse Events ---
+            timeBarContainer.addEventListener('mousedown', (e) => {
+                isDraggingTime = true;
+                handleTimeChange(e.clientX);
+            });
+            
+            document.addEventListener('mousemove', (e) => {
+                if (isDraggingTime) {
+                    e.preventDefault();
+                    handleTimeChange(e.clientX);
+                }
+            });
+
+            document.addEventListener('mouseup', () => {
+                isDraggingTime = false;
+            });
+            
+            // --- Touch Events ---
+            timeBarContainer.addEventListener('touchstart', (e) => {
+                isDraggingTime = true;
+                e.preventDefault();
+                const touch = e.touches[0];
+                handleTimeChange(touch.clientX);
+            }, { passive: false });
+
+            document.addEventListener('touchmove', (e) => {
+                if (isDraggingTime) {
+                    e.preventDefault();
+                    const touch = e.touches[0];
+                    handleTimeChange(touch.clientX);
+                }
+            }, { passive: false });
+
+            document.addEventListener('touchend', () => {
+                isDraggingTime = false;
+            });
+        }
+        
+        /**
+         * Mengatur event listener audio untuk memperbarui UI.
+         */
+        function setupAudioListeners() {
+            const timeBarProgress = document.getElementById('timeBarProgress');
+            const currentTimeDisplay = document.getElementById('currentTimeDisplay');
+            const durationDisplay = document.getElementById('durationDisplay');
+
+            // Setelah metadata dimuat, atur durasi
+            hbdAudio.addEventListener('loadedmetadata', () => {
+                durationDisplay.textContent = formatTime(hbdAudio.duration);
+            });
+
+            // Perbarui bilah progres dan waktu saat musik diputar
+            hbdAudio.addEventListener('timeupdate', () => {
+                if (isDraggingTime) return; // Jangan update jika pengguna sedang drag
+                
+                const ratio = hbdAudio.currentTime / hbdAudio.duration;
+                timeBarProgress.style.width = (ratio * 100) + '%';
+                currentTimeDisplay.textContent = formatTime(hbdAudio.currentTime);
+            });
+            
+            // Atur ulang saat musik selesai
+            hbdAudio.addEventListener('ended', () => {
+                isPlaying = false;
+                document.getElementById('playbackStatus').textContent = 'SELESAI';
+                document.getElementById('playIcon').textContent = '▶';
+                timeBarProgress.style.width = '100%'; 
+                currentTimeDisplay.textContent = durationDisplay.textContent;
+            });
+
+            // Tangani error pemuatan
+            hbdAudio.addEventListener('error', () => {
+                document.getElementById('playbackStatus').textContent = 'ERROR MEMUAT AUDIO';
+                console.error("Gagal memuat audio dari URL placeholder.");
+            });
         }
 
 
