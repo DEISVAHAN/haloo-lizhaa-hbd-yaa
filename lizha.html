@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Situs Web Luar Biasa Saya - Windows 95 Style</title>
+    <!-- Tailwind CSS for basic structure and responsive utility -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Menggunakan font yang menyerupai antarmuka Windows 95 */
+        @font-face {
+            font-family: 'W95Font';
+            /* Ini hanya placeholder, font yang lebih dekat adalah 'MS Sans Serif' atau 'Chicago', 
+               tapi kita akan menggunakan 'Inter' dan meniru gayanya. */
+            src: url('https://fonts.gstatic.com/s/inter/v12/UuJ1lP9w3x-T3L2W8g2P0A.woff2') format('woff2');
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        body {
+            font-family: 'W95Font', 'Inter', sans-serif;
+            background-color: #0000a8; /* Warna Biru Klasik */
+            /* Mengatur body untuk menengahkan loading dialog */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0; /* Menghilangkan padding agar desktop fullscreen */
+            overflow: hidden;
+            font-size: 11px;
+        }
+        
+        /* --- Global W95 Style --- */
+        .w95-base {
+            background-color: #c0c0c0; /* Abu-abu Ikonik */
+            border-style: solid;
+            border-width: 2px;
+            border-color: #ffffff #808080 #808080 #ffffff;
+            box-shadow: 1px 1px 0 #000000;
+        }
+
+        .w95-raised {
+            border-style: solid;
+            border-width: 2px;
+            border-color: #ffffff #808080 #808080 #ffffff;
+        }
+
+        .w95-sunken {
+            border-style: solid;
+            border-width: 2px;
+            border-color: #808080 #ffffff #ffffff #808080;
+            box-shadow: inset 1px 1px 0 #000000;
+        }
+
+        .w95-title-bar {
+            background-color: #000080; /* Biru Gelap Ikonik */
+            color: white;
+            padding: 2px 4px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: default;
+        }
+
+        .w95-button {
+            background-color: #c0c0c0;
+            color: #000000;
+            font-size: 12px;
+            padding: 1px 6px;
+            margin: 0 1px;
+            cursor: pointer;
+            line-height: normal;
+            min-width: 16px;
+            text-align: center;
+            border-style: solid;
+            border-width: 2px;
+            border-color: #ffffff #000000 #000000 #ffffff;
+        }
+
+        .w95-button:active {
+            border-color: #000000 #ffffff #ffffff #000000;
+            box-shadow: inset 1px 1px 0 #000000;
+        }
+
+        /* --- LOADING SCREEN STYLES --- */
+        #loading-dialog {
+            position: fixed;
+            z-index: 9999;
+            width: 350px;
+            max-width: 90%;
+            text-align: center;
+            padding: 2px;
+        }
+        
+        .dialog-content {
+            padding: 15px;
+            background-color: #c0c0c0;
+        }
+
+        /* Progress Bar Container (using w95-sunken style) */
+        .progress-bar-container {
+            height: 18px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background-color: #00ff00; /* Hijau Terang */
+            transition: width 0.3s linear;
+        }
+
+        /* Animation for the progress bar (marching ants effect) */
+        .progress-bar.active {
+            background-image: linear-gradient(
+                -45deg,
+                rgba(255, 255, 255, 0.15) 25%,
+                transparent 25%,
+                transparent 50%,
+                rgba(255, 255, 255, 0.15) 50%,
+                rgba(255, 255, 255, 0.15) 75%,
+                transparent 75%,
+                transparent
+            );
+            background-size: 15px 15px;
+            animation: progress-stripes 1s linear infinite;
+        }
+
+        @keyframes progress-stripes {
+            0% { background-position: 15px 0; }
+            100% { background-position: 0 0; }
+        }
+
+        /* --- DESKTOP COMPONENTS --- */
+        .desktop {
+            display: none; /* Awalnya disembunyikan */
+            width: 100vw;
+            height: 100vh; 
+            background-color: #0000a8; /* Warna Biru Klasik */
+            position: relative;
+            box-shadow: none; /* Override box-shadow from w95-base */
+            padding: 5px;
+            box-sizing: border-box;
+            flex-direction: column; 
+            align-items: flex-start;
+            justify-content: flex-start;
+        }
+        
+        /* Scrollbar style (Meniru tampilan Win95) */
+        .w95-scroll {
+            scrollbar-width: thin;
+            scrollbar-color: #808080 #c0c0c0;
+        }
+
+        .w95-scroll::-webkit-scrollbar {
+            width: 16px;
+            height: 16px;
+        }
+
+        .w95-scroll::-webkit-scrollbar-thumb {
+            background-color: #c0c0c0;
+            border-style: solid;
+            border-width: 1px;
+            border-color: #ffffff #808080 #808080 #ffffff;
+        }
+
+        .w95-scroll::-webkit-scrollbar-track {
+            background-color: #c0c0c0;
+        }
+
+        /* Ikon di Desktop */
+        .desktop-icon {
+            color: white;
+            text-align: center;
+            width: 60px;
+            margin: 10px 10px;
+            cursor: pointer;
+            user-select: none;
+            text-shadow: 1px 1px 0 #000000;
+        }
+
+        .icon-box {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            background-color: #c0c0c0;
+            border: 1px solid #000000;
+            margin-bottom: 4px;
+            font-size: 20px;
+            line-height: 32px;
+        }
+
+        /* Bilah Tugas (Taskbar) */
+        .taskbar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 28px;
+            background-color: #c0c0c0;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+            border-top: 2px solid #ffffff;
+        }
+
+        .start-button {
+            width: 50px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            border-style: solid;
+            border-width: 2px;
+            border-color: #ffffff #000000 #000000 #ffffff;
+            height: 22px;
+            line-height: 1;
+            padding: 0 4px;
+            margin-right: 4px;
+            background: #c0c0c0;
+            cursor: pointer;
+        }
+
+        .start-button:active {
+            border-color: #000000 #ffffff #ffffff #000000;
+            box-shadow: inset 1px 1px 0 #000000;
+        }
+
+        .taskbar-time {
+            height: 22px;
+            padding: 0 6px;
+            font-size: 12px;
+            line-height: 22px;
+        }
+
+        /* --- Custom Birthday Window Styles --- */
+        #birthday-window {
+            /* FIX: top: 50% untuk penempatan yang sempurna di tengah */
+            width: 70vw; 
+            max-width: 700px; 
+            height: 75vh; 
+            max-height: 750px; 
+            
+            position: absolute;
+            top: 50%; /* Dibuat sempurna di tengah */
+            left: 50%;
+            transform: translate(-50%, -50%); /* Center the window */
+            z-index: 20; 
+            display: none; 
+            flex-direction: column; 
+            min-width: 300px; /* Tambahan: Mencegah terlalu kecil di mobile */
+        }
+        
+        /* --- Custom Music Window Styles --- */
+        #music-window {
+            width: 300px; /* Lebar lebih kecil */
+            max-width: 90%; 
+            height: 150px; /* Tinggi kecil */
+            
+            position: absolute;
+            top: 60px; /* Penempatan default di desktop */
+            left: 100px;
+            z-index: 20; 
+            display: none; 
+            flex-direction: column; 
+        }
+
+        /* Gaya Menu Bar sederhana */
+        .menu-bar {
+            background-color: #c0c0c0;
+            padding: 2px 0;
+            display: flex;
+            border-bottom: 1px solid #808080;
+            margin-bottom: 5px;
+        }
+        .menu-item {
+            padding: 0 5px;
+            cursor: default;
+        }
+        .menu-item u {
+            text-decoration: none;
+            border-bottom: 1px solid black; /* Garis bawah simulasi */
+        }
+
+        /* Pembungkus Konten Jendela (abu-abu) */
+        .window-content-wrapper {
+            background-color: #c0c0c0;
+            padding: 4px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header Biru "HAPPY BIRTHDAY" */
+        .birthday-header {
+            background-color: #000080; 
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #808080;
+            box-shadow: inset 1px 1px 0 #ffffff, inset -1px -1px 0 #000000;
+        }
+
+        .birthday-title {
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            text-shadow: 1px 1px #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Teks Utama "SELAMAT ULANG TAHUN KE-27" */
+        .birthday-main-text {
+            font-size: 24px; /* Dibuat sedikit lebih besar */
+            font-weight: 900;
+            color: #ffcc00; /* Warna Emas/Kuning */
+            text-align: center;
+            margin-bottom: 15px; /* Sedikit dikurangi agar lebih padat */
+            padding-top: 10px;
+            text-shadow: 2px 2px #000080; /* Shadow lebih jelas */
+        }
+
+        /* FIX: Class baru untuk menggantikan inline style di wrapper pesan */
+        .message-container {
+            padding: 5px 10px; 
+            flex-grow: 1; 
+            display: flex; 
+            flex-direction: column;
+        }
+        .message-label {
+            color: #000080; 
+            font-weight: bold; 
+            margin-bottom: 5px; 
+            font-family: 'W95Font', sans-serif; 
+            font-size: 11px;
+        }
+
+        /* Area Pesan (Simulasi text editor/notepad) */
+        .message-box-area {
+            border: 1px solid #808080;
+            background-color: white; 
+            padding: 10px;
+            text-align: left;
+            flex-grow: 1; 
+            overflow-y: auto;
+            font-size: 12px;
+            line-height: 1.4;
+            white-space: pre-wrap; /* Mempertahankan format teks */
+            font-family: 'Courier New', monospace; /* Font monospasi untuk editor teks */
+        }
+
+
+        /* Responsif: Pastikan elemen terlihat bagus di perangkat kecil */
+        @media (max-width: 768px) {
+            .desktop {
+                height: 90vh;
+                margin-top: 10px;
+                padding: 5px;
+            }
+            #loading-dialog {
+                width: 90%;
+            }
+            #birthday-window {
+                /* Lebih kecil di mobile */
+                width: 95%; 
+                height: 85vh; /* Menggunakan vh untuk memastikan tidak terpotong */
+                top: 50%; /* FIX: Sempurna di tengah untuk mobile */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. LOADING SCREEN (Awalnya terlihat) -->
+    <div id="loading-dialog" class="loading-dialog w95-base">
+        <!-- Title Bar -->
+        <div class="w95-title-bar">
+            <div class="title-bar-text">Memuat Sistem Berkas...</div>
+            <div class="flex">
+                <div class="w95-button" style="width: 14px; height: 14px; font-size: 12px; padding: 0;">X</div>
+            </div>
+        </div>
+
+        <div class="dialog-content">
+            <p style="font-size: 14px; margin-bottom: 15px;">
+                <strong>Memuat Antarmuka Desktop 32-bit (Simulasi)...</strong>
+            </p>
+            <!-- Progress Bar (Menggunakan w95-sunken) -->
+            <div class="progress-bar-container w95-sunken">
+                <div id="progressBar" class="progress-bar active"></div>
+            </div>
+            <p id="progressText" style="margin-top: 10px; font-size: 12px;">0% Selesai</p>
+        </div>
+    </div>
+
+    <!-- 2. DESKTOP SCREEN (Awalnya tersembunyi) -->
+    <div class="desktop" id="desktop">
+        
+        <!-- HAPPY BIRTHDAY WINDOW (present.exe) -->
+        <div id="birthday-window" class="w95-base">
+            <!-- Title Bar -->
+            <div class="w95-title-bar">
+                <div class="title-bar-text">HAPPY BIRTHDAY.TXT</div>
+                <div class="flex">
+                    <!-- Minimize, Maximize, Close buttons are dummy, but Close triggers the function -->
+                    <div class="w95-button" style="width: 14px; height: 14px; font-size: 12px; padding: 0;">_</div>
+                    <div class="w95-button" style="width: 14px; height: 14px; font-size: 12px; padding: 0; margin-left: 2px;">&#9744;</div>
+                    <div class="w95-button" style="width: 14px; height: 14px; font-size: 12px; padding: 0; margin-left: 2px;" onclick="closeBirthdayWindow()">X</div>
+                </div>
+            </div>
+
+            <!-- Menu Bar (Simplified) -->
+            <div class="menu-bar">
+                <span class="menu-item"><u>F</u>ile</span>
+                <span class="menu-item"><u>E</u>dit</span>
+                <span class="menu-item"><u>V</u>iew</span>
+                <span class="menu-item"><u>H</u>elp</span>
+            </div>
+
+            <!-- Window Content -->
+            <div class="window-content-wrapper w95-scroll">
+                
+                <div class="birthday-header">
+                    <div class="birthday-title">
+                        <span style="font-size: 20px; margin-right: 5px;">🎉</span>
+                        <span style="font-size: 20px; color: #ff4500; margin-right: 5px;">❤️</span>
+                        HAPPY BIRTHDAY
+                        <span style="font-size: 20px; color: #ff4500; margin-left: 5px;">❤️</span>
+                        <span style="font-size: 20px; margin-left: 5px;">🎉</span>
+                    </div>
+                </div>
+
+                <div class="birthday-main-text">
+                    SELAMAT ULANG TAHUN KE-27
+                </div>
+
+                <!-- Message Box (Simulated Text Area) - Menggunakan class baru -->
+                <div class="message-container">
+                    <div class="message-label">MESSAGE.TXT</div>
+                    <div class="message-box-area w95-sunken" style="flex-grow: 1;">
+Haiii, selamat ulang tahun! Hari ini aku pengen kamu 
+ngerasain semua vibes positif dan kebahagiaan yang cuma bisa 
+didapetin kalo kamu ada di sini. Semoga segala keinginanmu 
+tercapai, apalagi yang kocak-kocak, jangan gak biasa, karena kamu 
+tuh unik banget! Aku selalu bersyukur bisa ngeliat kamu jadi 
+versi terbaik dari dirimu, yang kadang-kadang lucu banget pas 
+lagi laper, tapi juga selalu bikin aku tersenyum tanpa henti.
+
+Makasih udah jadi temen curhat, partner in crime, dan sumber 
+inspirasi sehari-hari. Semoga tahun ini kamu makin kece, makin 
+banyak momen bahagia, dan makin dicintai, karena kamu emang 
+pantas dapetin semua itu. Jangan lupa, kita bakal terus jalan 
+bareng, ngejar mimpi, dan ngelewatin segala drama hidup dengan 
+ketawa paling kenceng.
+
+Love and best wishes,
+- Teman Terbaikmu
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        
+        <!-- MUSIC PLAYER WINDOW (music.mp3) -->
+        <div id="music-window" class="w95-base">
+            <!-- Title Bar -->
+            <div class="w95-title-bar">
+                <div class="title-bar-text">Media Player - music.mp3</div>
+                <div class="flex">
+                    <div class="w95-button" style="width: 14px; height: 14px; font-size: 12px; padding: 0;">_</div>
+                    <div class="w95-button" style="width: 14px; height: 14px; font-size: 12px; padding: 0; margin-left: 2px;">&#9744;</div>
+                    <div class="w95-button" style="width: 14px; height: 14px; font-size: 12px; padding: 0; margin-left: 2px;" onclick="closeMusicWindow()">X</div>
+                </div>
+            </div>
+
+            <!-- Window Content -->
+            <div class="p-3 w95-raised flex flex-col justify-center items-center h-full">
+                <!-- Status Display -->
+                <div id="playbackStatus" class="w95-sunken w-full p-2 mb-3 text-center text-sm font-bold h-8 flex items-center justify-center bg-white">
+                    SIAP
+                </div>
+
+                <!-- Controls -->
+                <div class="flex gap-2">
+                    <button class="w95-button px-3 py-1" onclick="togglePlayback()">
+                        <span id="playIcon">▶</span> PUTAR
+                    </button>
+                    <button class="w95-button px-3 py-1" onclick="closeMusicWindow()">
+                        TUTUP
+                    </button>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Ikon Desktop -->
+        <div class="flex flex-col items-start p-2">
+            
+            <!-- ICON: present.exe -->
+            <!-- Menggunakan fungsi openBirthdayWindow() yang baru -->
+            <div class="desktop-icon" onclick="openBirthdayWindow()">
+                <div class="icon-box">🎁</div>
+                <span class="text-xs">present.exe</span>
+            </div>
+
+            <!-- ICON: music.mp3 -->
+            <!-- TELAH DIPERBARUI: Sekarang memanggil jendela Media Player baru -->
+            <div class="desktop-icon" onclick="openMusicWindow()">
+                <div class="icon-box">🎧</div>
+                <span class="text-xs">music.mp3</span>
+            </div>
+
+            <!-- ICON: cake.me -->
+            <div class="desktop-icon" onclick="alert('ERROR: cake.me - File terlalu manis untuk sistem ini. Silakan makan kuenya secara fisik!')">
+                <div class="icon-box">🎂</div>
+                <span class="text-xs">cake.me</span>
+            </div>
+            
+            <!-- ICON: gallery.jpg -->
+            <div class="desktop-icon" onclick="alert('ERROR: gallery.jpg terlalu besar (30MB!). Sistem meminta Anda untuk mencetak foto saja.')">
+                <div class="icon-box">🖼️</div>
+                <span class="text-xs">gallery.jpg</span>
+            </div>
+        </div>
+        
+        <!-- Taskbar -->
+        <div class="taskbar">
+            <div class="start-button w95-raised" onclick="alert('Menu Start: Tidak ada yang terjadi. Semua sudah ada di Desktop!')">
+                <span class="mr-1">
+                    <!-- Icon Windows Logo Placeholder -->
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 1L1 15L15 15L15 1L1 1Z" fill="#C0C0C0" stroke="black" stroke-width="1"/>
+                        <path d="M1 1L15 1L15 15L1 15L1 1Z" fill="#C0C0C0" stroke="black" stroke-width="1"/>
+                        <path d="M3 3H13V13H3V3Z" fill="#808080" stroke="black" stroke-width="1"/>
+                        <rect x="5" y="5" width="6" height="6" fill="#000080"/>
+                    </svg>
+                </span>
+                Start
+            </div>
+            
+            <!-- Tombol Taskbar Dummy -->
+            <div class="w95-button w95-sunken mr-2 flex items-center" 
+                onclick="alert('GameTerbaik.exe: Sedang tidak aktif. Silakan main Solitaire.')"
+                style="height: 25px; line-height: 22px; padding: 0 4px;">
+                <img src="https://placehold.co/16x16/c0c0c0/000?text=G" onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2IiBmaWxsPSIjYzBjMGMwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZpbGw9IiMwMDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJjZW50cmFsIiBmb250LXNpemU9IjEycHgiIGZvbnQtZmFtaWx5PSJpbnRlciI+RzwvdGV4dD48L3N2Zz4='" alt="Icon" class="mr-1 border border-black">
+                GameTerbaik
+            </div>
+
+            <div class="flex-grow"></div> <!-- Spacer -->
+
+            <div class="w95-sunken taskbar-time">
+                <span id="currentTime">00:00 AM</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        const loadingDialog = document.getElementById('loading-dialog');
+        const desktop = document.getElementById('desktop');
+        
+        let progress = 0;
+        const totalDuration = 5000; // 5 detik waktu loading
+        const updateInterval = 50; // Update setiap 50ms
+        
+        let isPlaying = false; // State untuk pemutar musik
+
+        /**
+         * Simulates the loading process by incrementally updating the progress bar.
+         */
+        function startLoading() {
+            // Pastikan dialog loading terlihat dan desktop tersembunyi
+            loadingDialog.style.display = 'block';
+            desktop.style.display = 'none';
+            document.body.style.padding = '0'; // Hapus padding body selama loading
+            
+            const startTime = Date.now();
+            
+            const interval = setInterval(() => {
+                const elapsed = Date.now() - startTime;
+                progress = Math.min(100, Math.floor((elapsed / totalDuration) * 100));
+
+                progressBar.style.width = progress + '%';
+                progressText.textContent = progress + '% Selesai';
+
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    progressBar.classList.remove('active');
+                    onLoadingComplete();
+                }
+            }, updateInterval);
+        }
+
+        /**
+         * Hides the loading dialog and shows the desktop environment.
+         */
+        function onLoadingComplete() {
+            // Beri jeda sebentar untuk menampilkan 100%
+            setTimeout(() => {
+                loadingDialog.style.display = 'none';
+                
+                // Ubah tata letak body untuk menampilkan desktop penuh
+                document.body.style.display = 'block';
+                document.body.style.padding = '0';
+                
+                // Tampilkan desktop
+                desktop.style.display = 'flex'; 
+                
+                // Secara otomatis buka jendela ulang tahun setelah loading selesai
+                openBirthdayWindow();
+            }, 500);
+        }
+        
+        /**
+         * Opens the custom Happy Birthday window.
+         */
+        function openBirthdayWindow() {
+            const birthdayWindow = document.getElementById('birthday-window');
+            birthdayWindow.style.display = 'flex';
+        }
+
+        /**
+         * Closes the custom Happy Birthday window.
+         */
+        function closeBirthdayWindow() {
+            const birthdayWindow = document.getElementById('birthday-window');
+            birthdayWindow.style.display = 'none';
+        }
+        
+        /**
+         * Opens the Music Player window.
+         */
+        function openMusicWindow() {
+            const musicWindow = document.getElementById('music-window');
+            musicWindow.style.display = 'flex';
+        }
+
+        /**
+         * Closes the Music Player window.
+         */
+        function closeMusicWindow() {
+            const musicWindow = document.getElementById('music-window');
+            musicWindow.style.display = 'none';
+            // Reset playback when closing
+            isPlaying = false;
+            document.getElementById('playbackStatus').textContent = 'SIAP';
+            document.getElementById('playIcon').textContent = '▶';
+        }
+        
+        /**
+         * Toggles the simulated music playback status.
+         */
+        function togglePlayback() {
+            const statusElement = document.getElementById('playbackStatus');
+            const iconElement = document.getElementById('playIcon');
+            
+            isPlaying = !isPlaying;
+            
+            if (isPlaying) {
+                statusElement.textContent = 'MEMUTAR: Best Song Ever.wav';
+                iconElement.textContent = '■'; // Stop icon
+            } else {
+                statusElement.textContent = 'DIJEDA';
+                iconElement.textContent = '▶'; // Play icon
+            }
+        }
+
+
+        // Setel waktu di Taskbar
+        function updateTime() {
+            const now = new Date();
+            let hours = now.getHours();
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // Jam '0' harusnya '12'
+            document.getElementById('currentTime').textContent = `${hours}:${minutes} ${ampm}`;
+        }
+        
+        // Start the loading simulation and time update when the window loads
+        window.onload = () => {
+            startLoading();
+            setInterval(updateTime, 1000);
+            updateTime();
+        };
+
+        // Prevent controls from doing anything (for aesthetics)
+        document.querySelectorAll('.w95-button, .start-button').forEach(button => {
+            button.addEventListener('click', (e) => {
+                // Biarkan event pada tombol 'X' (closeWindow), ikon desktop, dan alert start button bekerja
+                const isControl = e.currentTarget.textContent.trim() === '_' || e.currentTarget.textContent.trim() === '☐';
+                const isMenu = e.currentTarget.classList.contains('menu-item');
+                
+                if (isControl || isMenu) {
+                    e.preventDefault();
+                    console.log('Fungsi tombol diklik, tapi ini hanya simulasi!');
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>
