@@ -558,9 +558,11 @@ Love and best wishes,
                 </div>
             </div>
 
-            <!-- Elemen Audio untuk pemutaran musik (simulasi hbd.mp3) -->
-            <!-- Menggunakan SoundHelix Song 1 sebagai placeholder MP3 royalty-free -->
-            <audio id="hbdAudio" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" preload="auto" loop></audio>
+            <!-- Elemen Audio untuk pemutaran musik -->
+            <!-- PENTING: Jalur ke hbd.mp3 diubah menjadi relatif (./hbd.mp3). 
+                 File MP3 harus berada di direktori yang sama saat di-deploy. 
+                 Saat ini menggunakan URL placeholder karena lingkungan ini tidak mendukung unggahan file. -->
+            <audio id="hbdAudio" src="./hbd.mp3" preload="auto" loop></audio>
 
 
             <!-- Window Content (Background Putih/Cerah) -->
@@ -796,13 +798,23 @@ Love and best wishes,
             const iconElement = document.getElementById('playIcon');
             const trackTitle = document.getElementById('trackTitle');
             
+            // Periksa apakah audio sudah dimuat (durasi tersedia)
+            if (isNaN(hbdAudio.duration)) {
+                 // Jika durasi NaN, berarti file belum dimuat/tidak ditemukan.
+                 // NOTE: Dalam lingkungan riil, ini akan menampilkan "ERROR MEMUAT AUDIO" 
+                 // jika file hbd.mp3 tidak ada.
+                statusElement.textContent = 'ERROR: hbd.mp3 TIDAK DITEMUKAN';
+                trackTitle.textContent = 'hbd.mp3 (Gagal)';
+                return;
+            }
+            
             isPlaying = !isPlaying;
             
             if (isPlaying) {
                 hbdAudio.play().catch(error => {
                     // Tangani jika pemutaran gagal (misalnya, karena pembatasan browser tanpa interaksi pengguna)
                     console.error("Gagal memutar audio:", error);
-                    statusElement.textContent = 'ERROR MEMUTAR';
+                    statusElement.textContent = 'ERROR MEMUTAR (DIJEDA)';
                     isPlaying = false;
                     iconElement.textContent = '▶';
                 });
@@ -916,7 +928,7 @@ Love and best wishes,
 
                 const timeRatio = newTimePx / rect.width;
                 
-                if (hbdAudio.duration) {
+                if (hbdAudio.duration && isFinite(hbdAudio.duration)) {
                     hbdAudio.currentTime = hbdAudio.duration * timeRatio;
                 }
             };
@@ -969,16 +981,25 @@ Love and best wishes,
 
             // Setelah metadata dimuat, atur durasi
             hbdAudio.addEventListener('loadedmetadata', () => {
-                durationDisplay.textContent = formatTime(hbdAudio.duration);
+                 // Periksa apakah durasi valid sebelum ditampilkan
+                if (isFinite(hbdAudio.duration)) {
+                    durationDisplay.textContent = formatTime(hbdAudio.duration);
+                    document.getElementById('playbackStatus').textContent = 'READY';
+                } else {
+                    // Jika metadata dimuat tetapi durasi tidak valid (misalnya, stream/error)
+                    durationDisplay.textContent = '00:00';
+                }
             });
 
             // Perbarui bilah progres dan waktu saat musik diputar
             hbdAudio.addEventListener('timeupdate', () => {
                 if (isDraggingTime) return; // Jangan update jika pengguna sedang drag
                 
-                const ratio = hbdAudio.currentTime / hbdAudio.duration;
-                timeBarProgress.style.width = (ratio * 100) + '%';
-                currentTimeDisplay.textContent = formatTime(hbdAudio.currentTime);
+                if (isFinite(hbdAudio.duration) && hbdAudio.duration > 0) {
+                    const ratio = hbdAudio.currentTime / hbdAudio.duration;
+                    timeBarProgress.style.width = (ratio * 100) + '%';
+                    currentTimeDisplay.textContent = formatTime(hbdAudio.currentTime);
+                }
             });
             
             // Atur ulang saat musik selesai
@@ -991,9 +1012,10 @@ Love and best wishes,
             });
 
             // Tangani error pemuatan
-            hbdAudio.addEventListener('error', () => {
-                document.getElementById('playbackStatus').textContent = 'ERROR MEMUAT AUDIO';
-                console.error("Gagal memuat audio dari URL placeholder.");
+            hbdAudio.addEventListener('error', (e) => {
+                const statusElement = document.getElementById('playbackStatus');
+                statusElement.textContent = 'ERROR MEMUAT FILE hbd.mp3';
+                console.error("Gagal memuat audio. Pastikan 'hbd.mp3' berada di direktori yang sama.", e);
             });
         }
 
