@@ -846,7 +846,7 @@ Love and best wishes,
                     <button class="w95-button" onclick="closePrintSimulation()">
                         Tutup
                     </button>
-                    <!-- Tombol Unduh BARU -->
+                    <!-- Tombol Unduh -->
                     <button class="w95-button" onclick="downloadStrips()">
                         ⬇️ Unduh Semua (.png)
                     </button>
@@ -1324,6 +1324,8 @@ Love and best wishes,
         
         /**
          * Mengonversi semua photo strip menjadi gambar PNG dan memicu unduhan.
+         * Telah diperbaiki dengan menambahkan dimensi width/height eksplisit ke html2canvas
+         * untuk menghindari masalah rasio aspek ("gepeng").
          */
         async function downloadStrips() {
             const strips = document.querySelectorAll('#photoStripContainer .photo-strip-base');
@@ -1340,21 +1342,26 @@ Love and best wishes,
 
             for (let i = 0; i < strips.length; i++) {
                 const strip = strips[i];
+                
+                // FIX: Dapatkan dimensi aktual elemen untuk memastikan rasio aspek benar
+                const width = strip.offsetWidth;
+                const height = strip.offsetHeight;
+                
                 // Hilangkan efek hover/transformasi sebelum mengonversi
                 strip.style.transform = 'none'; 
                 
-                // html2canvas options: scale for better resolution, useCORS for external images
                 await html2canvas(strip, { 
-                    scale: 3, 
+                    scale: 3, // Skala tinggi untuk resolusi yang lebih baik
                     useCORS: true,
-                    // Pastikan background color strip template dipertahankan
-                    backgroundColor: null 
+                    backgroundColor: null,
+                    // Tambahkan dimensi eksplisit untuk mencegah rasio aspek gepeng
+                    width: width,
+                    height: height,
                 }).then(canvas => {
-                    // Buat link unduhan
+                    // Gunakan PNG untuk kualitas terbaik
                     const imageURL = canvas.toDataURL("image/png");
                     const link = document.createElement('a');
                     
-                    // Gunakan nama file yang berbeda untuk setiap strip
                     let filename = `PhotoStrip_${i + 1}_${new Date().getFullYear()}.png`;
                     
                     link.href = imageURL;
