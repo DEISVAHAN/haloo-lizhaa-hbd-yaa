@@ -114,7 +114,7 @@
             transition: width 0.3s linear;
         }
 
-        /* Animation for the progress bar (marching ants effect) */
+        /* Progress bar animation (marching ants effect) */
         .progress-bar.active {
             background-image: linear-gradient(
                 -45deg,
@@ -239,7 +239,9 @@
         }
 
         /* --- Custom Window Styles --- */
+        /* Jendela Ulang Tahun dan Kue */
         #birthday-window {
+            /* Gaya Jendela Ulang Tahun (PRESENT.EXE) */
             width: 70vw; 
             max-width: 700px; 
             height: 75vh; 
@@ -254,8 +256,80 @@
             flex-direction: column; 
             min-width: 300px; 
         }
+
+        .menu-bar {
+            background-color: #c0c0c0;
+            padding: 2px;
+            border-bottom: 1px solid #808080;
+        }
+
+        .menu-item {
+            margin-right: 10px;
+            cursor: default;
+        }
         
-        /* --- Custom Music Window Styles (Terpusat dan Ramping) --- */
+        .window-content-wrapper {
+            padding: 10px;
+            background-color: #c0c0c0;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            overflow: auto;
+        }
+        
+        .birthday-header {
+            text-align: center;
+            margin-bottom: 15px;
+            padding: 5px;
+            border-bottom: 2px solid #808080;
+        }
+        
+        .birthday-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #000080;
+            text-shadow: 1px 1px 0 #ffffff;
+        }
+        
+        .birthday-main-text {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #cc0000;
+            margin-bottom: 20px;
+            padding: 5px;
+            border: 2px dashed #cc0000;
+            background-color: #ffffe0;
+        }
+        
+        .message-container {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+        
+        .message-label {
+            font-size: 11px;
+            font-weight: bold;
+            margin-bottom: 2px;
+            color: #000000;
+        }
+
+        /* Area Pesan (Simulasi text editor/notepad) */
+        .message-box-area {
+            background-color: white; 
+            padding: 10px;
+            text-align: left;
+            flex-grow: 1; 
+            overflow-y: auto;
+            font-size: 12px;
+            line-height: 1.4;
+            white-space: pre-wrap; /* Mempertahankan format teks */
+            font-family: 'Courier New', monospace; /* Font monospasi untuk editor teks */
+            min-height: 150px;
+        }
+
+        /* Jendela Musik */
         #music-window {
             width: 350px; 
             max-width: 90%; 
@@ -268,13 +342,41 @@
             display: none; 
             flex-direction: column; 
         }
+
+        /* Jendela Kue (Cake Window) */
+        #cake-window {
+            width: 450px; 
+            max-width: 90%; 
+            height: auto; 
+            
+            position: absolute;
+            top: 50%; 
+            left: 50%;
+            transform: translate(-50%, -50%); 
+            z-index: 20; 
+            display: none; 
+            flex-direction: column; 
+        }
+
+        /* Jendela Doa (Modal) */
+        #prayer-dialog {
+            width: 400px;
+            max-width: 90%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 30; /* Di atas jendela kue */
+            display: none;
+            padding: 2px;
+        }
         
         .music-player-body {
             /* Warna latar belakang cerah untuk kontras (simulasi CRT) */
             background-color: #eeeeee; 
             padding: 10px 15px;
         }
-
+        
         /* Gaya Tombol Putar Tengah */
         .play-button-center {
             width: 40px;
@@ -295,140 +397,136 @@
             box-shadow: inset 1px 1px 0 #000000;
         }
 
-        /* Gaya Slider (Simulasi) */
-        .slider-container {
-            height: 10px;
-            background-color: #c0c0c0;
-            border: 2px solid #808080;
-            margin: 0 5px;
-            position: relative;
-            cursor: pointer;
-        }
-        .slider-fill {
-            height: 100%;
-            /* Menggunakan div terpisah untuk thumb agar tidak mengganggu layout */
-            background-color: #000000; 
-            position: relative;
-        }
-        
-        .slider-thumb {
-            position: absolute;
-            top: -2px; 
-            right: -6px; /* Offset to place it correctly on the black fill */
-            width: 10px;
-            height: 14px;
-            background-color: #c0c0c0;
-            border-style: solid;
-            border-width: 1px;
-            border-color: #ffffff #000000 #000000 #ffffff;
-            cursor: pointer;
-            box-shadow: 1px 1px 0 #000000;
-        }
-        .slider-thumb:active {
-             border-color: #000000 #ffffff #ffffff #000000;
-        }
-
-        
-        /* Gaya Bar Waktu (Simulasi Bar Pemutaran) */
+        /* Time Bar Styles */
         .time-bar-container {
-            background-color: #ffffff;
-            height: 4px;
-            margin-top: 5px;
-            position: relative;
-            border: 1px solid #808080;
+            height: 10px;
+            background-color: #808080;
+            border: 1px solid #000;
+            cursor: pointer;
         }
         .time-bar-progress {
             height: 100%;
-            width: 0%; /* Diatur oleh JS */
             background-color: #000080;
+            width: 0%;
         }
 
-
-        /* Gaya Menu Bar sederhana */
-        .menu-bar {
+        /* Volume Slider Styles (Reused W95 Sunken) */
+        .slider-container {
+            height: 10px;
             background-color: #c0c0c0;
-            padding: 2px 0;
-            display: flex;
-            border-bottom: 1px solid #808080;
-            margin-bottom: 5px;
+            border-style: solid;
+            border-width: 2px;
+            border-color: #808080 #ffffff #ffffff #808080;
+            box-shadow: inset 1px 1px 0 #000000;
+            cursor: pointer;
+            position: relative;
         }
-        .menu-item {
-            padding: 0 5px;
-            cursor: default;
+        .slider-fill {
+            height: 100%;
+            background-color: #000080;
+            position: relative;
         }
-        .menu-item u {
-            text-decoration: none;
-            border-bottom: 1px solid black; /* Garis bawah simulasi */
+        .slider-thumb {
+            position: absolute;
+            right: -6px; /* Posisi di ujung fill */
+            top: -4px;
+            width: 10px;
+            height: 18px;
+            background-color: #c0c0c0;
+            border-style: solid;
+            border-width: 2px;
+            border-color: #ffffff #000000 #000000 #ffffff;
+            cursor: grab;
         }
 
-        /* Pembungkus Konten Jendela (abu-abu) */
-        .window-content-wrapper {
-            background-color: #c0c0c0;
-            padding: 4px;
-            flex-grow: 1;
+        /* --- Custom Cake & Flame Styles --- */
+
+        .cake-container {
             display: flex;
             flex-direction: column;
-        }
-
-        /* Header Biru "HAPPY BIRTHDAY" */
-        .birthday-header {
-            background-color: #000080; 
-            padding: 8px;
-            margin-bottom: 15px;
-            border: 1px solid #808080;
-            box-shadow: inset 1px 1px 0 #ffffff, inset -1px -1px 0 #000000;
-        }
-
-        .birthday-title {
-            color: white;
-            font-size: 18px;
-            font-weight: bold;
+            align-items: center;
+            padding: 20px;
             text-align: center;
-            text-shadow: 1px 1px #000;
+            flex-grow: 1;
+        }
+
+        .cake-visual {
+            font-size: 80px; /* Kue emoji besar */
+            position: relative;
+            margin-bottom: 10px;
+        }
+
+        /* Lilin dan Animasi Api */
+        .candle-container {
+            position: absolute;
+            top: -20px; /* Di atas kue */
+            right: 0px; 
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-end;
+            transform: translateX(50%); /* Posisi di tengah atas emoji */
+        }
+        
+        /* Lilin (batang) */
+        .candle {
+            width: 6px;
+            height: 25px;
+            background-color: #f7d730; /* Kuning Lilin */
+            position: relative;
+            border: 1px solid #000;
+        }
+
+        /* Sumbu */
+        .wick {
+            position: absolute;
+            top: -3px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 4px;
+            background-color: #222;
+        }
+
+        /* Api (Flame) */
+        .flame {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 8px;
+            height: 12px;
+            background: radial-gradient(circle at 50% 100%, #ffc000, #ff8c00 60%, transparent 80%);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            filter: drop-shadow(0 0 5px #ffcc00);
+            animation: flicker 0.2s infinite alternate; /* Animasi berkedip */
+        }
+
+        /* Keyframes untuk Animasi Kedipan Api */
+        @keyframes flicker {
+            0% { transform: translateX(-50%) scaleY(1); opacity: 0.9; }
+            100% { transform: translateX(-50%) scaleY(0.95); opacity: 1; filter: drop-shadow(0 0 6px #ffcc00); }
+        }
+
+        /* Pesan di Bawah Kue */
+        .prayer-reminder {
+            font-size: 14px;
+            color: #000080;
+            font-weight: bold;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            padding: 5px 10px;
+            background-color: #ffffe0; /* Background kuning muda */
+            border: 1px solid #000080;
+        }
+        
+        /* Gaya Tombol aksi di Cake Window */
+        .action-button-group {
+            display: flex;
+            justify-content: center;
             gap: 10px;
-        }
-
-        /* Teks Utama "SELAMAT ULANG TAHUN KE-27" */
-        .birthday-main-text {
-            font-size: 24px; /* Dibuat sedikit lebih besar */
-            font-weight: 900;
-            color: #ffcc00; /* Warna Emas/Kuning */
-            text-align: center;
-            margin-bottom: 15px; /* Sedikit dikurangi agar lebih padat */
-            padding-top: 10px;
-            text-shadow: 2px 2px #000080; /* Shadow lebih jelas */
-        }
-
-        /* FIX: Class baru untuk menggantikan inline style di wrapper pesan */
-        .message-container {
-            padding: 5px 10px; 
-            flex-grow: 1; 
-            display: flex; 
-            flex-direction: column;
-        }
-        .message-label {
-            color: #000080; 
-            font-weight: bold; 
-            margin-bottom: 5px; 
-            font-family: 'W95Font', sans-serif; 
-            font-size: 11px;
-        }
-
-        /* Area Pesan (Simulasi text editor/notepad) */
-        .message-box-area {
-            border: 1px solid #808080;
-            background-color: white; 
             padding: 10px;
-            text-align: left;
-            flex-grow: 1; 
-            overflow-y: auto;
-            font-size: 12px;
-            line-height: 1.4;
-            white-space: pre-wrap; /* Mempertahankan format teks */
-            font-family: 'Courier New', monospace; /* Font monospasi untuk editor teks */
+            border-top: 1px solid #808080;
+            margin-top: auto; /* Dorong ke bawah */
         }
 
 
@@ -442,7 +540,7 @@
             #loading-dialog {
                 width: 90%;
             }
-            #birthday-window {
+            #birthday-window, #cake-window {
                 /* Lebih kecil di mobile */
                 width: 95%; 
                 height: 85vh; /* Menggunakan vh untuk memastikan tidak terpotong */
@@ -450,6 +548,9 @@
             }
              #music-window {
                 width: 95%; /* Lebih kecil di mobile */
+            }
+             #prayer-dialog {
+                width: 90%;
             }
         }
     </style>
@@ -519,7 +620,7 @@
                     SELAMAT ULANG TAHUN KE-27
                 </div>
 
-                <!-- Message Box (Simulated Text Area) - Menggunakan class baru -->
+                <!-- Message Box (Simulated Text Area) -->
                 <div class="message-container">
                     <div class="message-label">MESSAGE.TXT</div>
                     <div class="message-box-area w95-sunken" style="flex-grow: 1;">
@@ -546,7 +647,7 @@ Love and best wishes,
             </div>
         </div>
         
-        <!-- MUSIC PLAYER WINDOW (music.mp3) - Gaya Mirip Gambar -->
+        <!-- MUSIC PLAYER WINDOW (music.mp3) -->
         <div id="music-window" class="w95-base">
             <!-- Title Bar -->
             <div class="w95-title-bar">
@@ -559,9 +660,7 @@ Love and best wishes,
             </div>
 
             <!-- Elemen Audio untuk pemutaran musik -->
-            <!-- PENTING: Jalur ke hbd.mp3 diubah menjadi relatif (./hbd.mp3). 
-                 File MP3 harus berada di direktori yang sama saat di-deploy. 
-                 Saat ini menggunakan URL placeholder karena lingkungan ini tidak mendukung unggahan file. -->
+            <!-- PENTING: Jalur ke hbd.mp3 diubah menjadi relatif (./hbd.mp3). -->
             <audio id="hbdAudio" src="./hbd.mp3" preload="auto" loop></audio>
 
 
@@ -610,26 +709,96 @@ Love and best wishes,
             </div>
         </div>
 
+        <!-- CAKE.ME WINDOW (TIUP LILIN) -->
+        <div id="cake-window" class="w95-base">
+            <!-- Title Bar -->
+            <div class="w95-title-bar">
+                <div class="title-bar-text">CAKE.ME - TIUP LILIN</div>
+                <div class="flex">
+                    <div class="w95-button" style="width: 14px; height: 14px; font-size: 12px; padding: 0;">_</div>
+                    <div class="w95-button" style="width: 14px; height: 14px; font-size: 12px; padding: 0; margin-left: 2px;">&#9744;</div>
+                    <div class="w95-button" style="width: 14px; height: 14px; font-size: 12px; padding: 0; margin-left: 2px;" onclick="closeCakeWindow()">X</div>
+                </div>
+            </div>
+            
+            <div class="window-content-wrapper flex flex-col">
+                <div class="cake-container">
+                    <div class="w95-title-bar w-full mb-5" style="background-color: #ff9900; color: black; border-color: #ffd700 #cc7a00 #cc7a00 #ffd700;">
+                        <span class="mx-auto text-lg font-extrabold">AYO TIUP DULU</span>
+                    </div>
+
+                    <!-- Visual Kue dengan Lilin Api Animasi -->
+                    <div class="cake-visual">
+                        🎂
+                        <div class="candle-container">
+                            <div class="candle">
+                                <div class="wick"></div>
+                                <div class="flame"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Pesan Pengingat Doa -->
+                    <p class="prayer-reminder w-full">
+                        jangan lupa berdoa dulu yaa sebelum tiup lilin...
+                    </p>
+
+                </div>
+
+                <!-- Tombol Aksi -->
+                <div class="action-button-group w95-raised">
+                    <button class="w95-button" onclick="openPrayerDialog()">
+                        yuk berdoa
+                    </button>
+                    <button class="w95-button" onclick="closeCakeWindow()">
+                        tiup lilin
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PRAYER DIALOG (Modal Pop-up) -->
+        <div id="prayer-dialog" class="w95-base">
+            <!-- Title Bar -->
+            <div class="w95-title-bar">
+                <div class="title-bar-text">DOA SEBELUM TIUP LILIN</div>
+                <div class="flex">
+                    <div class="w95-button" style="width: 14px; height: 14px; font-size: 12px; padding: 0;" onclick="closePrayerDialog()">X</div>
+                </div>
+            </div>
+            
+            <div class="dialog-content flex flex-col items-center">
+                <p class="text-lg font-bold text-center mb-4 text-red-700">DOA KESELAMATAN & KEBERKAHAN</p>
+                <div class="w95-sunken p-4 bg-white w-full text-center" style="min-height: 80px;">
+                    <p class="text-sm font-serif italic" style="line-height: 1.5;">
+                        "Allohumma Inni As’aluka salamatan fid dinni wa dunya Wal Aakhiroh Wa ‘afayitan fii rizqi Wa barokatan fii ‘umri"
+                    </p>
+                </div>
+                <div class="mt-5">
+                    <button class="w95-button" onclick="closePrayerDialog()">
+                        kalo udah doa
+                    </button>
+                </div>
+            </div>
+        </div>
 
         <!-- Ikon Desktop -->
         <div class="flex flex-col items-start p-2">
             
             <!-- ICON: present.exe -->
-            <!-- Menggunakan fungsi openBirthdayWindow() yang baru -->
             <div class="desktop-icon" onclick="openBirthdayWindow()">
                 <div class="icon-box">🎁</div>
                 <span class="text-xs">present.exe</span>
             </div>
 
             <!-- ICON: music.mp3 -->
-            <!-- TELAH DIPERBARUI: Sekarang memanggil jendela Media Player baru -->
             <div class="desktop-icon" onclick="openMusicWindow()">
                 <div class="icon-box">🎧</div>
                 <span class="text-xs">music.mp3</span>
             </div>
 
-            <!-- ICON: cake.me -->
-            <div class="desktop-icon" onclick="alert('ERROR: cake.me - File terlalu manis untuk sistem ini. Silakan makan kuenya secara fisik!')">
+            <!-- ICON: cake.me (MEMANGGIL JENDELA BARU) -->
+            <div class="desktop-icon" onclick="openCakeWindow()">
                 <div class="icon-box">🎂</div>
                 <span class="text-xs">cake.me</span>
             </div>
@@ -660,7 +829,7 @@ Love and best wishes,
             <div class="w95-button w95-sunken mr-2 flex items-center" 
                 onclick="alert('GameTerbaik.exe: Sedang tidak aktif. Silakan main Solitaire.')"
                 style="height: 25px; line-height: 22px; padding: 0 4px;">
-                <img src="https://placehold.co/16x16/c0c0c0/000?text=G" onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2IiBmaWxsPSIjYzBjMGMwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZpbGw9IiMwMDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJjZW50cmFsIiBmb250LXNpemU9IjEycHgiIGZvbnQtZmFtaWx5PSJpbnRlciI+RzwvdHRleHQ+PC9zdmc+'" alt="Icon" class="mr-1 border border-black">
+                <img src="https://placehold.co/16x16/c0c0c0/000?text=G" onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2IiBmaWxsPSIjYzBjMGMwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZpbGw9IiMwMDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJjZW50cmFsIiBmb250LXNpemU9IjEycHgiIGZvbnQtZmFtaWx5PSJpbnRlciI+RzwvdGV4dD48L3N2Zz4='" alt="Icon" class="mr-1 border border-black">
                 GameTerbaik
             </div>
 
@@ -766,7 +935,42 @@ Love and best wishes,
             const birthdayWindow = document.getElementById('birthday-window');
             birthdayWindow.style.display = 'none';
         }
+
+        // --- FUNGSI JENDELA CAKE.ME ---
+        /**
+         * Opens the custom Cake window.
+         */
+        function openCakeWindow() {
+            const cakeWindow = document.getElementById('cake-window');
+            cakeWindow.style.display = 'flex';
+        }
+
+        /**
+         * Closes the custom Cake window and ensures the prayer dialog is closed.
+         */
+        function closeCakeWindow() {
+            const cakeWindow = document.getElementById('cake-window');
+            cakeWindow.style.display = 'none';
+            closePrayerDialog(); // Pastikan dialog doa juga tertutup
+        }
+
+        /**
+         * Opens the Prayer Dialog modal.
+         */
+        function openPrayerDialog() {
+            const prayerDialog = document.getElementById('prayer-dialog');
+            prayerDialog.style.display = 'block';
+        }
         
+        /**
+         * Closes the Prayer Dialog modal.
+         */
+        function closePrayerDialog() {
+            const prayerDialog = document.getElementById('prayer-dialog');
+            prayerDialog.style.display = 'none';
+        }
+        
+        // --- FUNGSI JENDELA MUSIC PLAYER ---
         /**
          * Opens the Music Player window.
          */
@@ -801,8 +1005,6 @@ Love and best wishes,
             // Periksa apakah audio sudah dimuat (durasi tersedia)
             if (isNaN(hbdAudio.duration)) {
                  // Jika durasi NaN, berarti file belum dimuat/tidak ditemukan.
-                 // NOTE: Dalam lingkungan riil, ini akan menampilkan "ERROR MEMUAT AUDIO" 
-                 // jika file hbd.mp3 tidak ada.
                 statusElement.textContent = 'ERROR: hbd.mp3 TIDAK DITEMUKAN';
                 trackTitle.textContent = 'hbd.mp3 (Gagal)';
                 return;
