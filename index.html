@@ -565,7 +565,24 @@
         .navigation-buttons button {
             margin: 0 5px;
         }
+        
+        /* Loading icon for print simulation */
+        .loading-spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-top: 4px solid #000080;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 10px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
+    <!-- Tambahkan pustaka html2canvas untuk mengonversi HTML menjadi gambar -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body class="bg-gray-800">
 
@@ -821,14 +838,17 @@ Love and best wishes,
                 <p class="mb-4 font-bold text-center text-sm">🎉 Hasil Cetak Photo Strip 🎉</p>
                 <div id="photoStripContainer" class="w-full flex justify-center flex-wrap">
                     <!-- Photo Strip will be injected here by JavaScript -->
-                    <div class="w95-sunken p-5 text-center text-sm text-gray-500">
-                        Memuat hasil cetak...
-                    </div>
+                    <div class="loading-spinner"></div>
+                    <p class="text-sm text-gray-700">Memproses cetakan...</p>
                 </div>
-                <p class="mt-4 text-xs text-gray-700">Dokumen telah selesai dicetak.</p>
-                <div class="mt-5">
+                <p id="printStatusText" class="mt-4 text-xs text-gray-700">Dokumen telah selesai dicetak.</p>
+                <div class="mt-5 flex gap-3">
                     <button class="w95-button" onclick="closePrintSimulation()">
-                        OK
+                        Tutup
+                    </button>
+                    <!-- Tombol Unduh BARU -->
+                    <button class="w95-button" onclick="downloadStrips()">
+                        ⬇️ Unduh Semua (.png)
                     </button>
                 </div>
             </div>
@@ -1274,24 +1294,92 @@ Love and best wishes,
         function openPrintSimulation() {
             const container = document.getElementById('photoStripContainer');
             const printWindow = document.getElementById('print-simulation-window');
-            
-            // Menggunakan 4 gambar pertama
-            const images = galleryData.slice(0, 4);
+            const statusText = document.getElementById('printStatusText');
 
-            // Generasi 3 strip foto dengan template berbeda
-            const strip1 = generatePhotoStrip('strip-template-1', images, 'GOOD VIBES & SMILES');
-            const strip2 = generatePhotoStrip('strip-template-2', images, '💖 You are My Love 💖');
-            const strip3 = generatePhotoStrip('strip-template-3', images, 'Always happy together');
-            
-            // Injeksi ke container
-            container.innerHTML = strip1 + strip2 + strip3;
-
+            // Tampilkan status loading awal
+            container.innerHTML = '<div class="loading-spinner"></div><p class="text-sm text-gray-700">Memproses cetakan...</p>';
+            statusText.textContent = 'Sedang Mencetak Dokumen...';
             printWindow.style.display = 'flex';
             focusWindow(printWindow);
+            
+            setTimeout(() => {
+                // Menggunakan 4 gambar pertama
+                const images = galleryData.slice(0, 4);
+
+                // Generasi 3 strip foto dengan template berbeda
+                const strip1 = generatePhotoStrip('strip-template-1', images, 'GOOD VIBES & SMILES');
+                const strip2 = generatePhotoStrip('strip-template-2', images, '💖 You are My Love 💖');
+                const strip3 = generatePhotoStrip('strip-template-3', images, 'Always happy together');
+                
+                // Injeksi ke container
+                container.innerHTML = strip1 + strip2 + strip3;
+                statusText.textContent = 'Dokumen telah selesai dicetak.';
+
+            }, 1500); // Simulasi waktu cetak 1.5 detik
         }
 
         function closePrintSimulation() {
             document.getElementById('print-simulation-window').style.display = 'none';
+        }
+        
+        /**
+         * Mengonversi semua photo strip menjadi gambar PNG dan memicu unduhan.
+         */
+        async function downloadStrips() {
+            const strips = document.querySelectorAll('#photoStripContainer .photo-strip-base');
+            const statusText = document.getElementById('printStatusText');
+            
+            if (strips.length === 0) {
+                 showMessageDialog('Peringatan', 'Tidak ada hasil cetak yang ditemukan. Silakan klik "Cetak" terlebih dahulu.');
+                 return;
+            }
+
+            statusText.textContent = 'Memproses unduhan... Jangan tutup jendela ini.';
+            
+            let downloadCount = 0;
+
+            for (let i = 0; i < strips.length; i++) {
+                const strip = strips[i];
+                // Hilangkan efek hover/transformasi sebelum mengonversi
+                strip.style.transform = 'none'; 
+                
+                // html2canvas options: scale for better resolution, useCORS for external images
+                await html2canvas(strip, { 
+                    scale: 3, 
+                    useCORS: true,
+                    // Pastikan background color strip template dipertahankan
+                    backgroundColor: null 
+                }).then(canvas => {
+                    // Buat link unduhan
+                    const imageURL = canvas.toDataURL("image/png");
+                    const link = document.createElement('a');
+                    
+                    // Gunakan nama file yang berbeda untuk setiap strip
+                    let filename = `PhotoStrip_${i + 1}_${new Date().getFullYear()}.png`;
+                    
+                    link.href = imageURL;
+                    link.download = filename;
+                    
+                    // Pemicu klik link untuk memulai unduhan
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    
+                    downloadCount++;
+                }).catch(error => {
+                    console.error("Gagal mengonversi strip ke gambar:", error);
+                    showMessageDialog('Error Unduh', `Gagal mengunduh Photo Strip ${i + 1}. Pastikan file gambar (img1.jpg, dll.) telah diunggah.`);
+                });
+                
+                // Kembalikan efek hover
+                strip.style.transform = ''; 
+            }
+            
+            statusText.textContent = `Selesai mengunduh ${downloadCount} dokumen.`;
+            
+            if (downloadCount > 0 && downloadCount === strips.length) {
+                showMessageDialog('Unduhan Berhasil', 'Semua photo strip telah berhasil diunduh ke perangkat Anda!');
+            }
         }
 
 
