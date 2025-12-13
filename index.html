@@ -79,9 +79,15 @@
             border-color: #ffffff #000000 #000000 #ffffff;
         }
 
-        .w95-button:active {
+        .w95-button:active:not(:disabled) {
             border-color: #000000 #ffffff #ffffff #000000;
             box-shadow: inset 1px 1px 0 #000000;
+        }
+        
+        .w95-button:disabled {
+            color: #808080; /* Warna abu-abu untuk teks tombol nonaktif */
+            border-color: #c0c0c0 #c0c0c0 #c0c0c0 #c0c0c0;
+            cursor: default;
         }
 
         /* --- LOADING SCREEN STYLES --- */
@@ -239,9 +245,7 @@
         }
 
         /* --- Custom Window Styles --- */
-        /* Jendela Ulang Tahun dan Kue */
         #birthday-window {
-            /* Gaya Jendela Ulang Tahun (PRESENT.EXE) */
             width: 70vw; 
             max-width: 700px; 
             height: 75vh; 
@@ -255,6 +259,108 @@
             display: none; 
             flex-direction: column; 
             min-width: 300px; 
+        }
+
+        #music-window {
+            width: 350px; 
+            max-width: 90%; 
+            
+            position: absolute;
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            z-index: 20; 
+            display: none; 
+            flex-direction: column; 
+        }
+        
+        #cake-window {
+            width: 450px; 
+            max-width: 90%; 
+            height: auto; 
+            
+            position: absolute;
+            top: 50%; 
+            left: 50%;
+            transform: translate(-50%, -50%); 
+            z-index: 20; 
+            display: none; 
+            flex-direction: column; 
+        }
+
+        #prayer-dialog {
+            width: 400px;
+            max-width: 90%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 30; 
+            display: none;
+            padding: 2px;
+        }
+
+        /* --- GALLERY VIEWER WINDOW STYLES --- */
+        #gallery-window {
+            width: 650px; 
+            max-width: 95%; 
+            height: auto; 
+            
+            position: absolute;
+            top: 50%; 
+            left: 50%;
+            transform: translate(-50%, -50%); 
+            z-index: 20; 
+            display: none; 
+            flex-direction: column; 
+            min-width: 350px; 
+        }
+        
+        .gallery-content-wrapper {
+            padding: 15px;
+            background-color: #c0c0c0;
+            position: relative;
+        }
+        
+        .image-display-area {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            min-height: 350px; 
+        }
+        
+        .polaroid {
+            background: white;
+            padding: 10px 10px 30px 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            transform: rotate(-1deg); /* Sedikit rotasi seperti foto asli */
+            max-width: 90%;
+            box-sizing: content-box;
+        }
+        
+        .gallery-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            max-width: 400px; /* Batasi ukuran foto */
+        }
+        
+        .caption {
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+            margin-top: 10px;
+        }
+        
+        .navigation-buttons {
+            gap: 10px;
+        }
+
+        .navigation-buttons button {
+            padding: 4px 10px;
+            min-width: 100px;
         }
 
         .menu-bar {
@@ -324,60 +430,16 @@
             overflow-y: auto;
             font-size: 12px;
             line-height: 1.4;
-            white-space: pre-wrap; /* Mempertahankan format teks */
-            font-family: 'Courier New', monospace; /* Font monospasi untuk editor teks */
+            white-space: pre-wrap; 
+            font-family: 'Courier New', monospace; 
             min-height: 150px;
         }
 
-        /* Jendela Musik */
-        #music-window {
-            width: 350px; 
-            max-width: 90%; 
-            
-            position: absolute;
-            top: 50%; 
-            left: 50%; 
-            transform: translate(-50%, -50%); 
-            z-index: 20; 
-            display: none; 
-            flex-direction: column; 
-        }
-
-        /* Jendela Kue (Cake Window) */
-        #cake-window {
-            width: 450px; 
-            max-width: 90%; 
-            height: auto; 
-            
-            position: absolute;
-            top: 50%; 
-            left: 50%;
-            transform: translate(-50%, -50%); 
-            z-index: 20; 
-            display: none; 
-            flex-direction: column; 
-        }
-
-        /* Jendela Doa (Modal) */
-        #prayer-dialog {
-            width: 400px;
-            max-width: 90%;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 30; /* Di atas jendela kue */
-            display: none;
-            padding: 2px;
-        }
-        
         .music-player-body {
-            /* Warna latar belakang cerah untuk kontras (simulasi CRT) */
             background-color: #eeeeee; 
             padding: 10px 15px;
         }
         
-        /* Gaya Tombol Putar Tengah */
         .play-button-center {
             width: 40px;
             height: 40px;
@@ -397,7 +459,6 @@
             box-shadow: inset 1px 1px 0 #000000;
         }
 
-        /* Time Bar Styles */
         .time-bar-container {
             height: 10px;
             background-color: #808080;
@@ -410,7 +471,6 @@
             width: 0%;
         }
 
-        /* Volume Slider Styles (Reused W95 Sunken) */
         .slider-container {
             height: 10px;
             background-color: #c0c0c0;
@@ -428,7 +488,7 @@
         }
         .slider-thumb {
             position: absolute;
-            right: -6px; /* Posisi di ujung fill */
+            right: -6px; 
             top: -4px;
             width: 10px;
             height: 18px;
@@ -451,32 +511,29 @@
         }
 
         .cake-visual {
-            font-size: 80px; /* Kue emoji besar */
+            font-size: 80px; 
             position: relative;
             margin-bottom: 10px;
         }
 
-        /* Lilin dan Animasi Api */
         .candle-container {
             position: absolute;
-            top: -20px; /* Di atas kue */
+            top: -20px; 
             right: 0px; 
             display: flex;
             justify-content: center;
             align-items: flex-end;
-            transform: translateX(50%); /* Posisi di tengah atas emoji */
+            transform: translateX(50%); 
         }
         
-        /* Lilin (batang) */
         .candle {
             width: 6px;
             height: 25px;
-            background-color: #f7d730; /* Kuning Lilin */
+            background-color: #f7d730; 
             position: relative;
             border: 1px solid #000;
         }
 
-        /* Sumbu */
         .wick {
             position: absolute;
             top: -3px;
@@ -487,7 +544,6 @@
             background-color: #222;
         }
 
-        /* Api (Flame) */
         .flame {
             position: absolute;
             top: -15px;
@@ -498,16 +554,14 @@
             background: radial-gradient(circle at 50% 100%, #ffc000, #ff8c00 60%, transparent 80%);
             border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
             filter: drop-shadow(0 0 5px #ffcc00);
-            animation: flicker 0.2s infinite alternate; /* Animasi berkedip */
+            animation: flicker 0.2s infinite alternate; 
         }
 
-        /* Keyframes untuk Animasi Kedipan Api */
         @keyframes flicker {
             0% { transform: translateX(-50%) scaleY(1); opacity: 0.9; }
             100% { transform: translateX(-50%) scaleY(0.95); opacity: 1; filter: drop-shadow(0 0 6px #ffcc00); }
         }
 
-        /* Pesan di Bawah Kue */
         .prayer-reminder {
             font-size: 14px;
             color: #000080;
@@ -515,18 +569,17 @@
             margin-top: 15px;
             margin-bottom: 20px;
             padding: 5px 10px;
-            background-color: #ffffe0; /* Background kuning muda */
+            background-color: #ffffe0; 
             border: 1px solid #000080;
         }
         
-        /* Gaya Tombol aksi di Cake Window */
         .action-button-group {
             display: flex;
             justify-content: center;
             gap: 10px;
             padding: 10px;
             border-top: 1px solid #808080;
-            margin-top: auto; /* Dorong ke bawah */
+            margin-top: auto; 
         }
 
 
@@ -540,16 +593,15 @@
             #loading-dialog {
                 width: 90%;
             }
-            #birthday-window, #cake-window {
-                /* Lebih kecil di mobile */
+            #birthday-window, #cake-window, #gallery-window {
                 width: 95%; 
-                height: 85vh; /* Menggunakan vh untuk memastikan tidak terpotong */
-                top: 50%; /* Sempurna di tengah untuk mobile */
+                height: 85vh; 
+                top: 50%; 
             }
-             #music-window {
-                width: 95%; /* Lebih kecil di mobile */
+            #music-window {
+                width: 95%; 
             }
-             #prayer-dialog {
+            #prayer-dialog {
                 width: 90%;
             }
         }
@@ -588,7 +640,6 @@
             <div class="w95-title-bar">
                 <div class="title-bar-text">HAPPY BIRTHDAY.TXT</div>
                 <div class="flex">
-                    <!-- Minimize, Maximize, Close buttons are dummy, but Close triggers the function -->
                     <div class="w95-button" style="width: 14px; height: 14px; font-size: 12px; padding: 0;">_</div>
                     <div class="w95-button" style="width: 14px; height: 14px; font-size: 12px; padding: 0; margin-left: 2px;">&#9744;</div>
                     <div class="w95-button" style="width: 14px; height: 14px; font-size: 12px; padding: 0; margin-left: 2px;" onclick="closeBirthdayWindow()">X</div>
@@ -660,7 +711,6 @@ Love and best wishes,
             </div>
 
             <!-- Elemen Audio untuk pemutaran musik -->
-            <!-- PENTING: Jalur ke hbd.mp3 diubah menjadi relatif (./hbd.mp3). -->
             <audio id="hbdAudio" src="./hbd.mp3" preload="auto" loop></audio>
 
 
@@ -668,7 +718,6 @@ Love and best wishes,
             <div class="music-player-body flex flex-col items-center">
                 <!-- Status/Judul Lagu -->
                 <div class="text-center mb-3">
-                    <!-- Judul file sesuai permintaan pengguna -->
                     <p id="trackTitle" class="font-bold text-sm">hbd.mp3</p>
                     <p class="text-xs">Ulang Tahun Klasik</p>
                 </div>
@@ -782,6 +831,52 @@ Love and best wishes,
             </div>
         </div>
 
+        <!-- GALLERY VIEWER WINDOW (gallery.jpg) -->
+        <div id="gallery-window" class="w95-base">
+            <!-- Title Bar -->
+            <div class="w95-title-bar">
+                <div class="title-bar-text">GALLERY VIEWER</div>
+                <div class="flex">
+                    <div class="w95-button" style="width: 14px; height: 14px; font-size: 12px; padding: 0;">_</div>
+                    <div class="w95-button" style="width: 14px; height: 14px; font-size: 12px; padding: 0; margin-left: 2px;">&#9744;</div>
+                    <div class="w95-button" style="width: 14px; height: 14px; font-size: 12px; padding: 0; margin-left: 2px;" onclick="closeGalleryWindow()">X</div>
+                </div>
+            </div>
+
+            <!-- Window Content -->
+            <div class="gallery-content-wrapper flex flex-col items-center">
+                <!-- Counter -->
+                <div class="w95-raised absolute top-3 right-3 p-1 text-xs" id="imageCounter">1/4</div>
+
+                <!-- Image Display Area -->
+                <div class="image-display-area">
+                    <div class="polaroid">
+                        <!-- Menggunakan onerror untuk menampilkan pesan fallback jika placeholder gagal dimuat -->
+                        <img id="currentImage" src="" alt="Galeri Foto" class="gallery-image"
+                             onerror="this.onerror=null; this.src='https://placehold.co/400x400/808080/ffffff?text=FOTO\nGAGAL\nDIMUAT';">
+                        <div class="caption" id="imageCaption">Caption Foto</div>
+                    </div>
+                </div>
+                
+                <!-- Navigation Buttons -->
+                <div class="navigation-buttons w-full flex justify-center py-4 px-2">
+                    <button id="prevButton" class="w95-button" onclick="showPrevImage()">
+                        &lt; Sebelumnya
+                    </button>
+                    <button id="nextButton" class="w95-button" onclick="showNextImage()">
+                        Berikutnya &gt;
+                    </button>
+                    <button class="w95-button" onclick="console.log('Lihat Video: Fitur belum tersedia')">
+                        Lihat Video
+                    </button>
+                    <button class="w95-button" onclick="console.log('Cetak: Simulasi mencetak gambar...')">
+                        Cetak
+                    </button>
+                </div>
+            </div>
+        </div>
+
+
         <!-- Ikon Desktop -->
         <div class="flex flex-col items-start p-2">
             
@@ -797,15 +892,14 @@ Love and best wishes,
                 <span class="text-xs">music.mp3</span>
             </div>
 
-            <!-- ICON: cake.me (MEMANGGIL JENDELA BARU) -->
+            <!-- ICON: cake.me -->
             <div class="desktop-icon" onclick="openCakeWindow()">
                 <div class="icon-box">🎂</div>
                 <span class="text-xs">cake.me</span>
             </div>
             
-            <!-- ICON: gallery.jpg -->
-            <!-- Diganti dengan console.log untuk menghindari error alert() di iframe -->
-            <div class="desktop-icon" onclick="console.log('ERROR: gallery.jpg terlalu besar (30MB!). Sistem meminta Anda untuk mencetak foto saja.')">
+            <!-- ICON: gallery.jpg (MEMANGGIL FUNGSI GALLERY) -->
+            <div class="desktop-icon" onclick="openGalleryWindow()">
                 <div class="icon-box">🖼️</div>
                 <span class="text-xs">gallery.jpg</span>
             </div>
@@ -813,7 +907,6 @@ Love and best wishes,
         
         <!-- Taskbar -->
         <div class="taskbar">
-            <!-- Diganti dengan console.log untuk menghindari error alert() di iframe -->
             <div class="start-button w95-raised" onclick="console.log('Menu Start: Tidak ada yang terjadi. Semua sudah ada di Desktop!')">
                 <span class="mr-1">
                     <!-- Icon Windows Logo Placeholder -->
@@ -828,7 +921,6 @@ Love and best wishes,
             </div>
             
             <!-- Tombol Taskbar Dummy -->
-            <!-- Diganti dengan console.log untuk menghindari error alert() di iframe -->
             <div class="w95-button w95-sunken mr-2 flex items-center" 
                 onclick="console.log('GameTerbaik.exe: Sedang tidak aktif. Silakan main Solitaire.')"
                 style="height: 25px; line-height: 22px; padding: 0 4px;">
@@ -851,20 +943,25 @@ Love and best wishes,
         const desktop = document.getElementById('desktop');
         
         let progress = 0;
-        const totalDuration = 5000; // 5 detik waktu loading
-        const updateInterval = 50; // Update setiap 50ms
+        const totalDuration = 5000; 
+        const updateInterval = 50; 
         
-        // Elemen Audio
         const hbdAudio = document.getElementById('hbdAudio');
-        
-        let isPlaying = false; // State untuk pemutar musik
-        let isDraggingVolume = false; // State untuk drag volume
-        let isDraggingTime = false; // State untuk drag waktu
+        let isPlaying = false; 
+        let isDraggingVolume = false; 
+        let isDraggingTime = false; 
+
+        // Data Galeri
+        const galleryData = [
+            { id: 1, url: 'https://placehold.co/400x400/4a86e8/ffffff?text=Foto+Pertama\nPasangan+Bahagia', caption: 'Semoga' },
+            { id: 2, url: 'https://placehold.co/400x400/808080/ffffff?text=Foto+Kedua\nLiburan', caption: 'Terima kasih telah menemani' },
+            { id: 3, url: 'https://placehold.co/400x400/f1c232/000000?text=Foto+Ketiga\nPerjalanan', caption: 'Kita akan terus berpetualang' },
+            { id: 4, url: 'https://placehold.co/400x400/e6b8af/000000?text=Foto+Keempat\nSenyum', caption: 'Happy Birthday!' },
+        ];
+        let currentImageIndex = 0; 
 
         /**
          * Mengubah detik menjadi format MM:SS.
-         * @param {number} totalSeconds - Jumlah detik.
-         * @returns {string} Format waktu MM:SS.
          */
         function formatTime(totalSeconds) {
             const minutes = Math.floor(totalSeconds / 60);
@@ -873,13 +970,12 @@ Love and best wishes,
         }
         
         /**
-         * Simulates the loading process by incrementally updating the progress bar.
+         * Simulates the loading process.
          */
         function startLoading() {
-            // Pastikan dialog loading terlihat dan desktop tersembunyi
             loadingDialog.style.display = 'block';
             desktop.style.display = 'none';
-            document.body.style.padding = '0'; // Hapus padding body selama loading
+            document.body.style.padding = '0';
             
             const startTime = Date.now();
             
@@ -902,94 +998,128 @@ Love and best wishes,
          * Hides the loading dialog and shows the desktop environment.
          */
         function onLoadingComplete() {
-            // Beri jeda sebentar untuk menampilkan 100%
             setTimeout(() => {
                 loadingDialog.style.display = 'none';
-                
-                // Ubah tata letak body untuk menampilkan desktop penuh
                 document.body.style.display = 'block';
                 document.body.style.padding = '0';
-                
-                // Tampilkan desktop
                 desktop.style.display = 'flex'; 
                 
-                // Secara otomatis buka jendela ulang tahun setelah loading selesai
                 openBirthdayWindow();
                 
-                // Inisialisasi Audio dan Slider setelah DOM dimuat
                 setupVolumeSlider();
                 setupTimeBar();
                 setupAudioListeners();
             }, 500);
         }
         
-        /**
-         * Opens the custom Happy Birthday window.
-         */
+        // --- FUNGSI JENDELA PRESENT.EXE ---
         function openBirthdayWindow() {
             const birthdayWindow = document.getElementById('birthday-window');
             birthdayWindow.style.display = 'flex';
         }
 
-        /**
-         * Closes the custom Happy Birthday window.
-         */
         function closeBirthdayWindow() {
             const birthdayWindow = document.getElementById('birthday-window');
             birthdayWindow.style.display = 'none';
         }
 
         // --- FUNGSI JENDELA CAKE.ME ---
-        /**
-         * Opens the custom Cake window.
-         */
         function openCakeWindow() {
             const cakeWindow = document.getElementById('cake-window');
-            // Menampilkan jendela kue. Ini adalah bagian yang diperiksa dan dikonfirmasi bekerja.
             cakeWindow.style.display = 'flex';
         }
 
-        /**
-         * Closes the custom Cake window and ensures the prayer dialog is closed.
-         */
         function closeCakeWindow() {
             const cakeWindow = document.getElementById('cake-window');
             cakeWindow.style.display = 'none';
-            closePrayerDialog(); // Pastikan dialog doa juga tertutup
+            closePrayerDialog(); 
         }
 
-        /**
-         * Opens the Prayer Dialog modal.
-         */
         function openPrayerDialog() {
             const prayerDialog = document.getElementById('prayer-dialog');
             prayerDialog.style.display = 'block';
         }
         
-        /**
-         * Closes the Prayer Dialog modal.
-         */
         function closePrayerDialog() {
             const prayerDialog = document.getElementById('prayer-dialog');
             prayerDialog.style.display = 'none';
         }
         
-        // --- FUNGSI JENDELA MUSIC PLAYER ---
+        // --- FUNGSI JENDELA GALLERY VIEWER ---
         /**
-         * Opens the Music Player window.
+         * Memperbarui tampilan galeri dengan data saat ini.
          */
+        function updateGalleryView() {
+            const image = galleryData[currentImageIndex];
+            const prevButton = document.getElementById('prevButton');
+            const nextButton = document.getElementById('nextButton');
+
+            document.getElementById('currentImage').src = image.url;
+            document.getElementById('imageCaption').textContent = image.caption;
+            document.getElementById('imageCounter').textContent = `${currentImageIndex + 1}/${galleryData.length}`;
+
+            // Kelola status tombol navigasi
+            const isFirst = currentImageIndex === 0;
+            const isLast = currentImageIndex === galleryData.length - 1;
+
+            prevButton.disabled = isFirst;
+            nextButton.disabled = isLast;
+
+            // Visual: Tombol nonaktif terlihat sunken (Win95 style)
+            prevButton.classList.toggle('w95-sunken', isFirst);
+            prevButton.classList.toggle('w95-raised', !isFirst); // Pastikan gaya raised/active saat aktif
+
+            nextButton.classList.toggle('w95-sunken', isLast);
+            nextButton.classList.toggle('w95-raised', !isLast);
+        }
+
+        /**
+         * Membuka jendela Galeri.
+         */
+        function openGalleryWindow() {
+            const galleryWindow = document.getElementById('gallery-window');
+            galleryWindow.style.display = 'flex';
+            currentImageIndex = 0; // Reset ke gambar pertama saat dibuka
+            updateGalleryView();
+        }
+
+        /**
+         * Menutup jendela Galeri.
+         */
+        function closeGalleryWindow() {
+            const galleryWindow = document.getElementById('gallery-window');
+            galleryWindow.style.display = 'none';
+        }
+
+        /**
+         * Menampilkan gambar sebelumnya.
+         */
+        function showPrevImage() {
+            if (currentImageIndex > 0) {
+                currentImageIndex--;
+                updateGalleryView();
+            }
+        }
+
+        /**
+         * Menampilkan gambar berikutnya.
+         */
+        function showNextImage() {
+            if (currentImageIndex < galleryData.length - 1) {
+                currentImageIndex++;
+                updateGalleryView();
+            }
+        }
+        
+        // --- FUNGSI JENDELA MUSIC PLAYER ---
         function openMusicWindow() {
             const musicWindow = document.getElementById('music-window');
             musicWindow.style.display = 'flex';
         }
 
-        /**
-         * Closes the Music Player window.
-         */
         function closeMusicWindow() {
             const musicWindow = document.getElementById('music-window');
             musicWindow.style.display = 'none';
-            // Stop playback when closing
             if (isPlaying) {
                 hbdAudio.pause();
             }
@@ -998,17 +1128,12 @@ Love and best wishes,
             document.getElementById('playIcon').textContent = '▶';
         }
         
-        /**
-         * Toggles the actual music playback status.
-         */
         function togglePlayback() {
             const statusElement = document.getElementById('playbackStatus');
             const iconElement = document.getElementById('playIcon');
             const trackTitle = document.getElementById('trackTitle');
             
-            // Periksa apakah audio sudah dimuat (durasi tersedia)
             if (isNaN(hbdAudio.duration)) {
-                 // Jika durasi NaN, berarti file belum dimuat/tidak ditemukan.
                 statusElement.textContent = 'ERROR: hbd.mp3 TIDAK DITEMUKAN';
                 trackTitle.textContent = 'hbd.mp3 (Gagal)';
                 return;
@@ -1018,58 +1143,42 @@ Love and best wishes,
             
             if (isPlaying) {
                 hbdAudio.play().catch(error => {
-                    // Tangani jika pemutaran gagal (misalnya, karena pembatasan browser tanpa interaksi pengguna)
                     console.error("Gagal memutar audio:", error);
                     statusElement.textContent = 'ERROR MEMUTAR (DIJEDA)';
                     isPlaying = false;
                     iconElement.textContent = '▶';
                 });
                 statusElement.textContent = 'MEMUTAR';
-                iconElement.textContent = '■'; // Stop icon
+                iconElement.textContent = '■'; 
                 trackTitle.textContent = 'hbd.mp3';
             } else {
                 hbdAudio.pause();
                 statusElement.textContent = 'DIJEDA';
-                iconElement.textContent = '▶'; // Play icon
+                iconElement.textContent = '▶'; 
                 trackTitle.textContent = 'DIJEDA';
             }
         }
         
-        /**
-         * Mengatur logika interaksi Volume Slider (sekarang fungsional).
-         */
         function setupVolumeSlider() {
             const sliderContainer = document.getElementById('volumeSliderContainer');
             const sliderFill = document.getElementById('volumeSliderFill');
             
             if (!sliderContainer || !sliderFill) return;
 
-            // Atur volume awal elemen audio sesuai visual (70%)
             hbdAudio.volume = 0.7;
 
-            /**
-             * Menghitung volume berdasarkan posisi mouse/touch.
-             * @param {number} clientX - Posisi X (mouse/touch) di viewport.
-             */
             const handleVolumeChange = (clientX) => {
                 const rect = sliderContainer.getBoundingClientRect();
-                // Hitung posisi relatif X di dalam slider container
                 let newVolumePx = clientX - rect.left;
                 
-                // Batasi nilai antara 0 dan lebar container
                 if (newVolumePx < 0) newVolumePx = 0;
                 if (newVolumePx > rect.width) newVolumePx = rect.width;
 
-                // Konversi ke persentase (0.0 hingga 1.0)
                 const volumeRatio = newVolumePx / rect.width;
 
-                // Terapkan ke elemen visual
                 sliderFill.style.width = (volumeRatio * 100) + '%';
-                
-                // Terapkan ke volume audio aktual
                 hbdAudio.volume = volumeRatio;
                 
-                // Opsional: Perbarui status teks (misalnya, di status bar)
                 const volumeLevel = Math.round(volumeRatio * 100);
                 document.getElementById('playbackStatus').textContent = `Volume: ${volumeLevel}%`;
             };
@@ -1082,20 +1191,19 @@ Love and best wishes,
 
             document.addEventListener('mousemove', (e) => {
                 if (isDraggingVolume) {
-                    e.preventDefault(); // Mencegah pemilihan teks
+                    e.preventDefault(); 
                     handleVolumeChange(e.clientX);
                 }
             });
 
             document.addEventListener('mouseup', () => {
                 isDraggingVolume = false;
-                // Kembalikan status bar jika tidak sedang diputar
                 if (!hbdAudio.paused) {
                     document.getElementById('playbackStatus').textContent = 'MEMUTAR';
                 }
             });
 
-            // --- Touch Events (Untuk Mobile Responsiveness) ---
+            // --- Touch Events ---
             sliderContainer.addEventListener('touchstart', (e) => {
                 isDraggingVolume = true;
                 e.preventDefault();
@@ -1119,9 +1227,6 @@ Love and best wishes,
             });
         }
         
-        /**
-         * Mengatur logika interaksi Bar Waktu.
-         */
         function setupTimeBar() {
             const timeBarContainer = document.querySelector('.time-bar-container');
             
@@ -1177,29 +1282,22 @@ Love and best wishes,
             });
         }
         
-        /**
-         * Mengatur event listener audio untuk memperbarui UI.
-         */
         function setupAudioListeners() {
             const timeBarProgress = document.getElementById('timeBarProgress');
             const currentTimeDisplay = document.getElementById('currentTimeDisplay');
             const durationDisplay = document.getElementById('durationDisplay');
 
-            // Setelah metadata dimuat, atur durasi
             hbdAudio.addEventListener('loadedmetadata', () => {
-                 // Periksa apakah durasi valid sebelum ditampilkan
                 if (isFinite(hbdAudio.duration)) {
                     durationDisplay.textContent = formatTime(hbdAudio.duration);
                     document.getElementById('playbackStatus').textContent = 'READY';
                 } else {
-                    // Jika metadata dimuat tetapi durasi tidak valid (misalnya, stream/error)
                     durationDisplay.textContent = '00:00';
                 }
             });
 
-            // Perbarui bilah progres dan waktu saat musik diputar
             hbdAudio.addEventListener('timeupdate', () => {
-                if (isDraggingTime) return; // Jangan update jika pengguna sedang drag
+                if (isDraggingTime) return; 
                 
                 if (isFinite(hbdAudio.duration) && hbdAudio.duration > 0) {
                     const ratio = hbdAudio.currentTime / hbdAudio.duration;
@@ -1208,7 +1306,6 @@ Love and best wishes,
                 }
             });
             
-            // Atur ulang saat musik selesai
             hbdAudio.addEventListener('ended', () => {
                 isPlaying = false;
                 document.getElementById('playbackStatus').textContent = 'SELESAI';
@@ -1217,7 +1314,6 @@ Love and best wishes,
                 currentTimeDisplay.textContent = durationDisplay.textContent;
             });
 
-            // Tangani error pemuatan
             hbdAudio.addEventListener('error', (e) => {
                 const statusElement = document.getElementById('playbackStatus');
                 statusElement.textContent = 'ERROR MEMUAT FILE hbd.mp3';
@@ -1233,7 +1329,7 @@ Love and best wishes,
             const minutes = now.getMinutes().toString().padStart(2, '0');
             const ampm = hours >= 12 ? 'PM' : 'AM';
             hours = hours % 12;
-            hours = hours ? hours : 12; // Jam '0' harusnya '12'
+            hours = hours ? hours : 12; 
             document.getElementById('currentTime').textContent = `${hours}:${minutes} ${ampm}`;
         }
         
@@ -1247,7 +1343,6 @@ Love and best wishes,
         // Prevent controls from doing anything (for aesthetics)
         document.querySelectorAll('.w95-button, .start-button').forEach(button => {
             button.addEventListener('click', (e) => {
-                // Biarkan event pada tombol 'X' (closeWindow), ikon desktop, dan alert start button bekerja
                 const isControl = e.currentTarget.textContent.trim() === '_' || e.currentTarget.textContent.trim() === '☐';
                 const isMenu = e.currentTarget.classList.contains('menu-item');
                 
