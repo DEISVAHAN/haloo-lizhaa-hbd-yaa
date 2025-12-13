@@ -1308,9 +1308,18 @@ Love and best wishes,
             videoWindow.style.display = 'flex';
             focusWindow(videoWindow);
             
-            // Muat ulang video dan coba putar (tanpa memaksa fullscreen)
+            // Muat ulang video dan coba putar
             videoElement.load();
-            videoElement.play().catch(error => {
+            videoElement.play().then(() => {
+                // Otomatis masuk ke mode layar penuh (Fullscreen)
+                if (videoElement.requestFullscreen) {
+                    videoElement.requestFullscreen();
+                } else if (videoElement.webkitRequestFullscreen) { /* Safari */
+                    videoElement.webkitRequestFullscreen();
+                } else if (videoElement.msRequestFullscreen) { /* IE11 */
+                    videoElement.msRequestFullscreen();
+                }
+            }).catch(error => {
                 console.error("Autoplay/Play Gagal:", error);
                 let errorMessage = `Browser Anda mungkin memblokir putar otomatis. Silakan klik tombol play (▶) pada pemutar video.`;
                 
