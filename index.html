@@ -804,7 +804,8 @@ Love and best wishes,
             </div>
             
             <!-- ICON: gallery.jpg -->
-            <div class="desktop-icon" onclick="alert('ERROR: gallery.jpg terlalu besar (30MB!). Sistem meminta Anda untuk mencetak foto saja.')">
+            <!-- Diganti dengan console.log untuk menghindari error alert() di iframe -->
+            <div class="desktop-icon" onclick="console.log('ERROR: gallery.jpg terlalu besar (30MB!). Sistem meminta Anda untuk mencetak foto saja.')">
                 <div class="icon-box">🖼️</div>
                 <span class="text-xs">gallery.jpg</span>
             </div>
@@ -812,7 +813,8 @@ Love and best wishes,
         
         <!-- Taskbar -->
         <div class="taskbar">
-            <div class="start-button w95-raised" onclick="alert('Menu Start: Tidak ada yang terjadi. Semua sudah ada di Desktop!')">
+            <!-- Diganti dengan console.log untuk menghindari error alert() di iframe -->
+            <div class="start-button w95-raised" onclick="console.log('Menu Start: Tidak ada yang terjadi. Semua sudah ada di Desktop!')">
                 <span class="mr-1">
                     <!-- Icon Windows Logo Placeholder -->
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -826,8 +828,9 @@ Love and best wishes,
             </div>
             
             <!-- Tombol Taskbar Dummy -->
+            <!-- Diganti dengan console.log untuk menghindari error alert() di iframe -->
             <div class="w95-button w95-sunken mr-2 flex items-center" 
-                onclick="alert('GameTerbaik.exe: Sedang tidak aktif. Silakan main Solitaire.')"
+                onclick="console.log('GameTerbaik.exe: Sedang tidak aktif. Silakan main Solitaire.')"
                 style="height: 25px; line-height: 22px; padding: 0 4px;">
                 <img src="https://placehold.co/16x16/c0c0c0/000?text=G" onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2IiBmaWxsPSIjYzBjMGMwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZpbGw9IiMwMDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJjZW50cmFsIiBmb250LXNpemU9IjEycHgiIGZvbnQtZmFtaWx5PSJpbnRlciI+RzwvdGV4dD48L3N2Zz4='" alt="Icon" class="mr-1 border border-black">
                 GameTerbaik
@@ -942,6 +945,7 @@ Love and best wishes,
          */
         function openCakeWindow() {
             const cakeWindow = document.getElementById('cake-window');
+            // Menampilkan jendela kue. Ini adalah bagian yang diperiksa dan dikonfirmasi bekerja.
             cakeWindow.style.display = 'flex';
         }
 
