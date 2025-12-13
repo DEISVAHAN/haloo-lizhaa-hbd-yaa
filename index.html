@@ -866,8 +866,9 @@ Love and best wishes,
                     <button id="nextButton" class="w95-button" onclick="showNextImage()">
                         Berikutnya &gt;
                     </button>
-                    <button class="w95-button" onclick="console.log('Lihat Video: Fitur belum tersedia')">
-                        Lihat Video
+                    <!-- Tombol ini sekarang secara eksplisit menyebutkan file video -->
+                    <button class="w95-button" onclick="console.log('VID1.MP4: File video ini (vid1.mp4) ada di folder, tapi fungsi pemutaran belum diimplementasikan.')">
+                        Lihat Video (vid1.mp4)
                     </button>
                     <button class="w95-button" onclick="console.log('Cetak: Simulasi mencetak gambar...')">
                         Cetak
@@ -951,12 +952,12 @@ Love and best wishes,
         let isDraggingVolume = false; 
         let isDraggingTime = false; 
 
-        // Data Galeri
+        // Data Galeri diperbarui untuk menampilkan nama file yang diminta: img1.jpg hingga img4.jpg
         const galleryData = [
-            { id: 1, url: 'https://placehold.co/400x400/4a86e8/ffffff?text=Foto+Pertama\nPasangan+Bahagia', caption: 'Semoga' },
-            { id: 2, url: 'https://placehold.co/400x400/808080/ffffff?text=Foto+Kedua\nLiburan', caption: 'Terima kasih telah menemani' },
-            { id: 3, url: 'https://placehold.co/400x400/f1c232/000000?text=Foto+Ketiga\nPerjalanan', caption: 'Kita akan terus berpetualang' },
-            { id: 4, url: 'https://placehold.co/400x400/e6b8af/000000?text=Foto+Keempat\nSenyum', caption: 'Happy Birthday!' },
+            { id: 1, name: 'img1.jpg', url: 'https://placehold.co/400x400/4a86e8/ffffff?text=img1.jpg', caption: 'img1.jpg: Foto kenangan lama.' },
+            { id: 2, name: 'img2.jpg', url: 'https://placehold.co/400x400/808080/ffffff?text=img2.jpg', caption: 'img2.jpg: Momen paling seru.' },
+            { id: 3, name: 'img3.jpg', url: 'https://placehold.co/400x400/f1c232/000000?text=img3.jpg', caption: 'img3.jpg: Perjalanan ke sana.' },
+            { id: 4, name: 'img4.jpg', url: 'https://placehold.co/400x400/e6b8af/000000?text=img4.jpg', caption: 'img4.jpg: Senyuman terhangat.' },
         ];
         let currentImageIndex = 0; 
 
@@ -1055,7 +1056,7 @@ Love and best wishes,
             const nextButton = document.getElementById('nextButton');
 
             document.getElementById('currentImage').src = image.url;
-            document.getElementById('imageCaption').textContent = image.caption;
+            document.getElementById('imageCaption').textContent = image.caption; // Menampilkan nama file di caption
             document.getElementById('imageCounter').textContent = `${currentImageIndex + 1}/${galleryData.length}`;
 
             // Kelola status tombol navigasi
