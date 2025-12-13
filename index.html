@@ -400,9 +400,9 @@
             animation: flicker 0.5s infinite alternate;
         }
         @keyframes flicker {
-            0% { transform: translate(-50%, 0) scale(1, 1); opacity: 1; }
-            50% { transform: translate(-50%, -1px) scale(0.95, 1.05); opacity: 0.9; }
-            100% { transform: translate(-50%, 0) scale(1.05, 0.95); opacity: 1; }
+            0% { transform: translate(-50%, 0) scale(1, 1); opacity: 0.9; }
+            50% { transform: translate(-50%, -1px) scale(0.95, 1.05); opacity: 0.8; }
+            100% { transform: translate(-50%, 0) scale(1.05, 0.95); opacity: 0.9; }
         }
         .prayer-reminder {
             text-align: center;
@@ -569,7 +569,7 @@
     </div>
     
     <!-- 2. SHUTDOWN SCREEN (Sesuai Permintaan: Loading Hitam + Teks Neon I Love You) -->
-    <div id="shutdown-screen">
+    <div id="shutdown-screen" style="display: none;">
         <div id="shutdown-text" class="shutdown-message">
             <span class="text-4xl">💖</span> I LOVE YOU! <span class="text-4xl">✨</span>
         </div>
@@ -583,7 +583,7 @@
         <div id="start-menu" class="flex">
             <!-- Sidebar Abu-abu Tua -->
             <div class="start-menu-sidebar">
-                Sistem Ulang Tahun
+                <!-- Teks 'Sistem Ulang Tahun' dihapus sesuai permintaan -->
             </div>
             <!-- Item Menu -->
             <div class="flex flex-col w-full">
@@ -797,7 +797,8 @@ Love and best wishes,
                     <div class="w95-button" style="width: 14px; height: 14px; font-size: 12px; padding: 0; margin-left: 2px;" onclick="closeMusicWindow()">X</div>
                 </div>
             </div>
-            <audio id="hbdAudio" src="./hbd.mp3" preload="auto" loop></audio>
+            <!-- Mengubah src menjadi URL placeholder, asumsikan pengguna akan mengunggah file yang sesuai -->
+            <audio id="hbdAudio" src="./hbd.mp3" preload="auto" loop></audio> 
             <div class="music-player-body flex flex-col items-center">
                 <div class="text-center mb-3">
                     <p id="trackTitle" class="font-bold text-sm">hbd.mp3</p>
@@ -842,7 +843,7 @@ Love and best wishes,
                 <div class="image-display-area" style="min-height: 350px;">
                     <div class="polaroid" style="transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;">
                         <img id="currentImage" src="" alt="Galeri Foto" class="gallery-image"
-                             onerror="this.onerror=null; this.src='https://placehold.co/400x300/808080/ffffff?text=FOTO\nGAGAL\n(Pastikan\nFile\ndiunggah)';">
+                             onerror="this.onerror=null; this.src='https://placehold.co/400x300/c0c0c0/000000?text=FOTO\nGAGAL\n(Pastikan\nFile\ndiunggah)';">
                         <div class="caption" id="imageCaption">Caption Foto</div>
                     </div>
                 </div>
@@ -853,8 +854,9 @@ Love and best wishes,
                     <button id="nextButton" class="w95-button" onclick="showNextImage()">
                         Berikutnya &gt;
                     </button>
-                    <button class="w95-button" onclick="openVideoWindow('vid1.mp4')">
-                        Lihat Video (vid1.mp4)
+                    <!-- Mengganti teks tombol agar lebih generik -->
+                    <button class="w95-button" onclick="openVideoWindow('video_kenangan')">
+                        Lihat Video
                     </button>
                     <button class="w95-button" onclick="showMessageDialog('Cetak', 'Simulasi mencetak. Jika ini nyata, printer Anda akan mengeluarkan bunyi dengungan sekarang.')">
                         Cetak
@@ -866,7 +868,7 @@ Love and best wishes,
         <!-- JENDELA VIDEO PLAYER -->
         <div id="video-window" class="w95-base w95-window" style="width: 600px; max-width: 90%; height: 400px; min-width: 300px;">
             <div class="w95-title-bar" data-draggable="video-window">
-                <div class="title-bar-text">MEDIA PLAYER - vid1.mp4</div>
+                <div class="title-bar-text" id="videoTitleBar">MEDIA PLAYER - Video Kenangan</div>
                 <div class="flex">
                     <div class="w95-button" style="width: 14px; height: 14px; font-size: 12px; padding: 0;">_</div>
                     <div class="w95-button" style="width: 14px; height: 14px; font-size: 12px; padding: 0; margin-left: 2px;">&#9744;</div>
@@ -887,23 +889,23 @@ Love and best wishes,
         <div class="flex flex-col items-start p-2">
             <div class="desktop-icon" onclick="openBirthdayWindow(); closeStartMenu();">
                 <div class="icon-box">🎁</div>
-                <span class="text-xs">present.exe</span>
+                <span class="text-xs text-white">present.exe</span>
             </div>
             <div class="desktop-icon" onclick="openMusicWindow(); closeStartMenu();">
                 <div class="icon-box">🎧</div>
-                <span class="text-xs">music.mp3</span>
+                <span class="text-xs text-white">music.mp3</span>
             </div>
             <div class="desktop-icon" onclick="openCakeWindow(); closeStartMenu();">
                 <div class="icon-box">🎂</div>
-                <span class="text-xs">cake.me</span>
+                <span class="text-xs text-white">cake.me</span>
             </div>
             <div class="desktop-icon" onclick="openGalleryWindow(); closeStartMenu();">
                 <div class="icon-box">🖼️</div>
-                <span class="text-xs">gallery.jpg</span>
+                <span class="text-xs text-white">gallery.jpg</span>
             </div>
             <div class="desktop-icon" onclick="openNotepadWindow(); closeStartMenu();">
                 <div class="icon-box">📝</div>
-                <span class="text-xs">notepad.exe</span>
+                <span class="text-xs text-white">notepad.exe</span>
             </div>
         </div>
         
@@ -921,13 +923,6 @@ Love and best wishes,
                 Start
             </div>
             
-            <div class="w95-button w95-sunken mr-2 flex items-center" 
-                onclick="showMessageDialog('GameTerbaik.exe', 'GameTerbaik.exe saat ini tidak aktif. Silakan nikmati aplikasi ulang tahun ini!')"
-                style="height: 25px; line-height: 22px; padding: 0 4px;">
-                <img src="https://placehold.co/16x16/c0c0c0/000?text=G" onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2IiBmaWxsPSIjYzBjMGMwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZpbGw9IiMwMDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJjZW50cmFsIiBmb250LXNpemU9IjEycHgiIGZvbnQtZmFtaWx5PSJpbnRlciI+RzwvdGV4dD48L3N2Zy4+'" alt="Icon" class="mr-1 border border-black">
-                GameTerbaik
-            </div>
-
             <div class="flex-grow"></div> 
 
             <div class="w95-sunken taskbar-time">
@@ -956,12 +951,12 @@ Love and best wishes,
         let isDraggingVolume = false; 
         let isDraggingTime = false; 
         
-        // Data Galeri
+        // Data Galeri - Menggunakan placeholder yang lebih generik
         const galleryData = [
-            { id: 1, name: 'img1.jpg', url: 'https://placehold.co/400x300/c0c0c0/000000?text=FOTO+1', caption: 'Foto kenangan lama.' },
-            { id: 2, name: 'img2.jpg', url: 'https://placehold.co/400x300/c0c0c0/000000?text=FOTO+2', caption: 'Momen paling seru.' },
-            { id: 3, name: 'img3.jpg', url: 'https://placehold.co/400x300/c0c0c0/000000?text=FOTO+3', caption: 'Perjalanan ke sana.' },
-            { id: 4, name: 'img4.jpg', url: 'https://placehold.co/400x300/c0c0c0/000000?text=FOTO+4', caption: 'Senyuman terhangat.' },
+            { id: 1, name: 'Foto 1', url: 'https://placehold.co/400x300/c0c0c0/000000?text=FOTO+1+(Momen+Awal)', caption: 'Foto kenangan lama.' },
+            { id: 2, name: 'Foto 2', url: 'https://placehold.co/400x300/000080/ffffff?text=FOTO+2+(Lagi+Senang)', caption: 'Momen paling seru.' },
+            { id: 3, name: 'Foto 3', url: 'https://placehold.co/400x300/808080/ffffff?text=FOTO+3+(Perjalanan)', caption: 'Perjalanan ke sana.' },
+            { id: 4, name: 'Foto 4', url: 'https://placehold.co/400x300/ff00ff/000000?text=FOTO+4+(Senyuman+Terbaik)', caption: 'Senyuman terhangat.' },
         ];
         let currentImageIndex = 0; 
 
@@ -1212,26 +1207,34 @@ Love and best wishes,
         }
 
         // --- FUNGSI JENDELA VIDEO PLAYER ---
-        function openVideoWindow(filename) {
+        function openVideoWindow(videoName) {
             closeGalleryWindow();
             const videoWindow = document.getElementById('video-window');
-            const videoContainer = document.getElementById('videoContainer');
             const videoElement = document.getElementById('mediaVideo');
-
-            videoElement.src = filename;
-            const titleBarText = videoWindow.querySelector('.w95-title-bar .title-bar-text');
-            titleBarText.textContent = `MEDIA PLAYER - ${filename}`;
+            const titleBarText = document.getElementById('videoTitleBar');
+            
+            // Jika file vid1.mp4 tidak ada, gunakan URL placeholder dari tempat lain
+            const videoSource = (videoName === 'video_kenangan') ? './vid1.mp4' : 'https://www.w3schools.com/html/mov_bbb.mp4';
+            
+            videoElement.src = videoSource;
+            titleBarText.textContent = `MEDIA PLAYER - ${videoName}`;
             
             videoWindow.style.display = 'flex';
             focusWindow(videoWindow);
 
-            // Attempt to play and fullscreen (may fail due to browser security)
             const playAndFullscreen = () => {
                 videoElement.load();
                 videoElement.play().catch(error => {
                     console.error("Autoplay/Play Gagal:", error);
-                    // Inform user if autoplay failed
-                    showMessageDialog('Video Error', `Browser Anda mungkin memblokir putar otomatis. Silakan klik tombol play (▶) di pemutar video. Error: ${error.message}`);
+                    let errorMessage = "Browser Anda mungkin memblokir putar otomatis. Silakan klik tombol play (▶) di pemutar video.";
+                    
+                    if (videoSource === './vid1.mp4' && error.message.includes('HTTP error') || error.message.includes('404')) {
+                        errorMessage = "File video **'vid1.mp4'** tidak ditemukan. Pastikan Anda sudah mengunggahnya.";
+                    } else if (error.message.includes('404')) {
+                         errorMessage = "File video tidak dapat dimuat dari sumber eksternal. Silakan unggah **'vid1.mp4'** untuk hasil terbaik.";
+                    }
+                    
+                    showMessageDialog('Video Error', errorMessage);
                 });
             };
 
@@ -1243,7 +1246,7 @@ Love and best wishes,
             const videoElement = document.getElementById('mediaVideo');
             
             videoElement.pause();
-            videoElement.src = "";
+            videoElement.src = ""; // Kosongkan src untuk menghemat memori
             
             // Exit fullscreen if active (cleanup)
             if (document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement) {
