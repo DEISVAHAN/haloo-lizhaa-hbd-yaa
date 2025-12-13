@@ -513,6 +513,7 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
             max-width: 90%;
             max-height: 80%;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
         }
         .gallery-image {
             display: block;
@@ -690,7 +691,7 @@ Haiii, selamat ulang tahun! Hari ini aku pengen kamu
 ngerasain semua vibes positif dan kebahagiaan yang cuma bisa 
 didapetin kalo kamu ada di sini. Semoga segala keinginanmu 
 tercapai, apalagi yang kocak-kocak, jangan gak biasa, karena kamu 
-tuh unik banget! Aku selalu bersyukur bisa ngeliat kamu jadi 
+tuh unik banget. Aku selalu bersyukur bisa ngeliat kamu jadi 
 versi terbaik dari dirimu, yang kadang-kadang lucu banget pas 
 lagi laper, tapi juga selalu bikin aku tersenyum tanpa henti.
 
@@ -841,9 +842,10 @@ Love and best wishes,
             <div class="gallery-content-wrapper flex flex-col items-center w95-scroll p-4">
                 <div class="w95-raised absolute top-3 right-3 p-1 text-xs" id="imageCounter">1/4</div>
                 <div class="image-display-area" style="min-height: 350px;">
-                    <div class="polaroid" style="transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;">
+                    <div class="polaroid">
+                        <!-- Gunakan URL placeholder jika file tidak ditemukan -->
                         <img id="currentImage" src="" alt="Galeri Foto" class="gallery-image"
-                             onerror="this.onerror=null; this.src='https://placehold.co/400x300/c0c0c0/000000?text=FOTO\nGAGAL\n(Pastikan\nFile\ndiunggah)';">
+                             onerror="this.onerror=null; this.src='https://placehold.co/400x300/c0c0c0/000000?text=File\nTidak\nDitemukan\n(Unggah\nFile)';">
                         <div class="caption" id="imageCaption">Caption Foto</div>
                     </div>
                 </div>
@@ -854,8 +856,7 @@ Love and best wishes,
                     <button id="nextButton" class="w95-button" onclick="showNextImage()">
                         Berikutnya &gt;
                     </button>
-                    <!-- Mengganti teks tombol agar lebih generik -->
-                    <button class="w95-button" onclick="openVideoWindow('video_kenangan')">
+                    <button class="w95-button" onclick="openVideoWindow('Video Kenangan', './vid1.mp4')">
                         Lihat Video
                     </button>
                     <button class="w95-button" onclick="showMessageDialog('Cetak', 'Simulasi mencetak. Jika ini nyata, printer Anda akan mengeluarkan bunyi dengungan sekarang.')">
@@ -951,12 +952,12 @@ Love and best wishes,
         let isDraggingVolume = false; 
         let isDraggingTime = false; 
         
-        // Data Galeri - Menggunakan placeholder yang lebih generik
+        // Data Galeri - Menggunakan nama file lokal sesuai permintaan
         const galleryData = [
-            { id: 1, name: 'Foto 1', url: 'https://placehold.co/400x300/c0c0c0/000000?text=FOTO+1+(Momen+Awal)', caption: 'Foto kenangan lama.' },
-            { id: 2, name: 'Foto 2', url: 'https://placehold.co/400x300/000080/ffffff?text=FOTO+2+(Lagi+Senang)', caption: 'Momen paling seru.' },
-            { id: 3, name: 'Foto 3', url: 'https://placehold.co/400x300/808080/ffffff?text=FOTO+3+(Perjalanan)', caption: 'Perjalanan ke sana.' },
-            { id: 4, name: 'Foto 4', url: 'https://placehold.co/400x300/ff00ff/000000?text=FOTO+4+(Senyuman+Terbaik)', caption: 'Senyuman terhangat.' },
+            { id: 1, name: 'img1.jpg', url: './img1.jpg', caption: 'Foto 1: Momen Awal' },
+            { id: 2, name: 'img2.jpg', url: './img2.jpg', caption: 'Foto 2: Lagi Senang' },
+            { id: 3, name: 'img3.jpg', url: './img3.jpg', caption: 'Foto 3: Perjalanan' },
+            { id: 4, name: 'img4.jpg', url: './img4.jpg', caption: 'Foto 4: Senyuman Terbaik' },
         ];
         let currentImageIndex = 0; 
 
@@ -1206,41 +1207,55 @@ Love and best wishes,
             messageDialog.style.display = 'none';
         }
 
-        // --- FUNGSI JENDELA VIDEO PLAYER ---
-        function openVideoWindow(videoName) {
+        // --- FUNGSI JENDELA VIDEO PLAYER (Termasuk Fullscreen) ---
+        function openVideoWindow(videoName, videoSource) {
             closeGalleryWindow();
             const videoWindow = document.getElementById('video-window');
             const videoElement = document.getElementById('mediaVideo');
             const titleBarText = document.getElementById('videoTitleBar');
-            
-            // Jika file vid1.mp4 tidak ada, gunakan URL placeholder dari tempat lain
-            const videoSource = (videoName === 'video_kenangan') ? './vid1.mp4' : 'https://www.w3schools.com/html/mov_bbb.mp4';
             
             videoElement.src = videoSource;
             titleBarText.textContent = `MEDIA PLAYER - ${videoName}`;
             
             videoWindow.style.display = 'flex';
             focusWindow(videoWindow);
-
-            const playAndFullscreen = () => {
-                videoElement.load();
-                videoElement.play().catch(error => {
-                    console.error("Autoplay/Play Gagal:", error);
-                    let errorMessage = "Browser Anda mungkin memblokir putar otomatis. Silakan klik tombol play (▶) di pemutar video.";
-                    
-                    if (videoSource === './vid1.mp4' && error.message.includes('HTTP error') || error.message.includes('404')) {
-                        errorMessage = "File video **'vid1.mp4'** tidak ditemukan. Pastikan Anda sudah mengunggahnya.";
-                    } else if (error.message.includes('404')) {
-                         errorMessage = "File video tidak dapat dimuat dari sumber eksternal. Silakan unggah **'vid1.mp4'** untuk hasil terbaik.";
-                    }
-                    
-                    showMessageDialog('Video Error', errorMessage);
-                });
-            };
-
-            playAndFullscreen();
+            
+            // Muat ulang video dan coba putar
+            videoElement.load();
+            videoElement.play().then(() => {
+                // Berhasil diputar, masuk ke mode fullscreen
+                enterFullscreen(videoWindow);
+            }).catch(error => {
+                console.error("Autoplay/Play Gagal:", error);
+                let errorMessage = `Browser Anda mungkin memblokir putar otomatis. Silakan klik tombol play (▶) pada pemutar video.`;
+                
+                // Cek jika error 404/file tidak ditemukan
+                if (error.message.includes('404')) {
+                     errorMessage = `File video <strong>'${videoSource.replace('./', '')}'</strong> tidak ditemukan. Pastikan Anda sudah mengunggahnya.`;
+                }
+                
+                showMessageDialog('Video Error', errorMessage);
+            });
         }
-
+        
+        /**
+         * Memaksa elemen untuk masuk ke mode fullscreen.
+         */
+        function enterFullscreen(element) {
+            if (element.requestFullscreen) {
+                element.requestFullscreen();
+            } else if (element.mozRequestFullScreen) { /* Firefox */
+                element.mozRequestFullScreen();
+            } else if (element.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+                element.webkitRequestFullscreen();
+            } else if (element.msRequestFullscreen) { /* IE/Edge */
+                element.msRequestFullscreen();
+            }
+        }
+        
+        /**
+         * Menutup jendela video dan keluar dari mode fullscreen.
+         */
         function closeVideoWindow() {
             const videoWindow = document.getElementById('video-window');
             const videoElement = document.getElementById('mediaVideo');
@@ -1248,7 +1263,7 @@ Love and best wishes,
             videoElement.pause();
             videoElement.src = ""; // Kosongkan src untuk menghemat memori
             
-            // Exit fullscreen if active (cleanup)
+            // Keluar dari fullscreen jika aktif
             if (document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement) {
                 if (document.exitFullscreen) {
                     document.exitFullscreen();
@@ -1268,15 +1283,19 @@ Love and best wishes,
             const image = galleryData[currentImageIndex];
             const prevButton = document.getElementById('prevButton');
             const nextButton = document.getElementById('nextButton');
-            const polaroidElement = document.querySelector('.polaroid');
+            const currentImageElement = document.getElementById('currentImage');
 
-            document.getElementById('currentImage').src = image.url;
+            // Set URL gambar
+            currentImageElement.src = image.url;
             document.getElementById('imageCaption').textContent = image.caption; 
             document.getElementById('imageCounter').textContent = `${currentImageIndex + 1}/${galleryData.length}`;
             
+            // Efek polaroid miring random
+            const polaroidElement = document.querySelector('.polaroid');
             const rotation = (Math.random() * 6 - 3).toFixed(2); 
             polaroidElement.style.transform = `rotate(${rotation}deg)`;
 
+            // Kontrol tombol navigasi
             const isFirst = currentImageIndex === 0;
             const isLast = currentImageIndex === galleryData.length - 1;
 
@@ -1529,6 +1548,8 @@ Love and best wishes,
              // Stop audio
              hbdAudio.pause();
              isPlaying = false;
+             // Ensure video is also closed
+             closeVideoWindow();
         }
 
         function handleRestart() {
