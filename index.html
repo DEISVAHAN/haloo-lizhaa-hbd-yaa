@@ -298,6 +298,30 @@
             min-width: 350px; 
         }
         
+        /* VIDEO PLAYER WINDOW */
+        #video-window {
+            width: 600px; 
+            max-width: 90%; 
+            height: 400px; /* Default height */
+            min-width: 300px; 
+        }
+
+        .video-container-wrapper {
+            background-color: #000000; /* Hitam agar terlihat seperti pemutar media */
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 5px;
+        }
+
+        #mediaVideo {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background-color: black;
+        }
+        
         .gallery-content-wrapper {
             padding: 15px;
             background-color: #c0c0c0;
@@ -322,7 +346,7 @@
             background: white;
             padding: 10px 10px 30px 10px; /* Padding bawah lebih besar untuk caption */
             box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5); /* Efek Shadow yang lebih kuat */
-            transform: rotate(-3deg); /* Sudut Kemiringan */
+            transform: rotate(-3deg); /* Sudut Kemiringan Default */
             max-width: 90%;
             max-height: 90%; 
             box-sizing: content-box;
@@ -607,6 +631,10 @@
             #message-dialog {
                 width: 90%;
             }
+            #video-window {
+                width: 95%;
+                height: 300px;
+            }
         }
     </style>
 </head>
@@ -875,14 +903,34 @@ Love and best wishes,
                     <button id="nextButton" class="w95-button" onclick="showNextImage()">
                         Berikutnya &gt;
                     </button>
-                    <!-- Tombol untuk mengakses file video lokal -->
-                    <button class="w95-button" onclick="handleVideoAccess('vid1.mp4')">
+                    <!-- TOMBOL INI MEMANGGIL FUNGSI UNTUK MEMUTAR VIDEO -->
+                    <button class="w95-button" onclick="openVideoWindow('vid1.mp4')">
                         Lihat Video (vid1.mp4)
                     </button>
                     <button class="w95-button" onclick="showMessageDialog('Cetak', 'Simulasi mencetak. Jika ini nyata, printer Anda akan mengeluarkan bunyi dengungan sekarang.')">
                         Cetak
                     </button>
                 </div>
+            </div>
+        </div>
+
+        <!-- VIDEO PLAYER WINDOW (vid1.mp4) -->
+        <div id="video-window" class="w95-base w95-window">
+            <!-- Title Bar -->
+            <div class="w95-title-bar" data-draggable="video-window">
+                <div class="title-bar-text">MEDIA PLAYER - vid1.mp4</div>
+                <div class="flex">
+                    <div class="w95-button" style="width: 14px; height: 14px; font-size: 12px; padding: 0;">_</div>
+                    <div class="w95-button" style="width: 14px; height: 14px; font-size: 12px; padding: 0; margin-left: 2px;">&#9744;</div>
+                    <div class="w95-button" style="width: 14px; height: 14px; font-size: 12px; padding: 0; margin-left: 2px;" onclick="closeVideoWindow()">X</div>
+                </div>
+            </div>
+            
+            <div id="videoContainer" class="video-container-wrapper">
+                <video id="mediaVideo" controls>
+                    <source src="" type="video/mp4">
+                    Browser Anda tidak mendukung tag video.
+                </video>
             </div>
         </div>
 
@@ -1158,20 +1206,82 @@ Love and best wishes,
             messageDialog.style.display = 'none';
         }
 
-        function handleVideoAccess(filename) {
-            const messageTitle = `Akses Berkas Media: ${filename}`;
-            const messageContent = `
-                <p class="text-sm text-left mb-3">
-                    Video <strong>${filename}</strong> telah ditemukan di direktori lokal.
-                </p>
-                <div class="w95-sunken p-3 bg-white text-left text-xs">
-                    <p class="font-bold text-red-600">PENTING:</p>
-                    <p>Fungsi pemutaran video secara langsung dalam aplikasi ini mungkin dibatasi oleh browser Anda atau lingkungan pengujian (iframe).</p>
-                    <p class="mt-2">Silakan unduh atau pastikan file Anda (<code>vid1.mp4</code>) diunggah dengan benar di folder yang sama.</p>
-                </div>
-            `;
-            showMessageDialog(messageTitle, messageContent);
+        // --- FUNGSI JENDELA VIDEO PLAYER BARU ---
+        function openVideoWindow(filename) {
+            // Tutup Galeri saat membuka video
+            closeGalleryWindow();
+
+            const videoWindow = document.getElementById('video-window');
+            const videoContainer = document.getElementById('videoContainer');
+            const videoElement = document.getElementById('mediaVideo');
+
+            // 1. Atur sumber video dan judul
+            videoElement.src = filename;
+            const titleBarText = videoWindow.querySelector('.w95-title-bar .title-bar-text');
+            titleBarText.textContent = `MEDIA PLAYER - ${filename}`;
+            
+            // 2. Tampilkan jendela dan fokuskan
+            videoWindow.style.display = 'flex';
+            focusWindow(videoWindow);
+
+            // 3. Coba putar dan fullscreen (Harus dipanggil dari user gesture)
+            const playAndFullscreen = () => {
+                // Pastikan video dimuat sebelum diputar
+                videoElement.load();
+                
+                videoElement.play().then(() => {
+                    // Sukses: Coba fullscreen pada kontainer video
+                    if (videoContainer.requestFullscreen) {
+                        videoContainer.requestFullscreen();
+                    } else if (videoContainer.webkitRequestFullscreen) { /* Safari */
+                        videoContainer.webkitRequestFullscreen();
+                    } else if (videoContainer.msRequestFullscreen) { /* IE11 */
+                        videoContainer.msRequestFullscreen();
+                    }
+                    
+                    // Hapus event listener tambahan setelah berhasil dipicu
+                    videoWindow.removeEventListener('click', playAndFullscreen);
+                    videoWindow.removeEventListener('touchstart', playAndFullscreen);
+
+                }).catch(error => {
+                    console.error("Autoplay/Play Gagal:", error);
+                    // Tampilkan pesan error jika putar otomatis gagal
+                    showMessageDialog('Video Error', `Browser Anda mungkin memblokir putar otomatis atau fullscreen. Silakan klik tombol play (▶) di pemutar video. Error: ${error.message}`);
+                });
+            };
+
+            // Tambahkan listener untuk pemicu ganda jika play otomatis gagal
+            // Listener ini akan mencoba play/fullscreen lagi jika user mengklik jendela
+            videoWindow.addEventListener('click', playAndFullscreen, { once: true });
+            videoWindow.addEventListener('touchstart', playAndFullscreen, { once: true });
+            
+            // Panggil segera karena sudah dipicu oleh klik tombol
+            playAndFullscreen();
         }
+
+        function closeVideoWindow() {
+            const videoWindow = document.getElementById('video-window');
+            const videoElement = document.getElementById('mediaVideo');
+            
+            // 1. Pause video
+            videoElement.pause();
+            videoElement.src = ""; // Kosongkan sumber untuk menghemat memori
+            
+            // 2. Keluar dari fullscreen jika aktif
+            if (document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement) {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) { /* Safari */
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) { /* IE11 */
+                    document.msExitFullscreen();
+                }
+            }
+            
+            // 3. Sembunyikan jendela
+            videoWindow.style.display = 'none';
+        }
+
         
         // --- FUNGSI JENDELA GALLERY VIEWER ---
         /**
