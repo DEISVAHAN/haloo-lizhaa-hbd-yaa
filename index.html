@@ -39,6 +39,18 @@
             border-color: #ffffff #808080 #808080 #ffffff;
             box-shadow: 1px 1px 0 #000000;
         }
+        
+        /* Gaya dasar untuk jendela yang bisa di-drag */
+        .w95-window {
+            position: absolute; /* Penting untuk dragging */
+            display: none; 
+            flex-direction: column;
+            z-index: 20; /* Jendela di atas desktop */
+            /* Posisi default di tengah */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
 
         .w95-raised {
             border-style: solid;
@@ -61,7 +73,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            cursor: default;
+            cursor: move; /* Menunjukkan bahwa bisa di-drag */
         }
 
         .w95-button {
@@ -77,16 +89,19 @@
             border-style: solid;
             border-width: 2px;
             border-color: #ffffff #000000 #000000 #ffffff;
+            box-shadow: 1px 1px 0 #000000;
         }
 
         .w95-button:active:not(:disabled) {
             border-color: #000000 #ffffff #ffffff #000000;
             box-shadow: inset 1px 1px 0 #000000;
+            transform: translate(1px, 1px);
         }
         
         .w95-button:disabled {
             color: #808080; /* Warna abu-abu untuk teks tombol nonaktif */
             border-color: #c0c0c0 #c0c0c0 #c0c0c0 #c0c0c0;
+            box-shadow: none;
             cursor: default;
         }
 
@@ -120,7 +135,7 @@
             transition: width 0.3s linear;
         }
 
-        /* Progress bar animation (marching ants effect) */
+        /* Animasi dipertahankan */
         .progress-bar.active {
             background-image: linear-gradient(
                 -45deg,
@@ -146,9 +161,9 @@
             display: none; /* Awalnya disembunyikan */
             width: 100vw;
             height: 100vh; 
-            background-color: #0000a8; /* Warna Biru Klasik */
+            background-color: #0000a8; 
             position: relative;
-            box-shadow: none; /* Override box-shadow from w95-base */
+            box-shadow: none; 
             padding: 5px;
             box-sizing: border-box;
             flex-direction: column; 
@@ -212,6 +227,7 @@
             align-items: center;
             padding: 2px;
             border-top: 2px solid #ffffff;
+            z-index: 10;
         }
 
         .start-button {
@@ -250,69 +266,35 @@
             max-width: 700px; 
             height: 75vh; 
             max-height: 750px; 
-            
-            position: absolute;
-            top: 50%; 
-            left: 50%;
-            transform: translate(-50%, -50%); 
-            z-index: 20; 
-            display: none; 
-            flex-direction: column; 
             min-width: 300px; 
         }
 
         #music-window {
             width: 350px; 
             max-width: 90%; 
-            
-            position: absolute;
-            top: 50%; 
-            left: 50%; 
-            transform: translate(-50%, -50%); 
-            z-index: 20; 
-            display: none; 
-            flex-direction: column; 
+            height: auto;
         }
         
         #cake-window {
             width: 450px; 
             max-width: 90%; 
             height: auto; 
-            
-            position: absolute;
-            top: 50%; 
-            left: 50%;
-            transform: translate(-50%, -50%); 
-            z-index: 20; 
-            display: none; 
-            flex-direction: column; 
         }
 
-        #prayer-dialog {
+        /* MESSAGE DIALOG (Reusable) */
+        #message-dialog {
             width: 400px;
             max-width: 90%;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
             z-index: 30; 
-            display: none;
             padding: 2px;
         }
 
-        /* --- GALLERY VIEWER WINDOW STYLES --- */
+        /* GALLERY VIEWER WINDOW */
         #gallery-window {
             width: 650px; 
             max-width: 95%; 
-            height: auto; 
-            
-            position: absolute;
-            top: 50%; 
-            left: 50%;
-            transform: translate(-50%, -50%); 
-            z-index: 20; 
-            display: none; 
-            flex-direction: column; 
+            height: 80vh; 
+            max-height: 750px;
             min-width: 350px; 
         }
         
@@ -320,6 +302,8 @@
             padding: 15px;
             background-color: #c0c0c0;
             position: relative;
+            flex-grow: 1;
+            overflow: auto;
         }
         
         .image-display-area {
@@ -328,22 +312,31 @@
             align-items: center;
             width: 100%;
             min-height: 350px; 
+            flex-grow: 1;
+            overflow: hidden;
+            padding-bottom: 20px;
         }
         
         .polaroid {
             background: white;
             padding: 10px 10px 30px 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-            transform: rotate(-1deg); /* Sedikit rotasi seperti foto asli */
+            transform: rotate(-1deg); 
             max-width: 90%;
             box-sizing: content-box;
+            max-height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
         
         .gallery-image {
-            width: 100%;
-            height: auto;
+            width: auto;
+            max-width: 100%;
+            max-height: 80%; /* Batasi agar caption tetap terlihat */
+            object-fit: contain;
             display: block;
-            max-width: 400px; /* Batasi ukuran foto */
+            margin: 0 auto;
         }
         
         .caption {
@@ -354,10 +347,6 @@
             margin-top: 10px;
         }
         
-        .navigation-buttons {
-            gap: 10px;
-        }
-
         .navigation-buttons button {
             padding: 4px 10px;
             min-width: 100px;
@@ -500,7 +489,6 @@
         }
 
         /* --- Custom Cake & Flame Styles --- */
-
         .cake-container {
             display: flex;
             flex-direction: column;
@@ -593,15 +581,21 @@
             #loading-dialog {
                 width: 90%;
             }
-            #birthday-window, #cake-window, #gallery-window {
+            .w95-window {
                 width: 95%; 
+                height: auto; 
+                max-height: 90vh;
+                top: 5vh; 
+                left: 2.5%; 
+                transform: none; /* Hilangkan transform agar drag berfungsi relatif */
+            }
+            #birthday-window {
                 height: 85vh; 
-                top: 50%; 
             }
-            #music-window {
-                width: 95%; 
+            #gallery-window {
+                height: 85vh;
             }
-            #prayer-dialog {
+            #message-dialog {
                 width: 90%;
             }
         }
@@ -612,7 +606,7 @@
     <!-- 1. LOADING SCREEN (Awalnya terlihat) -->
     <div id="loading-dialog" class="loading-dialog w95-base">
         <!-- Title Bar -->
-        <div class="w95-title-bar">
+        <div class="w95-title-bar" style="cursor: default;">
             <div class="title-bar-text">Memuat Sistem Berkas...</div>
             <div class="flex">
                 <div class="w95-button" style="width: 14px; height: 14px; font-size: 12px; padding: 0;">X</div>
@@ -635,9 +629,9 @@
     <div class="desktop" id="desktop">
         
         <!-- HAPPY BIRTHDAY WINDOW (present.exe) -->
-        <div id="birthday-window" class="w95-base">
+        <div id="birthday-window" class="w95-base w95-window">
             <!-- Title Bar -->
-            <div class="w95-title-bar">
+            <div class="w95-title-bar" data-draggable="birthday-window">
                 <div class="title-bar-text">HAPPY BIRTHDAY.TXT</div>
                 <div class="flex">
                     <div class="w95-button" style="width: 14px; height: 14px; font-size: 12px; padding: 0;">_</div>
@@ -699,9 +693,9 @@ Love and best wishes,
         </div>
         
         <!-- MUSIC PLAYER WINDOW (music.mp3) -->
-        <div id="music-window" class="w95-base">
+        <div id="music-window" class="w95-base w95-window">
             <!-- Title Bar -->
-            <div class="w95-title-bar">
+            <div class="w95-title-bar" data-draggable="music-window">
                 <div class="title-bar-text">MUSIC_PLAYER.EXE</div>
                 <div class="flex">
                     <div class="w95-button" style="width: 14px; height: 14px; font-size: 12px; padding: 0;">_</div>
@@ -712,7 +706,6 @@ Love and best wishes,
 
             <!-- Elemen Audio untuk pemutaran musik -->
             <audio id="hbdAudio" src="./hbd.mp3" preload="auto" loop></audio>
-
 
             <!-- Window Content (Background Putih/Cerah) -->
             <div class="music-player-body flex flex-col items-center">
@@ -759,9 +752,9 @@ Love and best wishes,
         </div>
 
         <!-- CAKE.ME WINDOW (TIUP LILIN) -->
-        <div id="cake-window" class="w95-base">
+        <div id="cake-window" class="w95-base w95-window">
             <!-- Title Bar -->
-            <div class="w95-title-bar">
+            <div class="w95-title-bar" data-draggable="cake-window">
                 <div class="title-bar-text">CAKE.ME - TIUP LILIN</div>
                 <div class="flex">
                     <div class="w95-button" style="width: 14px; height: 14px; font-size: 12px; padding: 0;">_</div>
@@ -772,7 +765,7 @@ Love and best wishes,
             
             <div class="window-content-wrapper flex flex-col">
                 <div class="cake-container">
-                    <div class="w95-title-bar w-full mb-5" style="background-color: #ff9900; color: black; border-color: #ffd700 #cc7a00 #cc7a00 #ffd700;">
+                    <div class="w95-title-bar w-full mb-5" style="background-color: #ff9900; color: black; border-color: #ffd700 #cc7a00 #cc7a00 #ffd700; cursor: default;">
                         <span class="mx-auto text-lg font-extrabold">AYO TIUP DULU</span>
                     </div>
 
@@ -796,7 +789,7 @@ Love and best wishes,
 
                 <!-- Tombol Aksi -->
                 <div class="action-button-group w95-raised">
-                    <button class="w95-button" onclick="openPrayerDialog()">
+                    <button class="w95-button" onclick="showMessageDialog('Doa', document.getElementById('prayer-text').innerHTML)">
                         yuk berdoa
                     </button>
                     <button class="w95-button" onclick="closeCakeWindow()">
@@ -806,35 +799,42 @@ Love and best wishes,
             </div>
         </div>
 
-        <!-- PRAYER DIALOG (Modal Pop-up) -->
-        <div id="prayer-dialog" class="w95-base">
+        <!-- Hidden content for prayer text -->
+        <div id="prayer-text" style="display: none;">
+            <p class="text-sm font-bold text-center mb-4 text-red-700">DOA KESELAMATAN & KEBERKAHAN</p>
+            <div class="w95-sunken p-4 bg-white w-full text-center" style="min-height: 80px;">
+                <p class="text-sm font-serif italic" style="line-height: 1.5;">
+                    "Allohumma Inni As’aluka salamatan fid dinni wa dunya Wal Aakhiroh Wa ‘afayitan fii rizqi Wa barokatan fii ‘umri"
+                </p>
+            </div>
+        </div>
+
+        <!-- MESSAGE DIALOG (Modal Pop-up, Digunakan untuk Doa & Pesan) -->
+        <div id="message-dialog" class="w95-base w95-window">
             <!-- Title Bar -->
-            <div class="w95-title-bar">
-                <div class="title-bar-text">DOA SEBELUM TIUP LILIN</div>
+            <div class="w95-title-bar" data-draggable="message-dialog">
+                <div class="title-bar-text" id="messageTitle">PESAN SISTEM</div>
                 <div class="flex">
-                    <div class="w95-button" style="width: 14px; height: 14px; font-size: 12px; padding: 0;" onclick="closePrayerDialog()">X</div>
+                    <div class="w95-button" style="width: 14px; height: 14px; font-size: 12px; padding: 0;" onclick="closeMessageDialog()">X</div>
                 </div>
             </div>
             
             <div class="dialog-content flex flex-col items-center">
-                <p class="text-lg font-bold text-center mb-4 text-red-700">DOA KESELAMATAN & KEBERKAHAN</p>
-                <div class="w95-sunken p-4 bg-white w-full text-center" style="min-height: 80px;">
-                    <p class="text-sm font-serif italic" style="line-height: 1.5;">
-                        "Allohumma Inni As’aluka salamatan fid dinni wa dunya Wal Aakhiroh Wa ‘afayitan fii rizqi Wa barokatan fii ‘umri"
-                    </p>
+                <div id="messageContent" class="w-full text-center">
+                    <!-- Isi Pesan Masuk Di Sini -->
                 </div>
                 <div class="mt-5">
-                    <button class="w95-button" onclick="closePrayerDialog()">
-                        kalo udah doa
+                    <button class="w95-button" onclick="closeMessageDialog()">
+                        OK
                     </button>
                 </div>
             </div>
         </div>
 
         <!-- GALLERY VIEWER WINDOW (gallery.jpg) -->
-        <div id="gallery-window" class="w95-base">
+        <div id="gallery-window" class="w95-base w95-window">
             <!-- Title Bar -->
-            <div class="w95-title-bar">
+            <div class="w95-title-bar" data-draggable="gallery-window">
                 <div class="title-bar-text">GALLERY VIEWER</div>
                 <div class="flex">
                     <div class="w95-button" style="width: 14px; height: 14px; font-size: 12px; padding: 0;">_</div>
@@ -844,33 +844,33 @@ Love and best wishes,
             </div>
 
             <!-- Window Content -->
-            <div class="gallery-content-wrapper flex flex-col items-center">
+            <div class="gallery-content-wrapper flex flex-col items-center w95-scroll">
                 <!-- Counter -->
                 <div class="w95-raised absolute top-3 right-3 p-1 text-xs" id="imageCounter">1/4</div>
 
                 <!-- Image Display Area -->
                 <div class="image-display-area">
                     <div class="polaroid">
-                        <!-- Menggunakan onerror untuk menampilkan pesan fallback jika placeholder gagal dimuat -->
+                        <!-- Path relatif lokal: './imgX.jpg' -->
                         <img id="currentImage" src="" alt="Galeri Foto" class="gallery-image"
-                             onerror="this.onerror=null; this.src='https://placehold.co/400x400/808080/ffffff?text=FOTO\nGAGAL\nDIMUAT';">
+                             onerror="this.onerror=null; this.src='https://placehold.co/400x400/808080/ffffff?text=FOTO\nGAGAL\n(Pastikan\nFile\ndiunggah)';">
                         <div class="caption" id="imageCaption">Caption Foto</div>
                     </div>
                 </div>
                 
                 <!-- Navigation Buttons -->
-                <div class="navigation-buttons w-full flex justify-center py-4 px-2">
+                <div class="navigation-buttons w-full flex justify-center py-4 px-2 mt-auto">
                     <button id="prevButton" class="w95-button" onclick="showPrevImage()">
                         &lt; Sebelumnya
                     </button>
                     <button id="nextButton" class="w95-button" onclick="showNextImage()">
                         Berikutnya &gt;
                     </button>
-                    <!-- Tombol ini sekarang secara eksplisit menyebutkan file video -->
-                    <button class="w95-button" onclick="console.log('VID1.MP4: File video ini (vid1.mp4) ada di folder, tapi fungsi pemutaran belum diimplementasikan.')">
+                    <!-- Tombol untuk mengakses file video lokal -->
+                    <button class="w95-button" onclick="handleVideoAccess('vid1.mp4')">
                         Lihat Video (vid1.mp4)
                     </button>
-                    <button class="w95-button" onclick="console.log('Cetak: Simulasi mencetak gambar...')">
+                    <button class="w95-button" onclick="showMessageDialog('Cetak', 'Simulasi mencetak. Jika ini nyata, printer Anda akan mengeluarkan bunyi dengungan sekarang.')">
                         Cetak
                     </button>
                 </div>
@@ -908,7 +908,7 @@ Love and best wishes,
         
         <!-- Taskbar -->
         <div class="taskbar">
-            <div class="start-button w95-raised" onclick="console.log('Menu Start: Tidak ada yang terjadi. Semua sudah ada di Desktop!')">
+            <div class="start-button w95-raised" onclick="showMessageDialog('Menu Start', 'Maaf, menu Start ini hanya pajangan. Semua sudah ada di Desktop!')">
                 <span class="mr-1">
                     <!-- Icon Windows Logo Placeholder -->
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -923,7 +923,7 @@ Love and best wishes,
             
             <!-- Tombol Taskbar Dummy -->
             <div class="w95-button w95-sunken mr-2 flex items-center" 
-                onclick="console.log('GameTerbaik.exe: Sedang tidak aktif. Silakan main Solitaire.')"
+                onclick="showMessageDialog('GameTerbaik.exe', 'GameTerbaik.exe saat ini tidak aktif. Silakan nikmati aplikasi ulang tahun ini!')"
                 style="height: 25px; line-height: 22px; padding: 0 4px;">
                 <img src="https://placehold.co/16x16/c0c0c0/000?text=G" onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2IiBmaWxsPSIjYzBjMGMwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZpbGw9IiMwMDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJjZW50cmFsIiBmb250LXNpemU9IjEycHgiIGZvbnQtZmFtaWx5PSJpbnRlciI+RzwvdGV4dD48L3N2Zz4='" alt="Icon" class="mr-1 border border-black">
                 GameTerbaik
@@ -943,24 +943,120 @@ Love and best wishes,
         const loadingDialog = document.getElementById('loading-dialog');
         const desktop = document.getElementById('desktop');
         
+        const windows = document.querySelectorAll('.w95-window');
+        let activeWindow = null; 
+        let maxZIndex = 20;
+
         let progress = 0;
-        const totalDuration = 5000; 
+        const totalDuration = 3000; 
         const updateInterval = 50; 
         
         const hbdAudio = document.getElementById('hbdAudio');
         let isPlaying = false; 
         let isDraggingVolume = false; 
         let isDraggingTime = false; 
-
-        // Data Galeri diperbarui untuk menampilkan nama file yang diminta: img1.jpg hingga img4.jpg
+        
+        // Data Galeri - menggunakan path relatif
         const galleryData = [
-            { id: 1, name: 'img1.jpg', url: 'https://placehold.co/400x400/4a86e8/ffffff?text=img1.jpg', caption: 'img1.jpg: Foto kenangan lama.' },
-            { id: 2, name: 'img2.jpg', url: 'https://placehold.co/400x400/808080/ffffff?text=img2.jpg', caption: 'img2.jpg: Momen paling seru.' },
-            { id: 3, name: 'img3.jpg', url: 'https://placehold.co/400x400/f1c232/000000?text=img3.jpg', caption: 'img3.jpg: Perjalanan ke sana.' },
-            { id: 4, name: 'img4.jpg', url: 'https://placehold.co/400x400/e6b8af/000000?text=img4.jpg', caption: 'img4.jpg: Senyuman terhangat.' },
+            { id: 1, name: 'img1.jpg', url: './img1.jpg', caption: 'img1.jpg: Foto kenangan lama.' },
+            { id: 2, name: 'img2.jpg', url: './img2.jpg', caption: 'img2.jpg: Momen paling seru.' },
+            { id: 3, name: 'img3.jpg', url: './img3.jpg', caption: 'img3.jpg: Perjalanan ke sana.' },
+            { id: 4, name: 'img4.jpg', url: './img4.jpg', caption: 'img4.jpg: Senyuman terhangat.' },
         ];
         let currentImageIndex = 0; 
 
+        /**
+         * Mengatur fokus jendela (z-index).
+         */
+        function focusWindow(windowElement) {
+            maxZIndex++;
+            windowElement.style.zIndex = maxZIndex;
+            // Di sini Anda juga bisa menambahkan logika untuk mengubah border title bar jika perlu
+        }
+        
+        /**
+         * Menyiapkan fungsi drag and drop untuk jendela.
+         */
+        function setupWindowDragging() {
+            const titleBars = document.querySelectorAll('.w95-title-bar[data-draggable]');
+
+            titleBars.forEach(titleBar => {
+                const windowId = titleBar.getAttribute('data-draggable');
+                const windowElement = document.getElementById(windowId);
+
+                let isDragging = false;
+                let offsetX, offsetY;
+                
+                // Fungsi untuk memulai drag
+                const startDrag = (clientX, clientY) => {
+                    isDragging = true;
+                    // Pastikan jendela diatur ke posisi absolut
+                    if (windowElement.style.position !== 'absolute') {
+                        windowElement.style.position = 'absolute';
+                    }
+                    
+                    // Hapus transform jika ada, hitung offset
+                    const rect = windowElement.getBoundingClientRect();
+                    windowElement.style.transform = 'none'; 
+                    offsetX = clientX - rect.left;
+                    offsetY = clientY - rect.top;
+                    
+                    focusWindow(windowElement);
+                };
+
+                // Fungsi untuk menggerakkan jendela
+                const drag = (clientX, clientY) => {
+                    if (!isDragging) return;
+                    
+                    const newLeft = clientX - offsetX;
+                    const newTop = clientY - offsetY;
+                    
+                    // Batasi pergerakan di dalam desktop
+                    const maxX = desktop.clientWidth - windowElement.offsetWidth;
+                    const maxY = desktop.clientHeight - windowElement.offsetHeight;
+
+                    windowElement.style.left = Math.max(0, Math.min(newLeft, maxX)) + 'px';
+                    windowElement.style.top = Math.max(0, Math.min(newTop, maxY)) + 'px';
+                };
+
+                // Fungsi untuk menghentikan drag
+                const stopDrag = () => {
+                    isDragging = false;
+                };
+
+                // --- Mouse Events ---
+                titleBar.addEventListener('mousedown', (e) => {
+                    if (e.target.closest('.w95-button')) return; // Abaikan jika mengklik tombol kontrol
+                    e.preventDefault();
+                    startDrag(e.clientX, e.clientY);
+                });
+
+                document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
+                document.addEventListener('mouseup', stopDrag);
+
+                // --- Touch Events ---
+                titleBar.addEventListener('touchstart', (e) => {
+                    if (e.target.closest('.w95-button')) return;
+                    e.preventDefault();
+                    const touch = e.touches[0];
+                    startDrag(touch.clientX, touch.clientY);
+                }, { passive: false });
+
+                document.addEventListener('touchmove', (e) => {
+                    if (!isDragging) return;
+                    e.preventDefault();
+                    const touch = e.touches[0];
+                    drag(touch.clientX, touch.clientY);
+                }, { passive: false });
+
+                document.addEventListener('touchend', stopDrag);
+                
+                // Set listener untuk fokus saat mengklik bagian mana pun dari jendela
+                windowElement.addEventListener('mousedown', () => focusWindow(windowElement));
+                windowElement.addEventListener('touchstart', () => focusWindow(windowElement));
+            });
+        }
+        
         /**
          * Mengubah detik menjadi format MM:SS.
          */
@@ -1010,6 +1106,7 @@ Love and best wishes,
                 setupVolumeSlider();
                 setupTimeBar();
                 setupAudioListeners();
+                setupWindowDragging(); // Tambahkan fungsi drag
             }, 500);
         }
         
@@ -1017,6 +1114,7 @@ Love and best wishes,
         function openBirthdayWindow() {
             const birthdayWindow = document.getElementById('birthday-window');
             birthdayWindow.style.display = 'flex';
+            focusWindow(birthdayWindow);
         }
 
         function closeBirthdayWindow() {
@@ -1028,22 +1126,42 @@ Love and best wishes,
         function openCakeWindow() {
             const cakeWindow = document.getElementById('cake-window');
             cakeWindow.style.display = 'flex';
+            focusWindow(cakeWindow);
         }
 
         function closeCakeWindow() {
             const cakeWindow = document.getElementById('cake-window');
             cakeWindow.style.display = 'none';
-            closePrayerDialog(); 
+            closeMessageDialog(); 
         }
 
-        function openPrayerDialog() {
-            const prayerDialog = document.getElementById('prayer-dialog');
-            prayerDialog.style.display = 'block';
+        // --- FUNGSI KOTAK PESAN GENERIC (Pengganti alert()) ---
+        function showMessageDialog(title, contentHTML) {
+            const messageDialog = document.getElementById('message-dialog');
+            document.getElementById('messageTitle').textContent = title;
+            document.getElementById('messageContent').innerHTML = contentHTML;
+            messageDialog.style.display = 'flex';
+            focusWindow(messageDialog);
         }
         
-        function closePrayerDialog() {
-            const prayerDialog = document.getElementById('prayer-dialog');
-            prayerDialog.style.display = 'none';
+        function closeMessageDialog() {
+            const messageDialog = document.getElementById('message-dialog');
+            messageDialog.style.display = 'none';
+        }
+
+        function handleVideoAccess(filename) {
+            const messageTitle = `Akses Berkas Media: ${filename}`;
+            const messageContent = `
+                <p class="text-sm text-left mb-3">
+                    Video <strong>${filename}</strong> telah ditemukan di direktori lokal.
+                </p>
+                <div class="w95-sunken p-3 bg-white text-left text-xs">
+                    <p class="font-bold text-red-600">PENTING:</p>
+                    <p>Fungsi pemutaran video secara langsung dalam aplikasi ini mungkin dibatasi oleh browser Anda atau lingkungan pengujian (iframe).</p>
+                    <p class="mt-2">Silakan unduh atau pastikan file Anda (<code>vid1.mp4</code>) diunggah dengan benar di folder yang sama.</p>
+                </div>
+            `;
+            showMessageDialog(messageTitle, messageContent);
         }
         
         // --- FUNGSI JENDELA GALLERY VIEWER ---
@@ -1055,21 +1173,20 @@ Love and best wishes,
             const prevButton = document.getElementById('prevButton');
             const nextButton = document.getElementById('nextButton');
 
+            // MENGGUNAKAN PATH RELATIF DI SINI
             document.getElementById('currentImage').src = image.url;
             document.getElementById('imageCaption').textContent = image.caption; // Menampilkan nama file di caption
             document.getElementById('imageCounter').textContent = `${currentImageIndex + 1}/${galleryData.length}`;
 
-            // Kelola status tombol navigasi
+            // Kelola status tombol navigasi dan gaya Win95
             const isFirst = currentImageIndex === 0;
             const isLast = currentImageIndex === galleryData.length - 1;
 
             prevButton.disabled = isFirst;
-            nextButton.disabled = isLast;
-
-            // Visual: Tombol nonaktif terlihat sunken (Win95 style)
             prevButton.classList.toggle('w95-sunken', isFirst);
-            prevButton.classList.toggle('w95-raised', !isFirst); // Pastikan gaya raised/active saat aktif
+            prevButton.classList.toggle('w95-raised', !isFirst);
 
+            nextButton.disabled = isLast;
             nextButton.classList.toggle('w95-sunken', isLast);
             nextButton.classList.toggle('w95-raised', !isLast);
         }
@@ -1082,6 +1199,7 @@ Love and best wishes,
             galleryWindow.style.display = 'flex';
             currentImageIndex = 0; // Reset ke gambar pertama saat dibuka
             updateGalleryView();
+            focusWindow(galleryWindow);
         }
 
         /**
@@ -1116,6 +1234,7 @@ Love and best wishes,
         function openMusicWindow() {
             const musicWindow = document.getElementById('music-window');
             musicWindow.style.display = 'flex';
+            focusWindow(musicWindow);
         }
 
         function closeMusicWindow() {
@@ -1137,6 +1256,7 @@ Love and best wishes,
             if (isNaN(hbdAudio.duration)) {
                 statusElement.textContent = 'ERROR: hbd.mp3 TIDAK DITEMUKAN';
                 trackTitle.textContent = 'hbd.mp3 (Gagal)';
+                showMessageDialog('Audio Error', 'File audio hbd.mp3 gagal dimuat. Pastikan file tersebut sudah diunggah.');
                 return;
             }
             
@@ -1148,6 +1268,7 @@ Love and best wishes,
                     statusElement.textContent = 'ERROR MEMUTAR (DIJEDA)';
                     isPlaying = false;
                     iconElement.textContent = '▶';
+                    showMessageDialog('Audio Error', 'Browser memblokir pemutaran otomatis. Silakan coba lagi setelah berinteraksi dengan halaman.');
                 });
                 statusElement.textContent = 'MEMUTAR';
                 iconElement.textContent = '■'; 
@@ -1349,7 +1470,6 @@ Love and best wishes,
                 
                 if (isControl || isMenu) {
                     e.preventDefault();
-                    console.log('Fungsi tombol diklik, tapi ini hanya simulasi!');
                 }
             });
         });
