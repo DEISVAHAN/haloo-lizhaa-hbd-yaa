@@ -110,6 +110,77 @@
             overflow: auto;
         }
 
+        /* --- Custom Window Styles --- */
+        
+        /* Photo Strip Styles (NEW) */
+        .photo-strip-base {
+            width: 90px;
+            height: 380px;
+            padding: 10px 8px;
+            border-radius: 12px;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            overflow: hidden;
+            margin: 0 5px;
+            transition: transform 0.3s ease;
+        }
+        .photo-strip-base:hover {
+            transform: scale(1.03) rotate(1deg);
+        }
+
+        .strip-image-frame {
+            width: 100%;
+            height: 70px;
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            border-radius: 4px;
+            border: 2px solid #fff;
+        }
+
+        .strip-image-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .strip-text-bottom {
+            font-size: 8px;
+            font-weight: bold;
+            text-align: center;
+            color: white;
+            margin-top: 5px;
+            line-height: 1;
+            text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+            padding: 5px 0;
+        }
+
+        /* Template 1: Orange/Yellow Vibe */
+        .strip-template-1 {
+            background: linear-gradient(180deg, #ffcc00 0%, #ff8c00 100%);
+            border: 3px solid white;
+        }
+
+        /* Template 2: Pink/Red Vibe */
+        .strip-template-2 {
+            background: linear-gradient(180deg, #ff69b4 0%, #ff1493 100%);
+            border: 3px solid white;
+        }
+
+        /* Template 3: Purple Vibe */
+        .strip-template-3 {
+            background: linear-gradient(180deg, #9370db 0%, #6a5acd 100%);
+            border: 3px solid white;
+        }
+
+
+        /* [Sisanya adalah CSS dari versi sebelumnya, dipersingkat di sini] */
         /* --- LOADING SCREEN STYLES --- */
         #loading-dialog {
             position: fixed;
@@ -436,64 +507,6 @@
             height: 22px;
             line-height: 20px;
         }
-        /* Music Player Styles */
-        .music-player-body {
-            padding: 15px;
-            background-color: #c0c0c0;
-        }
-        .play-button-center {
-            font-size: 24px;
-            width: 40px;
-            height: 40px;
-            line-height: 38px;
-            text-align: center;
-            border-radius: 50%;
-            background-color: #c0c0c0;
-            border-style: solid;
-            border-width: 2px;
-            border-color: #ffffff #000000 #000000 #ffffff;
-            cursor: pointer;
-        }
-        .play-button-center:active {
-            border-color: #000000 #ffffff #ffffff #000000;
-        }
-        .time-bar-container {
-            height: 8px;
-            background-color: #ffffff;
-            border-style: solid;
-            border-width: 1px;
-            border-color: #808080 #ffffff #ffffff #808080;
-        }
-        .time-bar-progress {
-            height: 100%;
-            width: 0%;
-            background-color: #000080;
-        }
-        .slider-container {
-            height: 8px;
-            background-color: #ffffff;
-            border-style: solid;
-            border-width: 1px;
-            border-color: #808080 #ffffff #ffffff #808080;
-            position: relative;
-        }
-        .slider-fill {
-            height: 100%;
-            background-color: #000080;
-            position: relative;
-        }
-        .slider-thumb {
-            position: absolute;
-            right: 0;
-            top: -4px;
-            width: 10px;
-            height: 14px;
-            background-color: #c0c0c0;
-            border-style: solid;
-            border-width: 2px;
-            border-color: #ffffff #000000 #000000 #ffffff;
-            cursor: pointer;
-        }
         /* Gallery Styles */
         .gallery-content-wrapper {
             position: relative;
@@ -787,7 +800,33 @@ Love and best wishes,
                 </div>
             </div>
         </div>
-        
+
+        <!-- JENDELA PRINT SIMULATION (BARU) -->
+        <div id="print-simulation-window" class="w95-base w95-window" style="width: 350px; max-width: 90%; height: auto; z-index: 40; padding: 2px;">
+            <!-- Title Bar -->
+            <div class="w95-title-bar" data-draggable="print-simulation-window">
+                <div class="title-bar-text">Print Manager - Hasil Cetak</div>
+                <div class="flex">
+                    <div class="w95-button" style="width: 14px; height: 14px; font-size: 12px; padding: 0;" onclick="closePrintSimulation()">X</div>
+                </div>
+            </div>
+            <div class="dialog-content flex flex-col items-center p-4">
+                <p class="mb-4 font-bold text-center text-sm">🎉 Hasil Cetak Photo Strip 🎉</p>
+                <div id="photoStripContainer" class="w-full flex justify-center flex-wrap">
+                    <!-- Photo Strip will be injected here by JavaScript -->
+                    <div class="w95-sunken p-5 text-center text-sm text-gray-500">
+                        Memuat hasil cetak...
+                    </div>
+                </div>
+                <p class="mt-4 text-xs text-gray-700">Dokumen telah selesai dicetak.</p>
+                <div class="mt-5">
+                    <button class="w95-button" onclick="closePrintSimulation()">
+                        OK
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <!-- JENDELA MUSIC PLAYER -->
         <div id="music-window" class="w95-base w95-window" style="width: 350px; max-width: 90%; height: auto;">
             <div class="w95-title-bar" data-draggable="music-window">
@@ -859,7 +898,8 @@ Love and best wishes,
                     <button class="w95-button" onclick="openVideoWindow('Video Kenangan', './vid1.mp4')">
                         Lihat Video
                     </button>
-                    <button class="w95-button" onclick="showMessageDialog('Cetak', 'Simulasi mencetak. Jika ini nyata, printer Anda akan mengeluarkan bunyi dengungan sekarang.')">
+                    <!-- Mengganti showMessageDialog dengan openPrintSimulation() -->
+                    <button class="w95-button" onclick="openPrintSimulation()">
                         Cetak
                     </button>
                 </div>
@@ -954,10 +994,10 @@ Love and best wishes,
         
         // Data Galeri - Menggunakan nama file lokal sesuai permintaan
         const galleryData = [
-            { id: 1, name: 'img1.jpg', url: './img1.jpg', caption: 'Foto 1: Momen Awal' },
-            { id: 2, name: 'img2.jpg', url: './img2.jpg', caption: 'Foto 2: Lagi Senang' },
-            { id: 3, name: 'img3.jpg', url: './img3.jpg', caption: 'Foto 3: Perjalanan' },
-            { id: 4, name: 'img4.jpg', url: './img4.jpg', caption: 'Foto 4: Senyuman Terbaik' },
+            { id: 1, name: 'img1.jpg', url: './img1.jpg', caption: 'Momen Awal' },
+            { id: 2, name: 'img2.jpg', url: './img2.jpg', caption: 'Lagi Senang' },
+            { id: 3, name: 'img3.jpg', url: './img3.jpg', caption: 'Perjalanan' },
+            { id: 4, name: 'img4.jpg', url: './img4.jpg', caption: 'Senyuman Terbaik' },
         ];
         let currentImageIndex = 0; 
 
@@ -1207,6 +1247,47 @@ Love and best wishes,
             messageDialog.style.display = 'none';
         }
 
+        // --- FUNGSI PRINT SIMULATION (BARU) ---
+        function generatePhotoStrip(templateClass, images, footerText) {
+            let imagesHtml = images.map(img => `
+                <div class="strip-image-frame">
+                    <img src="${img.url}" alt="${img.caption}"
+                        onerror="this.onerror=null; this.src='https://placehold.co/80x70/c0c0c0/000000?text=${img.name.replace('.jpg', '')}';">
+                </div>
+            `).join('');
+
+            return `
+                <div class="photo-strip-base ${templateClass}">
+                    ${imagesHtml}
+                    <div class="strip-text-bottom">${footerText}</div>
+                </div>
+            `;
+        }
+
+        function openPrintSimulation() {
+            const container = document.getElementById('photoStripContainer');
+            const printWindow = document.getElementById('print-simulation-window');
+            
+            // Menggunakan 4 gambar pertama
+            const images = galleryData.slice(0, 4);
+
+            // Generasi 3 strip foto dengan template berbeda
+            const strip1 = generatePhotoStrip('strip-template-1', images, 'GOOD VIBES & SMILES');
+            const strip2 = generatePhotoStrip('strip-template-2', images, '💖 You are My Love 💖');
+            const strip3 = generatePhotoStrip('strip-template-3', images, 'Always happy together');
+            
+            // Injeksi ke container
+            container.innerHTML = strip1 + strip2 + strip3;
+
+            printWindow.style.display = 'flex';
+            focusWindow(printWindow);
+        }
+
+        function closePrintSimulation() {
+            document.getElementById('print-simulation-window').style.display = 'none';
+        }
+
+
         // --- FUNGSI JENDELA VIDEO PLAYER (Termasuk Fullscreen) ---
         function openVideoWindow(videoName, videoSource) {
             closeGalleryWindow();
@@ -1230,7 +1311,7 @@ Love and best wishes,
                 let errorMessage = `Browser Anda mungkin memblokir putar otomatis. Silakan klik tombol play (▶) pada pemutar video.`;
                 
                 // Cek jika error 404/file tidak ditemukan
-                if (error.message.includes('404')) {
+                if (error.message && error.message.includes('404')) {
                      errorMessage = `File video <strong>'${videoSource.replace('./', '')}'</strong> tidak ditemukan. Pastikan Anda sudah mengunggahnya.`;
                 }
                 
@@ -1548,8 +1629,9 @@ Love and best wishes,
              // Stop audio
              hbdAudio.pause();
              isPlaying = false;
-             // Ensure video is also closed
+             // Ensure video and print window are also closed
              closeVideoWindow();
+             closePrintSimulation();
         }
 
         function handleRestart() {
