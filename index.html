@@ -10,8 +10,7 @@
         /* Menggunakan font yang menyerupai antarmuka Windows 95 */
         @font-face {
             font-family: 'W95Font';
-            /* Ini hanya placeholder, font yang lebih dekat adalah 'MS Sans Serif' atau 'Chicago', 
-               tapi kita akan menggunakan 'Inter' dan meniru gayanya. */
+            /* Ini hanya placeholder, kita akan menggunakan 'Inter' dan meniru gayanya. */
             src: url('https://fonts.gstatic.com/s/inter/v12/UuJ1lP9w3x-T3L2W8g2P0A.woff2') format('woff2');
             font-weight: 400;
             font-style: normal;
@@ -20,13 +19,12 @@
         body {
             font-family: 'W95Font', 'Inter', sans-serif;
             background-color: #0000a8; /* Warna Biru Klasik */
-            /* Mengatur body untuk menengahkan loading dialog */
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            padding: 0; /* Menghilangkan padding agar desktop fullscreen */
+            padding: 0;
             overflow: hidden;
             font-size: 11px;
         }
@@ -40,13 +38,11 @@
             box-shadow: 1px 1px 0 #000000;
         }
         
-        /* Gaya dasar untuk jendela yang bisa di-drag */
         .w95-window {
-            position: absolute; /* Penting untuk dragging */
+            position: absolute;
             display: none; 
             flex-direction: column;
-            z-index: 20; /* Jendela di atas desktop */
-            /* Posisi default di tengah */
+            z-index: 20; 
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
@@ -66,14 +62,14 @@
         }
 
         .w95-title-bar {
-            background-color: #000080; /* Biru Gelap Ikonik */
+            background-color: #000080;
             color: white;
             padding: 2px 4px;
             font-weight: bold;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            cursor: move; /* Menunjukkan bahwa bisa di-drag */
+            cursor: move;
         }
 
         .w95-button {
@@ -99,10 +95,19 @@
         }
         
         .w95-button:disabled {
-            color: #808080; /* Warna abu-abu untuk teks tombol nonaktif */
+            color: #808080;
             border-color: #c0c0c0 #c0c0c0 #c0c0c0 #c0c0c0;
             box-shadow: none;
             cursor: default;
+        }
+        
+        .window-content-wrapper {
+            padding: 10px;
+            background-color: #c0c0c0;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            overflow: auto;
         }
 
         /* --- LOADING SCREEN STYLES --- */
@@ -115,42 +120,22 @@
             padding: 2px;
         }
         
-        .dialog-content {
-            padding: 15px;
-            background-color: #c0c0c0;
-        }
-
-        /* Progress Bar Container (using w95-sunken style) */
         .progress-bar-container {
             height: 18px;
             margin-top: 10px;
             overflow: hidden;
         }
-
-        /* Progress Bar */
         .progress-bar {
             height: 100%;
             width: 0%;
-            background-color: #00ff00; /* Hijau Terang */
+            background-color: #00ff00;
             transition: width 0.3s linear;
         }
-
-        /* Animasi dipertahankan */
         .progress-bar.active {
-            background-image: linear-gradient(
-                -45deg,
-                rgba(255, 255, 255, 0.15) 25%,
-                transparent 25%,
-                transparent 50%,
-                rgba(255, 255, 255, 0.15) 50%,
-                rgba(255, 255, 255, 0.15) 75%,
-                transparent 75%,
-                transparent
-            );
+            background-image: linear-gradient(-45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
             background-size: 15px 15px;
             animation: progress-stripes 1s linear infinite;
         }
-
         @keyframes progress-stripes {
             0% { background-position: 15px 0; }
             100% { background-position: 0 0; }
@@ -158,7 +143,7 @@
 
         /* --- DESKTOP COMPONENTS --- */
         .desktop {
-            display: none; /* Awalnya disembunyikan */
+            display: none;
             width: 100vw;
             height: 100vh; 
             background-color: #0000a8; 
@@ -171,51 +156,7 @@
             justify-content: flex-start;
         }
         
-        /* Scrollbar style (Meniru tampilan Win95) */
-        .w95-scroll {
-            scrollbar-width: thin;
-            scrollbar-color: #808080 #c0c0c0;
-        }
-
-        .w95-scroll::-webkit-scrollbar {
-            width: 16px;
-            height: 16px;
-        }
-
-        .w95-scroll::-webkit-scrollbar-thumb {
-            background-color: #c0c0c0;
-            border-style: solid;
-            border-width: 1px;
-            border-color: #ffffff #808080 #808080 #ffffff;
-        }
-
-        .w95-scroll::-webkit-scrollbar-track {
-            background-color: #c0c0c0;
-        }
-
-        /* Ikon di Desktop */
-        .desktop-icon {
-            color: white;
-            text-align: center;
-            width: 60px;
-            margin: 10px 10px;
-            cursor: pointer;
-            user-select: none;
-            text-shadow: 1px 1px 0 #000000;
-        }
-
-        .icon-box {
-            display: inline-block;
-            width: 32px;
-            height: 32px;
-            background-color: #c0c0c0;
-            border: 1px solid #000000;
-            margin-bottom: 4px;
-            font-size: 20px;
-            line-height: 32px;
-        }
-
-        /* Bilah Tugas (Taskbar) */
+        /* Taskbar */
         .taskbar {
             position: absolute;
             bottom: 0;
@@ -247,260 +188,293 @@
             background: #c0c0c0;
             cursor: pointer;
         }
-
         .start-button:active {
             border-color: #000000 #ffffff #ffffff #000000;
             box-shadow: inset 1px 1px 0 #000000;
         }
 
-        .taskbar-time {
-            height: 22px;
-            padding: 0 6px;
-            font-size: 12px;
-            line-height: 22px;
+        /* --- START MENU STYLES --- */
+        #start-menu {
+            position: absolute;
+            bottom: 32px; /* Di atas taskbar */
+            left: 2px;
+            width: 200px;
+            background-color: #c0c0c0;
+            display: none;
+            flex-direction: column;
+            border-style: solid;
+            border-width: 2px;
+            border-color: #ffffff #000000 #000000 #ffffff;
+            box-shadow: 2px 2px 0 #000000;
+            z-index: 50; 
+        }
+
+        .start-menu-sidebar {
+            width: 25px;
+            background-color: #808080;
+            color: #c0c0c0;
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            padding-bottom: 5px;
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+            white-space: nowrap;
+            letter-spacing: 2px;
+            text-shadow: 1px 1px 0 #000000;
+            border-right: 2px solid #000000;
+        }
+
+        .start-menu-item {
+            display: flex;
+            align-items: center;
+            padding: 3px 5px;
+            cursor: pointer;
+            border-bottom: 1px solid transparent; 
+            border-top: 1px solid transparent;
+        }
+
+        .start-menu-item:hover {
+            background-color: #000080;
+            color: white;
+        }
+        
+        .start-menu-item-icon {
+            font-size: 16px;
+            width: 24px;
+            text-align: center;
+            margin-right: 5px;
+        }
+
+        /* Separator dan item Shutdown */
+        .start-menu-separator {
+            height: 2px;
+            margin: 2px 0;
+            background-color: #ffffff;
+            border-top: 1px solid #808080;
+        }
+        
+        .shutdown-item {
+            margin-top: auto; /* Dorong ke bawah */
+            border-top: 2px solid #808080;
         }
 
         /* --- Custom Window Styles --- */
-        #birthday-window {
-            width: 70vw; 
-            max-width: 700px; 
-            height: 75vh; 
-            max-height: 750px; 
-            min-width: 300px; 
-        }
-
-        #music-window {
-            width: 350px; 
-            max-width: 90%; 
-            height: auto;
-        }
-        
-        #cake-window {
-            width: 450px; 
-            max-width: 90%; 
-            height: auto; 
-        }
-
-        /* MESSAGE DIALOG (Reusable) */
-        #message-dialog {
-            width: 400px;
+        #notepad-window {
+            width: 450px;
             max-width: 90%;
-            z-index: 30; 
-            padding: 2px;
+            height: 350px;
         }
 
-        /* GALLERY VIEWER WINDOW */
-        #gallery-window {
-            width: 650px; 
-            max-width: 95%; 
-            height: 80vh; 
-            max-height: 750px;
-            min-width: 350px; 
-        }
-        
-        /* VIDEO PLAYER WINDOW */
-        #video-window {
-            width: 600px; 
-            max-width: 90%; 
-            height: 400px; /* Default height */
-            min-width: 300px; 
-        }
-
-        .video-container-wrapper {
-            background-color: #000000; /* Hitam agar terlihat seperti pemutar media */
+        .notepad-area {
             flex-grow: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            background-color: white;
             padding: 5px;
-        }
-
-        #mediaVideo {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            background-color: black;
-        }
-        
-        .gallery-content-wrapper {
-            padding: 15px;
-            background-color: #c0c0c0;
-            position: relative;
-            flex-grow: 1;
-            overflow: auto;
-        }
-        
-        .image-display-area {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            min-height: 350px; 
-            flex-grow: 1;
-            overflow: hidden;
-            padding-bottom: 20px;
-        }
-        
-        /* Gaya Polaroid Miring yang Diperbarui */
-        .polaroid {
-            background: white;
-            padding: 10px 10px 30px 10px; /* Padding bawah lebih besar untuk caption */
-            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5); /* Efek Shadow yang lebih kuat */
-            transform: rotate(-3deg); /* Sudut Kemiringan Default */
-            max-width: 90%;
-            max-height: 90%; 
-            box-sizing: content-box;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-            cursor: pointer;
-        }
-        
-        .polaroid:hover {
-            transform: rotate(0deg) scale(1.02); /* Sedikit tegak dan membesar saat hover */
-            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.7);
-        }
-
-        .gallery-image {
-            width: auto;
-            max-width: 100%;
-            max-height: 300px; /* Ukuran gambar yang lebih kecil di dalam bingkai */
-            object-fit: contain;
-            display: block;
-            margin: 0 auto;
-            border: 1px solid #ddd;
-        }
-        
-        .caption {
-            text-align: center;
-            font-size: 14px;
-            font-weight: bold;
-            color: #333;
-            margin-top: 10px;
-        }
-        
-        .navigation-buttons button {
-            padding: 4px 10px;
-            min-width: 100px;
-        }
-
-        .menu-bar {
-            background-color: #c0c0c0;
-            padding: 2px;
-            border-bottom: 1px solid #808080;
-        }
-
-        .menu-item {
-            margin-right: 10px;
-            cursor: default;
-        }
-        
-        .window-content-wrapper {
-            padding: 10px;
-            background-color: #c0c0c0;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-            overflow: auto;
-        }
-        
-        .birthday-header {
-            text-align: center;
-            margin-bottom: 15px;
-            padding: 5px;
-            border-bottom: 2px solid #808080;
-        }
-        
-        .birthday-title {
-            font-size: 24px;
-            font-weight: bold;
-            color: #000080;
-            text-shadow: 1px 1px 0 #ffffff;
-        }
-        
-        .birthday-main-text {
-            text-align: center;
-            font-size: 18px;
-            font-weight: bold;
-            color: #cc0000;
-            margin-bottom: 20px;
-            padding: 5px;
-            border: 2px dashed #cc0000;
-            background-color: #ffffe0;
-        }
-        
-        .message-container {
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-        }
-        
-        .message-label {
-            font-size: 11px;
-            font-weight: bold;
-            margin-bottom: 2px;
-            color: #000000;
-        }
-
-        /* Area Pesan (Simulasi text editor/notepad) */
-        .message-box-area {
-            background-color: white; 
-            padding: 10px;
-            text-align: left;
-            flex-grow: 1; 
-            overflow-y: auto;
+            font-family: 'Courier New', monospace;
             font-size: 12px;
             line-height: 1.4;
-            white-space: pre-wrap; 
-            font-family: 'Courier New', monospace; 
-            min-height: 150px;
-        }
-
-        .music-player-body {
-            background-color: #eeeeee; 
-            padding: 10px 15px;
+            resize: none;
+            border: none;
+            outline: none;
         }
         
+        /* --- SHUTDOWN SCREEN STYLES (Neon Glow) --- */
+        #shutdown-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: black;
+            color: white;
+            z-index: 10000;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .shutdown-message {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #ff00ff; /* Pink/Magenta Neon */
+            /* EFEK NEON GLOW */
+            text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 30px #ff00ff;
+            animation: pulse-glow 2s infinite alternate;
+        }
+
+        @keyframes pulse-glow {
+            0% { text-shadow: 0 0 5px #ff00ff, 0 0 10px #ff00ff; opacity: 0.8; }
+            100% { text-shadow: 0 0 15px #ff00ff, 0 0 40px #ff00ff; opacity: 1; }
+        }
+        
+        /* Responsif: Pastikan elemen terlihat bagus di perangkat kecil */
+        @media (max-width: 768px) {
+            .desktop {
+                height: 90vh;
+                margin-top: 10px;
+                padding: 5px;
+            }
+            .w95-window {
+                width: 95%; 
+                height: auto; 
+                max-height: 90vh;
+                top: 5vh; 
+                left: 2.5%; 
+                transform: none;
+            }
+            #start-menu {
+                width: 150px;
+            }
+            .shutdown-message {
+                font-size: 2rem;
+            }
+        }
+
+        /* --- STYLES FOR OTHER WINDOWS (Kept for completeness) --- */
+        .birthday-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #000080;
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #000080;
+            padding-bottom: 5px;
+        }
+        .birthday-main-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: red;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 0 #fff;
+        }
+        .message-box-area {
+            background-color: white;
+            border: 1px solid #808080;
+            padding: 10px;
+            min-height: 150px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            overflow: auto;
+        }
+        .cake-visual {
+            font-size: 100px;
+            text-align: center;
+            position: relative;
+        }
+        .candle-container {
+            position: absolute;
+            top: 25px; 
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .candle {
+            position: relative;
+            width: 10px;
+            height: 30px;
+            background-color: white;
+            border: 1px solid #000;
+        }
+        .wick {
+            position: absolute;
+            top: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 5px;
+            background-color: #5d4037;
+        }
+        .flame {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 8px;
+            height: 12px;
+            background-color: #ffcc00;
+            border-radius: 50%;
+            box-shadow: 0 0 5px #ffcc00, 0 0 10px #ff6600, 0 0 15px #ff3300;
+            animation: flicker 0.5s infinite alternate;
+        }
+        @keyframes flicker {
+            0% { transform: translate(-50%, 0) scale(1, 1); opacity: 1; }
+            50% { transform: translate(-50%, -1px) scale(0.95, 1.05); opacity: 0.9; }
+            100% { transform: translate(-50%, 0) scale(1.05, 0.95); opacity: 1; }
+        }
+        .prayer-reminder {
+            text-align: center;
+            margin-top: 10px;
+            font-style: italic;
+            font-size: 12px;
+        }
+        .action-button-group {
+            display: flex;
+            justify-content: space-around;
+            padding: 8px;
+            margin-top: 10px;
+        }
+        .desktop-icon {
+            text-align: center;
+            margin: 10px;
+            width: 60px;
+            cursor: pointer;
+            padding: 5px;
+        }
+        .desktop-icon:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 1px dotted #ffffff;
+        }
+        .icon-box {
+            font-size: 30px;
+            line-height: 1;
+        }
+        .taskbar-time {
+            padding: 0 6px;
+            height: 22px;
+            line-height: 20px;
+        }
+        /* Music Player Styles */
+        .music-player-body {
+            padding: 15px;
+            background-color: #c0c0c0;
+        }
         .play-button-center {
+            font-size: 24px;
             width: 40px;
             height: 40px;
+            line-height: 38px;
+            text-align: center;
+            border-radius: 50%;
             background-color: #c0c0c0;
             border-style: solid;
             border-width: 2px;
             border-color: #ffffff #000000 #000000 #ffffff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             cursor: pointer;
-            font-size: 20px;
-            line-height: 1;
         }
         .play-button-center:active {
             border-color: #000000 #ffffff #ffffff #000000;
-            box-shadow: inset 1px 1px 0 #000000;
         }
-
         .time-bar-container {
-            height: 10px;
-            background-color: #808080;
-            border: 1px solid #000;
-            cursor: pointer;
+            height: 8px;
+            background-color: #ffffff;
+            border-style: solid;
+            border-width: 1px;
+            border-color: #808080 #ffffff #ffffff #808080;
         }
         .time-bar-progress {
             height: 100%;
-            background-color: #000080;
             width: 0%;
+            background-color: #000080;
         }
-
         .slider-container {
-            height: 10px;
-            background-color: #c0c0c0;
+            height: 8px;
+            background-color: #ffffff;
             border-style: solid;
-            border-width: 2px;
+            border-width: 1px;
             border-color: #808080 #ffffff #ffffff #808080;
-            box-shadow: inset 1px 1px 0 #000000;
-            cursor: pointer;
             position: relative;
         }
         .slider-fill {
@@ -510,139 +484,72 @@
         }
         .slider-thumb {
             position: absolute;
-            right: -6px; 
+            right: 0;
             top: -4px;
             width: 10px;
-            height: 18px;
+            height: 14px;
             background-color: #c0c0c0;
             border-style: solid;
             border-width: 2px;
             border-color: #ffffff #000000 #000000 #ffffff;
-            cursor: grab;
+            cursor: pointer;
         }
-
-        /* --- Custom Cake & Flame Styles --- */
-        .cake-container {
+        /* Gallery Styles */
+        .gallery-content-wrapper {
+            position: relative;
+        }
+        .image-display-area {
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            padding: 20px;
-            text-align: center;
-            flex-grow: 1;
-        }
-
-        .cake-visual {
-            font-size: 80px; 
-            position: relative;
-            margin-bottom: 10px;
-        }
-
-        .candle-container {
-            position: absolute;
-            top: -20px; 
-            right: 0px; 
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            transform: translateX(50%); 
-        }
-        
-        .candle {
-            width: 6px;
-            height: 25px;
-            background-color: #f7d730; 
-            position: relative;
-            border: 1px solid #000;
-        }
-
-        .wick {
-            position: absolute;
-            top: -3px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 2px;
-            height: 4px;
-            background-color: #222;
-        }
-
-        .flame {
-            position: absolute;
-            top: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 8px;
-            height: 12px;
-            background: radial-gradient(circle at 50% 100%, #ffc000, #ff8c00 60%, transparent 80%);
-            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-            filter: drop-shadow(0 0 5px #ffcc00);
-            animation: flicker 0.2s infinite alternate; 
-        }
-
-        @keyframes flicker {
-            0% { transform: translateX(-50%) scaleY(1); opacity: 0.9; }
-            100% { transform: translateX(-50%) scaleY(0.95); opacity: 1; filter: drop-shadow(0 0 6px #ffcc00); }
-        }
-
-        .prayer-reminder {
-            font-size: 14px;
-            color: #000080;
-            font-weight: bold;
-            margin-top: 15px;
-            margin-bottom: 20px;
-            padding: 5px 10px;
-            background-color: #ffffe0; 
-            border: 1px solid #000080;
-        }
-        
-        .action-button-group {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
+            width: 100%;
             padding: 10px;
-            border-top: 1px solid #808080;
-            margin-top: auto; 
+            background-color: #808080;
+            min-height: 400px;
         }
-
-
-        /* Responsif: Pastikan elemen terlihat bagus di perangkat kecil */
-        @media (max-width: 768px) {
-            .desktop {
-                height: 90vh;
-                margin-top: 10px;
-                padding: 5px;
-            }
-            #loading-dialog {
-                width: 90%;
-            }
-            .w95-window {
-                width: 95%; 
-                height: auto; 
-                max-height: 90vh;
-                top: 5vh; 
-                left: 2.5%; 
-                transform: none; /* Hilangkan transform agar drag berfungsi relatif */
-            }
-            #birthday-window {
-                height: 85vh; 
-            }
-            #gallery-window {
-                height: 85vh;
-            }
-            #message-dialog {
-                width: 90%;
-            }
-            #video-window {
-                width: 95%;
-                height: 300px;
-            }
+        .polaroid {
+            background-color: white;
+            padding: 10px 10px 20px 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            max-width: 90%;
+            max-height: 80%;
+        }
+        .gallery-image {
+            display: block;
+            max-width: 100%;
+            max-height: 450px;
+            height: auto;
+            width: auto;
+            border: 1px solid #ccc;
+        }
+        .caption {
+            text-align: center;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        .navigation-buttons button {
+            margin: 0 5px;
+        }
+        /* Video Player Styles */
+        .video-container-wrapper {
+            flex-grow: 1;
+            background-color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #mediaVideo {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background-color: black;
         }
     </style>
 </head>
-<body>
+<body class="bg-gray-800">
 
     <!-- 1. LOADING SCREEN (Awalnya terlihat) -->
     <div id="loading-dialog" class="loading-dialog w95-base">
-        <!-- Title Bar -->
         <div class="w95-title-bar" style="cursor: default;">
             <div class="title-bar-text">Memuat Sistem Berkas...</div>
             <div class="flex">
@@ -650,23 +557,107 @@
             </div>
         </div>
 
-        <div class="dialog-content">
+        <div class="dialog-content p-4">
             <p style="font-size: 14px; margin-bottom: 15px;">
                 <strong>Memuat Antarmuka Desktop 32-bit (Simulasi)...</strong>
             </p>
-            <!-- Progress Bar (Menggunakan w95-sunken) -->
             <div class="progress-bar-container w95-sunken">
                 <div id="progressBar" class="progress-bar active"></div>
             </div>
             <p id="progressText" style="margin-top: 10px; font-size: 12px;">0% Selesai</p>
         </div>
     </div>
+    
+    <!-- 2. SHUTDOWN SCREEN (Sesuai Permintaan: Loading Hitam + Teks Neon I Love You) -->
+    <div id="shutdown-screen">
+        <div id="shutdown-text" class="shutdown-message">
+            <span class="text-4xl">💖</span> I LOVE YOU! <span class="text-4xl">✨</span>
+        </div>
+        <p class="text-xl mt-4 font-mono">Sampai jumpa lagi...</p>
+    </div>
 
-    <!-- 2. DESKTOP SCREEN (Awalnya tersembunyi) -->
+    <!-- 3. DESKTOP SCREEN (Awalnya tersembunyi) -->
     <div class="desktop" id="desktop">
         
-        <!-- HAPPY BIRTHDAY WINDOW (present.exe) -->
-        <div id="birthday-window" class="w95-base w95-window">
+        <!-- START MENU (BARU - Sesuai Permintaan) -->
+        <div id="start-menu" class="flex">
+            <!-- Sidebar Abu-abu Tua -->
+            <div class="start-menu-sidebar">
+                Sistem Ulang Tahun
+            </div>
+            <!-- Item Menu -->
+            <div class="flex flex-col w-full">
+                <!-- Pilihan Aplikasi -->
+                <div class="flex-grow flex flex-col pt-1">
+                    <div class="start-menu-item" onclick="handleStartMenuAction('ucapan')">
+                        <div class="start-menu-item-icon">💌</div>
+                        Kartu Ucapan
+                    </div>
+                    <div class="start-menu-item" onclick="handleStartMenuAction('kue')">
+                        <div class="start-menu-item-icon">🎂</div>
+                        Kue Ulang Tahun
+                    </div>
+                    <div class="start-menu-item" onclick="handleStartMenuAction('notepad')">
+                        <div class="start-menu-item-icon">📝</div>
+                        Notepad
+                    </div>
+                    <div class="start-menu-separator"></div>
+                    <div class="start-menu-item" onclick="handleStartMenuAction('restart')">
+                        <div class="start-menu-item-icon">🔄</div>
+                        Restart
+                    </div>
+                    <div class="start-menu-item" onclick="handleStartMenuAction('tentang')">
+                        <div class="start-menu-item-icon">❓</div>
+                        Tentang
+                    </div>
+                </div>
+                
+                <!-- Shutdown Item -->
+                <div class="start-menu-item shutdown-item" onclick="handleStartMenuAction('shutdown')">
+                    <div class="start-menu-item-icon">🛑</div>
+                    Shutdown
+                </div>
+            </div>
+        </div>
+        
+        <!-- JENDELA NOTEPAD (Sesuai Permintaan) -->
+        <div id="notepad-window" class="w95-base w95-window">
+            <!-- Title Bar -->
+            <div class="w95-title-bar" data-draggable="notepad-window">
+                <div class="title-bar-text">Tanpa Judul - Notepad</div>
+                <div class="flex">
+                    <div class="w95-button" style="width: 14px; height: 14px; font-size: 12px; padding: 0;">_</div>
+                    <div class="w95-button" style="width: 14px; height: 14px; font-size: 12px; padding: 0; margin-left: 2px;">&#9744;</div>
+                    <div class="w95-button" style="width: 14px; height: 14px; font-size: 12px; padding: 0; margin-left: 2px;" onclick="closeNotepadWindow()">X</div>
+                </div>
+            </div>
+
+            <!-- Menu Bar (Simplified) -->
+            <div class="menu-bar">
+                <span class="menu-item"><u>F</u>ile</span>
+                <span class="menu-item"><u>E</u>dit</span>
+                <span class="menu-item"><u>F</u>ormat</span>
+                <span class="menu-item"><u>V</u>iew</span>
+                <span class="menu-item"><u>H</u>elp</span>
+            </div>
+
+            <!-- Window Content -->
+            <div class="window-content-wrapper p-0 flex flex-col">
+                <textarea class="notepad-area w95-sunken" id="notepad-textarea">
+Selamat datang di Notepad!
+
+Ini adalah tempat untuk menuliskan semua ide brilian yang tiba-tiba muncul di kepala Anda. 
+
+Catatan Penting:
+1. Hari ini adalah hari spesial!
+2. Jangan lupa makan kue.
+3. Tetap bahagia selalu!
+                </textarea>
+            </div>
+        </div>
+
+        <!-- JENDELA KARTU UCAPAN (present.exe) -->
+        <div id="birthday-window" class="w95-base w95-window" style="width: 70vw; max-width: 700px; height: 75vh; max-height: 750px; min-width: 300px;">
             <!-- Title Bar -->
             <div class="w95-title-bar" data-draggable="birthday-window">
                 <div class="title-bar-text">HAPPY BIRTHDAY.TXT</div>
@@ -677,25 +668,14 @@
                 </div>
             </div>
 
-            <!-- Menu Bar (Simplified) -->
             <div class="menu-bar">
                 <span class="menu-item"><u>F</u>ile</span>
                 <span class="menu-item"><u>E</u>dit</span>
-                <span class="menu-item"><u>V</u>iew</span>
-                <span class="menu-item"><u>H</u>elp</span>
             </div>
 
-            <!-- Window Content -->
             <div class="window-content-wrapper w95-scroll">
-                
                 <div class="birthday-header">
-                    <div class="birthday-title">
-                        <span style="font-size: 20px; margin-right: 5px;">🎉</span>
-                        <span style="font-size: 20px; color: #ff4500; margin-right: 5px;">❤️</span>
-                        HAPPY BIRTHDAY
-                        <span style="font-size: 20px; color: #ff4500; margin-left: 5px;">❤️</span>
-                        <span style="font-size: 20px; margin-left: 5px;">🎉</span>
-                    </div>
+                    <div class="birthday-title">🎉 ❤️ HAPPY BIRTHDAY ❤️ 🎉</div>
                 </div>
 
                 <div class="birthday-main-text">
@@ -725,71 +705,11 @@ Love and best wishes,
 - Teman Terbaikmu
                     </div>
                 </div>
-
             </div>
         </div>
         
-        <!-- MUSIC PLAYER WINDOW (music.mp3) -->
-        <div id="music-window" class="w95-base w95-window">
-            <!-- Title Bar -->
-            <div class="w95-title-bar" data-draggable="music-window">
-                <div class="title-bar-text">MUSIC_PLAYER.EXE</div>
-                <div class="flex">
-                    <div class="w95-button" style="width: 14px; height: 14px; font-size: 12px; padding: 0;">_</div>
-                    <div class="w95-button" style="width: 14px; height: 14px; font-size: 12px; padding: 0; margin-left: 2px;">&#9744;</div>
-                    <div class="w95-button" style="width: 14px; height: 14px; font-size: 12px; padding: 0; margin-left: 2px;" onclick="closeMusicWindow()">X</div>
-                </div>
-            </div>
-
-            <!-- Elemen Audio untuk pemutaran musik -->
-            <audio id="hbdAudio" src="./hbd.mp3" preload="auto" loop></audio>
-
-            <!-- Window Content (Background Putih/Cerah) -->
-            <div class="music-player-body flex flex-col items-center">
-                <!-- Status/Judul Lagu -->
-                <div class="text-center mb-3">
-                    <p id="trackTitle" class="font-bold text-sm">hbd.mp3</p>
-                    <p class="text-xs">Ulang Tahun Klasik</p>
-                </div>
-                
-                <!-- Tombol Putar (Ikon Tengah) -->
-                <div id="playPauseButton" class="play-button-center mb-5" onclick="togglePlayback()">
-                    <span id="playIcon">▶</span> 
-                </div>
-
-                <!-- Waktu Pemutaran -->
-                <div class="flex justify-between w-full text-xs mb-1">
-                    <span id="currentTimeDisplay">00:00</span>
-                    <span id="durationDisplay">00:00</span>
-                </div>
-                
-                <!-- Bar Waktu (Time Bar) -->
-                <div class="time-bar-container w-full mb-5">
-                    <div id="timeBarProgress" class="time-bar-progress"></div>
-                </div>
-
-                <!-- Kontrol Volume -->
-                <div class="flex items-center w-full">
-                    <!-- Ikon Speaker -->
-                    <span class="text-xl mr-2">🔊</span>
-                    
-                    <!-- Slider Volume (Fungsional) -->
-                    <div id="volumeSliderContainer" class="slider-container flex-grow">
-                        <div id="volumeSliderFill" class="slider-fill" style="width: 70%;">
-                            <div class="slider-thumb" id="volumeSliderThumb"></div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Status Bar di Bawah (Fungsional) -->
-                <div class="w95-sunken w-full mt-4 text-center text-xs p-1" style="height: 20px; line-height: 14px;">
-                    <span id="playbackStatus">READY</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- CAKE.ME WINDOW (TIUP LILIN) -->
-        <div id="cake-window" class="w95-base w95-window">
+        <!-- JENDELA CAKE.ME (TIUP LILIN) -->
+        <div id="cake-window" class="w95-base w95-window" style="width: 450px; max-width: 90%; height: auto;">
             <!-- Title Bar -->
             <div class="w95-title-bar" data-draggable="cake-window">
                 <div class="title-bar-text">CAKE.ME - TIUP LILIN</div>
@@ -817,7 +737,6 @@ Love and best wishes,
                         </div>
                     </div>
                     
-                    <!-- Pesan Pengingat Doa -->
                     <p class="prayer-reminder w-full">
                         jangan lupa berdoa dulu yaa sebelum tiup lilin...
                     </p>
@@ -846,8 +765,8 @@ Love and best wishes,
             </div>
         </div>
 
-        <!-- MESSAGE DIALOG (Modal Pop-up, Digunakan untuk Doa & Pesan) -->
-        <div id="message-dialog" class="w95-base w95-window">
+        <!-- MESSAGE DIALOG (Modal Pop-up) -->
+        <div id="message-dialog" class="w95-base w95-window" style="width: 400px; max-width: 90%; z-index: 30; padding: 2px;">
             <!-- Title Bar -->
             <div class="w95-title-bar" data-draggable="message-dialog">
                 <div class="title-bar-text" id="messageTitle">PESAN SISTEM</div>
@@ -856,7 +775,7 @@ Love and best wishes,
                 </div>
             </div>
             
-            <div class="dialog-content flex flex-col items-center">
+            <div class="dialog-content flex flex-col items-center p-4">
                 <div id="messageContent" class="w-full text-center">
                     <!-- Isi Pesan Masuk Di Sini -->
                 </div>
@@ -867,10 +786,49 @@ Love and best wishes,
                 </div>
             </div>
         </div>
+        
+        <!-- JENDELA MUSIC PLAYER -->
+        <div id="music-window" class="w95-base w95-window" style="width: 350px; max-width: 90%; height: auto;">
+            <div class="w95-title-bar" data-draggable="music-window">
+                <div class="title-bar-text">MUSIC_PLAYER.EXE</div>
+                <div class="flex">
+                    <div class="w95-button" style="width: 14px; height: 14px; font-size: 12px; padding: 0;">_</div>
+                    <div class="w95-button" style="width: 14px; height: 14px; font-size: 12px; padding: 0; margin-left: 2px;">&#9744;</div>
+                    <div class="w95-button" style="width: 14px; height: 14px; font-size: 12px; padding: 0; margin-left: 2px;" onclick="closeMusicWindow()">X</div>
+                </div>
+            </div>
+            <audio id="hbdAudio" src="./hbd.mp3" preload="auto" loop></audio>
+            <div class="music-player-body flex flex-col items-center">
+                <div class="text-center mb-3">
+                    <p id="trackTitle" class="font-bold text-sm">hbd.mp3</p>
+                    <p class="text-xs">Ulang Tahun Klasik</p>
+                </div>
+                <div id="playPauseButton" class="play-button-center mb-5" onclick="togglePlayback()">
+                    <span id="playIcon">▶</span> 
+                </div>
+                <div class="flex justify-between w-full text-xs mb-1">
+                    <span id="currentTimeDisplay">00:00</span>
+                    <span id="durationDisplay">00:00</span>
+                </div>
+                <div class="time-bar-container w-full mb-5">
+                    <div id="timeBarProgress" class="time-bar-progress"></div>
+                </div>
+                <div class="flex items-center w-full">
+                    <span class="text-xl mr-2">🔊</span>
+                    <div id="volumeSliderContainer" class="slider-container flex-grow">
+                        <div id="volumeSliderFill" class="slider-fill" style="width: 70%;">
+                            <div class="slider-thumb" id="volumeSliderThumb"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="w95-sunken w-full mt-4 text-center text-xs p-1" style="height: 20px; line-height: 14px;">
+                    <span id="playbackStatus">READY</span>
+                </div>
+            </div>
+        </div>
 
-        <!-- GALLERY VIEWER WINDOW (gallery.jpg) -->
-        <div id="gallery-window" class="w95-base w95-window">
-            <!-- Title Bar -->
+        <!-- JENDELA GALLERY VIEWER -->
+        <div id="gallery-window" class="w95-base w95-window" style="width: 650px; max-width: 95%; height: 80vh; max-height: 750px; min-width: 350px;">
             <div class="w95-title-bar" data-draggable="gallery-window">
                 <div class="title-bar-text">GALLERY VIEWER</div>
                 <div class="flex">
@@ -879,23 +837,15 @@ Love and best wishes,
                     <div class="w95-button" style="width: 14px; height: 14px; font-size: 12px; padding: 0; margin-left: 2px;" onclick="closeGalleryWindow()">X</div>
                 </div>
             </div>
-
-            <!-- Window Content -->
-            <div class="gallery-content-wrapper flex flex-col items-center w95-scroll">
-                <!-- Counter -->
+            <div class="gallery-content-wrapper flex flex-col items-center w95-scroll p-4">
                 <div class="w95-raised absolute top-3 right-3 p-1 text-xs" id="imageCounter">1/4</div>
-
-                <!-- Image Display Area -->
-                <div class="image-display-area">
-                    <div class="polaroid">
-                        <!-- Path relatif lokal: './imgX.jpg' -->
+                <div class="image-display-area" style="min-height: 350px;">
+                    <div class="polaroid" style="transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;">
                         <img id="currentImage" src="" alt="Galeri Foto" class="gallery-image"
                              onerror="this.onerror=null; this.src='https://placehold.co/400x300/808080/ffffff?text=FOTO\nGAGAL\n(Pastikan\nFile\ndiunggah)';">
                         <div class="caption" id="imageCaption">Caption Foto</div>
                     </div>
                 </div>
-                
-                <!-- Navigation Buttons -->
                 <div class="navigation-buttons w-full flex justify-center py-4 px-2 mt-auto">
                     <button id="prevButton" class="w95-button" onclick="showPrevImage()">
                         &lt; Sebelumnya
@@ -903,7 +853,6 @@ Love and best wishes,
                     <button id="nextButton" class="w95-button" onclick="showNextImage()">
                         Berikutnya &gt;
                     </button>
-                    <!-- TOMBOL INI MEMANGGIL FUNGSI UNTUK MEMUTAR VIDEO -->
                     <button class="w95-button" onclick="openVideoWindow('vid1.mp4')">
                         Lihat Video (vid1.mp4)
                     </button>
@@ -914,9 +863,8 @@ Love and best wishes,
             </div>
         </div>
 
-        <!-- VIDEO PLAYER WINDOW (vid1.mp4) -->
-        <div id="video-window" class="w95-base w95-window">
-            <!-- Title Bar -->
+        <!-- JENDELA VIDEO PLAYER -->
+        <div id="video-window" class="w95-base w95-window" style="width: 600px; max-width: 90%; height: 400px; min-width: 300px;">
             <div class="w95-title-bar" data-draggable="video-window">
                 <div class="title-bar-text">MEDIA PLAYER - vid1.mp4</div>
                 <div class="flex">
@@ -937,37 +885,32 @@ Love and best wishes,
 
         <!-- Ikon Desktop -->
         <div class="flex flex-col items-start p-2">
-            
-            <!-- ICON: present.exe -->
-            <div class="desktop-icon" onclick="openBirthdayWindow()">
+            <div class="desktop-icon" onclick="openBirthdayWindow(); closeStartMenu();">
                 <div class="icon-box">🎁</div>
                 <span class="text-xs">present.exe</span>
             </div>
-
-            <!-- ICON: music.mp3 -->
-            <div class="desktop-icon" onclick="openMusicWindow()">
+            <div class="desktop-icon" onclick="openMusicWindow(); closeStartMenu();">
                 <div class="icon-box">🎧</div>
                 <span class="text-xs">music.mp3</span>
             </div>
-
-            <!-- ICON: cake.me -->
-            <div class="desktop-icon" onclick="openCakeWindow()">
+            <div class="desktop-icon" onclick="openCakeWindow(); closeStartMenu();">
                 <div class="icon-box">🎂</div>
                 <span class="text-xs">cake.me</span>
             </div>
-            
-            <!-- ICON: gallery.jpg (MEMANGGIL FUNGSI GALLERY) -->
-            <div class="desktop-icon" onclick="openGalleryWindow()">
+            <div class="desktop-icon" onclick="openGalleryWindow(); closeStartMenu();">
                 <div class="icon-box">🖼️</div>
                 <span class="text-xs">gallery.jpg</span>
+            </div>
+            <div class="desktop-icon" onclick="openNotepadWindow(); closeStartMenu();">
+                <div class="icon-box">📝</div>
+                <span class="text-xs">notepad.exe</span>
             </div>
         </div>
         
         <!-- Taskbar -->
         <div class="taskbar">
-            <div class="start-button w95-raised" onclick="showMessageDialog('Menu Start', 'Maaf, menu Start ini hanya pajangan. Semua sudah ada di Desktop!')">
+            <div class="start-button w95-raised" id="startButton" onclick="toggleStartMenu()">
                 <span class="mr-1">
-                    <!-- Icon Windows Logo Placeholder -->
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                         <path d="M1 1L1 15L15 15L15 1L1 1Z" fill="#C0C0C0" stroke="black" stroke-width="1"/>
                         <path d="M1 1L15 1L15 15L1 15L1 1Z" fill="#C0C0C0" stroke="black" stroke-width="1"/>
@@ -978,7 +921,6 @@ Love and best wishes,
                 Start
             </div>
             
-            <!-- Tombol Taskbar Dummy -->
             <div class="w95-button w95-sunken mr-2 flex items-center" 
                 onclick="showMessageDialog('GameTerbaik.exe', 'GameTerbaik.exe saat ini tidak aktif. Silakan nikmati aplikasi ulang tahun ini!')"
                 style="height: 25px; line-height: 22px; padding: 0 4px;">
@@ -986,7 +928,7 @@ Love and best wishes,
                 GameTerbaik
             </div>
 
-            <div class="flex-grow"></div> <!-- Spacer -->
+            <div class="flex-grow"></div> 
 
             <div class="w95-sunken taskbar-time">
                 <span id="currentTime">00:00 AM</span>
@@ -999,9 +941,10 @@ Love and best wishes,
         const progressText = document.getElementById('progressText');
         const loadingDialog = document.getElementById('loading-dialog');
         const desktop = document.getElementById('desktop');
+        const startMenu = document.getElementById('start-menu');
+        const startButton = document.getElementById('startButton');
+        const shutdownScreen = document.getElementById('shutdown-screen');
         
-        const windows = document.querySelectorAll('.w95-window');
-        let activeWindow = null; 
         let maxZIndex = 20;
 
         let progress = 0;
@@ -1013,12 +956,12 @@ Love and best wishes,
         let isDraggingVolume = false; 
         let isDraggingTime = false; 
         
-        // Data Galeri - menggunakan path relatif
+        // Data Galeri
         const galleryData = [
-            { id: 1, name: 'img1.jpg', url: './img1.jpg', caption: 'img1.jpg: Foto kenangan lama.' },
-            { id: 2, name: 'img2.jpg', url: './img2.jpg', caption: 'img2.jpg: Momen paling seru.' },
-            { id: 3, name: 'img3.jpg', url: './img3.jpg', caption: 'img3.jpg: Perjalanan ke sana.' },
-            { id: 4, name: 'img4.jpg', url: './img4.jpg', caption: 'img4.jpg: Senyuman terhangat.' },
+            { id: 1, name: 'img1.jpg', url: 'https://placehold.co/400x300/c0c0c0/000000?text=FOTO+1', caption: 'Foto kenangan lama.' },
+            { id: 2, name: 'img2.jpg', url: 'https://placehold.co/400x300/c0c0c0/000000?text=FOTO+2', caption: 'Momen paling seru.' },
+            { id: 3, name: 'img3.jpg', url: 'https://placehold.co/400x300/c0c0c0/000000?text=FOTO+3', caption: 'Perjalanan ke sana.' },
+            { id: 4, name: 'img4.jpg', url: 'https://placehold.co/400x300/c0c0c0/000000?text=FOTO+4', caption: 'Senyuman terhangat.' },
         ];
         let currentImageIndex = 0; 
 
@@ -1028,7 +971,6 @@ Love and best wishes,
         function focusWindow(windowElement) {
             maxZIndex++;
             windowElement.style.zIndex = maxZIndex;
-            // Di sini Anda juga bisa menambahkan logika untuk mengubah border title bar jika perlu
         }
         
         /**
@@ -1044,15 +986,12 @@ Love and best wishes,
                 let isDragging = false;
                 let offsetX, offsetY;
                 
-                // Fungsi untuk memulai drag
                 const startDrag = (clientX, clientY) => {
                     isDragging = true;
-                    // Pastikan jendela diatur ke posisi absolut
                     if (windowElement.style.position !== 'absolute') {
                         windowElement.style.position = 'absolute';
                     }
                     
-                    // Hapus transform jika ada, hitung offset
                     const rect = windowElement.getBoundingClientRect();
                     windowElement.style.transform = 'none'; 
                     offsetX = clientX - rect.left;
@@ -1061,14 +1000,12 @@ Love and best wishes,
                     focusWindow(windowElement);
                 };
 
-                // Fungsi untuk menggerakkan jendela
                 const drag = (clientX, clientY) => {
                     if (!isDragging) return;
                     
                     const newLeft = clientX - offsetX;
                     const newTop = clientY - offsetY;
                     
-                    // Batasi pergerakan di dalam desktop
                     const maxX = desktop.clientWidth - windowElement.offsetWidth;
                     const maxY = desktop.clientHeight - windowElement.offsetHeight;
 
@@ -1076,14 +1013,13 @@ Love and best wishes,
                     windowElement.style.top = Math.max(0, Math.min(newTop, maxY)) + 'px';
                 };
 
-                // Fungsi untuk menghentikan drag
                 const stopDrag = () => {
                     isDragging = false;
                 };
 
-                // --- Mouse Events ---
+                // --- Event Listeners ---
                 titleBar.addEventListener('mousedown', (e) => {
-                    if (e.target.closest('.w95-button')) return; // Abaikan jika mengklik tombol kontrol
+                    if (e.target.closest('.w95-button')) return; 
                     e.preventDefault();
                     startDrag(e.clientX, e.clientY);
                 });
@@ -1091,7 +1027,6 @@ Love and best wishes,
                 document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
                 document.addEventListener('mouseup', stopDrag);
 
-                // --- Touch Events ---
                 titleBar.addEventListener('touchstart', (e) => {
                     if (e.target.closest('.w95-button')) return;
                     e.preventDefault();
@@ -1108,7 +1043,6 @@ Love and best wishes,
 
                 document.addEventListener('touchend', stopDrag);
                 
-                // Set listener untuk fokus saat mengklik bagian mana pun dari jendela
                 windowElement.addEventListener('mousedown', () => focusWindow(windowElement));
                 windowElement.addEventListener('touchstart', () => focusWindow(windowElement));
             });
@@ -1126,10 +1060,12 @@ Love and best wishes,
         /**
          * Simulates the loading process.
          */
-        function startLoading() {
+        function startLoading(onCompleteCallback = onLoadingComplete) {
             loadingDialog.style.display = 'block';
             desktop.style.display = 'none';
-            document.body.style.padding = '0';
+            progressBar.style.width = '0%';
+            progressText.textContent = '0% Selesai';
+            progressBar.classList.add('active');
             
             const startTime = Date.now();
             
@@ -1143,7 +1079,7 @@ Love and best wishes,
                 if (progress >= 100) {
                     clearInterval(interval);
                     progressBar.classList.remove('active');
-                    onLoadingComplete();
+                    setTimeout(onCompleteCallback, 500); 
                 }
             }, updateInterval);
         }
@@ -1152,21 +1088,90 @@ Love and best wishes,
          * Hides the loading dialog and shows the desktop environment.
          */
         function onLoadingComplete() {
-            setTimeout(() => {
-                loadingDialog.style.display = 'none';
-                document.body.style.display = 'block';
-                document.body.style.padding = '0';
-                desktop.style.display = 'flex'; 
-                
-                openBirthdayWindow();
-                
+            loadingDialog.style.display = 'none';
+            document.body.style.display = 'block';
+            desktop.style.display = 'flex'; 
+            
+            openBirthdayWindow();
+            
+            // Setup hanya dilakukan sekali
+            if (!hbdAudio.initialized) {
                 setupVolumeSlider();
                 setupTimeBar();
                 setupAudioListeners();
-                setupWindowDragging(); // Tambahkan fungsi drag
-            }, 500);
+                setupWindowDragging(); 
+                hbdAudio.initialized = true;
+            }
         }
         
+        // --- FUNGSI MENU START ---
+        function toggleStartMenu() {
+            const isVisible = startMenu.style.display === 'flex';
+            if (isVisible) {
+                closeStartMenu();
+            } else {
+                startMenu.style.display = 'flex';
+                // Tekan tombol Start secara visual
+                startButton.style.borderColor = '#000000 #ffffff #ffffff #000000';
+                startButton.style.boxShadow = 'inset 1px 1px 0 #000000';
+            }
+        }
+        
+        function closeStartMenu() {
+            startMenu.style.display = 'none';
+            // Kembalikan tombol Start ke posisi normal
+            startButton.style.borderColor = '#ffffff #000000 #000000 #ffffff';
+            startButton.style.boxShadow = '1px 1px 0 #000000';
+        }
+        
+        function handleStartMenuAction(action) {
+            closeStartMenu();
+
+            switch (action) {
+                case 'ucapan':
+                    openBirthdayWindow();
+                    break;
+                case 'kue':
+                    openCakeWindow();
+                    break;
+                case 'notepad':
+                    openNotepadWindow();
+                    break;
+                case 'restart':
+                    handleRestart();
+                    break;
+                case 'tentang':
+                    showMessageDialog('Tentang Sistem', 'Sistem Ulang Tahun versi 95.27. Dibuat dengan cinta dan nostalgia. (c) 2025');
+                    break;
+                case 'shutdown':
+                    handleShutdown();
+                    break;
+                default:
+                    // do nothing
+            }
+        }
+        
+        // Menutup menu start jika mengklik di luar
+        document.addEventListener('mousedown', (e) => {
+            const target = e.target;
+            // Tutup jika tidak mengklik menu itu sendiri atau tombol start
+            if (startMenu.style.display === 'flex' && !startMenu.contains(target) && target !== startButton && !startButton.contains(target)) {
+                closeStartMenu();
+            }
+        });
+        
+        // --- FUNGSI JENDELA NOTEPAD ---
+        function openNotepadWindow() {
+            const notepadWindow = document.getElementById('notepad-window');
+            notepadWindow.style.display = 'flex';
+            focusWindow(notepadWindow);
+        }
+
+        function closeNotepadWindow() {
+            const notepadWindow = document.getElementById('notepad-window');
+            notepadWindow.style.display = 'none';
+        }
+
         // --- FUNGSI JENDELA PRESENT.EXE ---
         function openBirthdayWindow() {
             const birthdayWindow = document.getElementById('birthday-window');
@@ -1206,56 +1211,30 @@ Love and best wishes,
             messageDialog.style.display = 'none';
         }
 
-        // --- FUNGSI JENDELA VIDEO PLAYER BARU ---
+        // --- FUNGSI JENDELA VIDEO PLAYER ---
         function openVideoWindow(filename) {
-            // Tutup Galeri saat membuka video
             closeGalleryWindow();
-
             const videoWindow = document.getElementById('video-window');
             const videoContainer = document.getElementById('videoContainer');
             const videoElement = document.getElementById('mediaVideo');
 
-            // 1. Atur sumber video dan judul
             videoElement.src = filename;
             const titleBarText = videoWindow.querySelector('.w95-title-bar .title-bar-text');
             titleBarText.textContent = `MEDIA PLAYER - ${filename}`;
             
-            // 2. Tampilkan jendela dan fokuskan
             videoWindow.style.display = 'flex';
             focusWindow(videoWindow);
 
-            // 3. Coba putar dan fullscreen (Harus dipanggil dari user gesture)
+            // Attempt to play and fullscreen (may fail due to browser security)
             const playAndFullscreen = () => {
-                // Pastikan video dimuat sebelum diputar
                 videoElement.load();
-                
-                videoElement.play().then(() => {
-                    // Sukses: Coba fullscreen pada kontainer video
-                    if (videoContainer.requestFullscreen) {
-                        videoContainer.requestFullscreen();
-                    } else if (videoContainer.webkitRequestFullscreen) { /* Safari */
-                        videoContainer.webkitRequestFullscreen();
-                    } else if (videoContainer.msRequestFullscreen) { /* IE11 */
-                        videoContainer.msRequestFullscreen();
-                    }
-                    
-                    // Hapus event listener tambahan setelah berhasil dipicu
-                    videoWindow.removeEventListener('click', playAndFullscreen);
-                    videoWindow.removeEventListener('touchstart', playAndFullscreen);
-
-                }).catch(error => {
+                videoElement.play().catch(error => {
                     console.error("Autoplay/Play Gagal:", error);
-                    // Tampilkan pesan error jika putar otomatis gagal
-                    showMessageDialog('Video Error', `Browser Anda mungkin memblokir putar otomatis atau fullscreen. Silakan klik tombol play (▶) di pemutar video. Error: ${error.message}`);
+                    // Inform user if autoplay failed
+                    showMessageDialog('Video Error', `Browser Anda mungkin memblokir putar otomatis. Silakan klik tombol play (▶) di pemutar video. Error: ${error.message}`);
                 });
             };
 
-            // Tambahkan listener untuk pemicu ganda jika play otomatis gagal
-            // Listener ini akan mencoba play/fullscreen lagi jika user mengklik jendela
-            videoWindow.addEventListener('click', playAndFullscreen, { once: true });
-            videoWindow.addEventListener('touchstart', playAndFullscreen, { once: true });
-            
-            // Panggil segera karena sudah dipicu oleh klik tombol
             playAndFullscreen();
         }
 
@@ -1263,46 +1242,38 @@ Love and best wishes,
             const videoWindow = document.getElementById('video-window');
             const videoElement = document.getElementById('mediaVideo');
             
-            // 1. Pause video
             videoElement.pause();
-            videoElement.src = ""; // Kosongkan sumber untuk menghemat memori
+            videoElement.src = "";
             
-            // 2. Keluar dari fullscreen jika aktif
+            // Exit fullscreen if active (cleanup)
             if (document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement) {
                 if (document.exitFullscreen) {
                     document.exitFullscreen();
-                } else if (document.webkitExitFullscreen) { /* Safari */
+                } else if (document.webkitExitFullscreen) { 
                     document.webkitExitFullscreen();
-                } else if (document.msExitFullscreen) { /* IE11 */
+                } else if (document.msExitFullscreen) { 
                     document.msExitFullscreen();
                 }
             }
             
-            // 3. Sembunyikan jendela
             videoWindow.style.display = 'none';
         }
 
         
         // --- FUNGSI JENDELA GALLERY VIEWER ---
-        /**
-         * Memperbarui tampilan galeri dengan data saat ini.
-         */
         function updateGalleryView() {
             const image = galleryData[currentImageIndex];
             const prevButton = document.getElementById('prevButton');
             const nextButton = document.getElementById('nextButton');
             const polaroidElement = document.querySelector('.polaroid');
 
-            // MENGGUNAKAN PATH RELATIF DI SINI
             document.getElementById('currentImage').src = image.url;
-            document.getElementById('imageCaption').textContent = image.caption; // Menampilkan nama file di caption
+            document.getElementById('imageCaption').textContent = image.caption; 
             document.getElementById('imageCounter').textContent = `${currentImageIndex + 1}/${galleryData.length}`;
             
-            // Atur sudut miring acak untuk setiap gambar (membuatnya terlihat lebih organik)
-            const rotation = (Math.random() * 6 - 3).toFixed(2); // Antara -3.00 deg dan 3.00 deg
+            const rotation = (Math.random() * 6 - 3).toFixed(2); 
             polaroidElement.style.transform = `rotate(${rotation}deg)`;
 
-            // Kelola status tombol navigasi dan gaya Win95
             const isFirst = currentImageIndex === 0;
             const isLast = currentImageIndex === galleryData.length - 1;
 
@@ -1315,28 +1286,19 @@ Love and best wishes,
             nextButton.classList.toggle('w95-raised', !isLast);
         }
 
-        /**
-         * Membuka jendela Galeri.
-         */
         function openGalleryWindow() {
             const galleryWindow = document.getElementById('gallery-window');
             galleryWindow.style.display = 'flex';
-            currentImageIndex = 0; // Reset ke gambar pertama saat dibuka
+            currentImageIndex = 0; 
             updateGalleryView();
             focusWindow(galleryWindow);
         }
 
-        /**
-         * Menutup jendela Galeri.
-         */
         function closeGalleryWindow() {
             const galleryWindow = document.getElementById('gallery-window');
             galleryWindow.style.display = 'none';
         }
 
-        /**
-         * Menampilkan gambar sebelumnya.
-         */
         function showPrevImage() {
             if (currentImageIndex > 0) {
                 currentImageIndex--;
@@ -1344,9 +1306,6 @@ Love and best wishes,
             }
         }
 
-        /**
-         * Menampilkan gambar berikutnya.
-         */
         function showNextImage() {
             if (currentImageIndex < galleryData.length - 1) {
                 currentImageIndex++;
@@ -1396,7 +1355,7 @@ Love and best wishes,
                 });
                 statusElement.textContent = 'MEMUTAR';
                 iconElement.textContent = '■'; 
-                trackTitle.textContent = 'hbd.mp3';
+                trackTitle.textContent = 'MEMUTAR hbd.mp3';
             } else {
                 hbdAudio.pause();
                 statusElement.textContent = 'DIJEDA';
@@ -1429,7 +1388,6 @@ Love and best wishes,
                 document.getElementById('playbackStatus').textContent = `Volume: ${volumeLevel}%`;
             };
 
-            // --- Mouse Events ---
             sliderContainer.addEventListener('mousedown', (e) => {
                 isDraggingVolume = true;
                 handleVolumeChange(e.clientX);
@@ -1448,22 +1406,19 @@ Love and best wishes,
                     document.getElementById('playbackStatus').textContent = 'MEMUTAR';
                 }
             });
-
-            // --- Touch Events ---
+            
+            // Touch listeners
             sliderContainer.addEventListener('touchstart', (e) => {
                 isDraggingVolume = true;
-                e.preventDefault();
-                const touch = e.touches[0];
-                handleVolumeChange(touch.clientX);
-            }, { passive: false });
+                handleVolumeChange(e.touches[0].clientX);
+            });
 
             document.addEventListener('touchmove', (e) => {
                 if (isDraggingVolume) {
-                    e.preventDefault();
-                    const touch = e.touches[0];
-                    handleVolumeChange(touch.clientX);
+                    e.preventDefault(); 
+                    handleVolumeChange(e.touches[0].clientX);
                 }
-            }, { passive: false });
+            });
 
             document.addEventListener('touchend', () => {
                 isDraggingVolume = false;
@@ -1490,7 +1445,6 @@ Love and best wishes,
                 }
             };
             
-            // --- Mouse Events ---
             timeBarContainer.addEventListener('mousedown', (e) => {
                 isDraggingTime = true;
                 handleTimeChange(e.clientX);
@@ -1507,21 +1461,18 @@ Love and best wishes,
                 isDraggingTime = false;
             });
             
-            // --- Touch Events ---
+            // Touch listeners
             timeBarContainer.addEventListener('touchstart', (e) => {
                 isDraggingTime = true;
-                e.preventDefault();
-                const touch = e.touches[0];
-                handleTimeChange(touch.clientX);
-            }, { passive: false });
-
+                handleTimeChange(e.touches[0].clientX);
+            });
+            
             document.addEventListener('touchmove', (e) => {
                 if (isDraggingTime) {
                     e.preventDefault();
-                    const touch = e.touches[0];
-                    handleTimeChange(touch.clientX);
+                    handleTimeChange(e.touches[0].clientX);
                 }
-            }, { passive: false });
+            });
 
             document.addEventListener('touchend', () => {
                 isDraggingTime = false;
@@ -1567,6 +1518,53 @@ Love and best wishes,
             });
         }
 
+        // --- FUNGSI RESTART & SHUTDOWN ---
+
+        function closeAllWindows() {
+             // Close all windows
+             document.querySelectorAll('.w95-window').forEach(win => win.style.display = 'none');
+             // Stop audio
+             hbdAudio.pause();
+             isPlaying = false;
+        }
+
+        function handleRestart() {
+            closeAllWindows();
+            
+            // 1. Tampilkan loading screen dengan title Restart
+            loadingDialog.querySelector('.title-bar-text').textContent = "Restarting Windows...";
+            loadingDialog.querySelector('strong').textContent = "Memulai Ulang Sistem Ulang Tahun...";
+            
+            startLoading(() => {
+                // Setelah loading selesai, kembalikan ke kondisi awal desktop
+                loadingDialog.querySelector('.title-bar-text').textContent = "Memuat Sistem Berkas...";
+                loadingDialog.querySelector('strong').textContent = "Memuat Antarmuka Desktop 32-bit (Simulasi)...";
+                onLoadingComplete();
+            });
+        }
+
+        function handleShutdown() {
+            closeAllWindows();
+            
+            // 1. Tampilkan loading screen dengan title Shutdown
+            loadingDialog.querySelector('.title-bar-text').textContent = "Shutting Down...";
+            loadingDialog.querySelector('strong').textContent = "Mematikan Sistem...";
+            
+            shutdownScreen.style.opacity = 0; // Pastikan opacity 0 sebelum loading
+            shutdownScreen.style.display = 'flex';
+            
+            startLoading(() => {
+                // 2. Sembunyikan loading screen dan tampilkan Shutdown Screen dengan efek
+                loadingDialog.style.display = 'none';
+                desktop.style.display = 'none';
+                
+                // Transisi halus ke layar hitam penuh
+                setTimeout(() => {
+                    shutdownScreen.style.opacity = 1;
+                }, 50); 
+            });
+        }
+
 
         // Setel waktu di Taskbar
         function updateTime() {
@@ -1593,7 +1591,7 @@ Love and best wishes,
                 const isMenu = e.currentTarget.classList.contains('menu-item');
                 
                 if (isControl || isMenu) {
-                    e.preventDefault();
+                    // Hanya mencegah aksi default, biarkan fungsi onclick berjalan
                 }
             });
         });
