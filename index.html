@@ -317,26 +317,35 @@
             padding-bottom: 20px;
         }
         
+        /* Gaya Polaroid Miring yang Diperbarui */
         .polaroid {
             background: white;
-            padding: 10px 10px 30px 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-            transform: rotate(-1deg); 
+            padding: 10px 10px 30px 10px; /* Padding bawah lebih besar untuk caption */
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5); /* Efek Shadow yang lebih kuat */
+            transform: rotate(-3deg); /* Sudut Kemiringan */
             max-width: 90%;
+            max-height: 90%; 
             box-sizing: content-box;
-            max-height: 100%;
             display: flex;
             flex-direction: column;
             justify-content: center;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            cursor: pointer;
         }
         
+        .polaroid:hover {
+            transform: rotate(0deg) scale(1.02); /* Sedikit tegak dan membesar saat hover */
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.7);
+        }
+
         .gallery-image {
             width: auto;
             max-width: 100%;
-            max-height: 80%; /* Batasi agar caption tetap terlihat */
+            max-height: 300px; /* Ukuran gambar yang lebih kecil di dalam bingkai */
             object-fit: contain;
             display: block;
             margin: 0 auto;
+            border: 1px solid #ddd;
         }
         
         .caption {
@@ -853,7 +862,7 @@ Love and best wishes,
                     <div class="polaroid">
                         <!-- Path relatif lokal: './imgX.jpg' -->
                         <img id="currentImage" src="" alt="Galeri Foto" class="gallery-image"
-                             onerror="this.onerror=null; this.src='https://placehold.co/400x400/808080/ffffff?text=FOTO\nGAGAL\n(Pastikan\nFile\ndiunggah)';">
+                             onerror="this.onerror=null; this.src='https://placehold.co/400x300/808080/ffffff?text=FOTO\nGAGAL\n(Pastikan\nFile\ndiunggah)';">
                         <div class="caption" id="imageCaption">Caption Foto</div>
                     </div>
                 </div>
@@ -925,7 +934,7 @@ Love and best wishes,
             <div class="w95-button w95-sunken mr-2 flex items-center" 
                 onclick="showMessageDialog('GameTerbaik.exe', 'GameTerbaik.exe saat ini tidak aktif. Silakan nikmati aplikasi ulang tahun ini!')"
                 style="height: 25px; line-height: 22px; padding: 0 4px;">
-                <img src="https://placehold.co/16x16/c0c0c0/000?text=G" onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2IiBmaWxsPSIjYzBjMGMwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZpbGw9IiMwMDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJjZW50cmFsIiBmb250LXNpemU9IjEycHgiIGZvbnQtZmFtaWx5PSJpbnRlciI+RzwvdGV4dD48L3N2Zz4='" alt="Icon" class="mr-1 border border-black">
+                <img src="https://placehold.co/16x16/c0c0c0/000?text=G" onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2IiBmaWxsPSIjYzBjMGMwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZpbGw9IiMwMDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJjZW50cmFsIiBmb250LXNpemU9IjEycHgiIGZvbnQtZmFtaWx5PSJpbnRlciI+RzwvdGV4dD48L3N2Zy4+'" alt="Icon" class="mr-1 border border-black">
                 GameTerbaik
             </div>
 
@@ -1172,11 +1181,16 @@ Love and best wishes,
             const image = galleryData[currentImageIndex];
             const prevButton = document.getElementById('prevButton');
             const nextButton = document.getElementById('nextButton');
+            const polaroidElement = document.querySelector('.polaroid');
 
             // MENGGUNAKAN PATH RELATIF DI SINI
             document.getElementById('currentImage').src = image.url;
             document.getElementById('imageCaption').textContent = image.caption; // Menampilkan nama file di caption
             document.getElementById('imageCounter').textContent = `${currentImageIndex + 1}/${galleryData.length}`;
+            
+            // Atur sudut miring acak untuk setiap gambar (membuatnya terlihat lebih organik)
+            const rotation = (Math.random() * 6 - 3).toFixed(2); // Antara -3.00 deg dan 3.00 deg
+            polaroidElement.style.transform = `rotate(${rotation}deg)`;
 
             // Kelola status tombol navigasi dan gaya Win95
             const isFirst = currentImageIndex === 0;
