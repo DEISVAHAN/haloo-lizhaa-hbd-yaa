@@ -116,7 +116,7 @@
         .photo-strip-base {
             width: 90px;
             height: 380px;
-            padding: 10px 8px;
+            padding: 10px 8px; /* Total size: 106px x 400px (Content + Padding) */
             border-radius: 12px;
             box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
             display: flex;
@@ -1325,7 +1325,7 @@ Love and best wishes,
         /**
          * Mengonversi semua photo strip menjadi gambar PNG dan memicu unduhan.
          * Telah diperbaiki dengan menambahkan dimensi width/height eksplisit ke html2canvas
-         * untuk menghindari masalah rasio aspek ("gepeng").
+         * dan skala yang ditingkatkan (scale: 5) untuk mencegah masalah rasio aspek ("gepeng").
          */
         async function downloadStrips() {
             const strips = document.querySelectorAll('#photoStripContainer .photo-strip-base');
@@ -1343,18 +1343,27 @@ Love and best wishes,
             for (let i = 0; i < strips.length; i++) {
                 const strip = strips[i];
                 
-                // FIX: Dapatkan dimensi aktual elemen untuk memastikan rasio aspek benar
+                // 1. Dapatkan dimensi aktual elemen (termasuk padding)
                 const width = strip.offsetWidth;
                 const height = strip.offsetHeight;
+
+                // DEBUGGING: Tampilkan dimensi untuk memverifikasi rasio
+                if (i === 0) {
+                     showMessageDialog('Debug Dimensi (Percobaan Akhir)', 
+                        `Dimensi Photo Strip ke-1 yang diambil: <strong>${width}px x ${height}px</strong>. 
+                        Rasio diharapkan: 106px x 400px (Content 90x380 + Padding 8/10). 
+                        Jika hasil masih gepeng, dimensi ini mungkin salah di browser Anda.`
+                    );
+                }
                 
                 // Hilangkan efek hover/transformasi sebelum mengonversi
                 strip.style.transform = 'none'; 
                 
                 await html2canvas(strip, { 
-                    scale: 3, // Skala tinggi untuk resolusi yang lebih baik
+                    scale: 5, // Skala yang DITINGKATKAN untuk resolusi dan akurasi yang lebih baik
                     useCORS: true,
                     backgroundColor: null,
-                    // Tambahkan dimensi eksplisit untuk mencegah rasio aspek gepeng
+                    // Tetapkan dimensi eksplisit yang terdeteksi
                     width: width,
                     height: height,
                 }).then(canvas => {
