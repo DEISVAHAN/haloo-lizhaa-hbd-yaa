@@ -126,6 +126,7 @@
             overflow: hidden;
             margin: 0 5px;
             transition: transform 0.3s ease;
+            cursor: pointer; /* Agar terasa interaktif */
         }
         .photo-strip-base:hover {
             transform: scale(1.03) rotate(1deg);
@@ -404,6 +405,50 @@
             }
         }
 
+        /* --- GALLERY STYLES ADJUSTMENTS (PENYESUAIAN UKURAN GAMBAR) --- */
+        .image-display-area {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding: 10px;
+            background-color: #808080;
+            min-height: 300px; /* Sedikit lebih kecil */
+        }
+        .polaroid {
+            background-color: white;
+            padding: 8px 8px 16px 8px; /* Padding lebih kecil */
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+            max-width: 95%;
+            max-height: 90%;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .gallery-image {
+            display: block;
+            max-width: 350px; /* Max lebar gambar */
+            max-height: 250px; /* Max tinggi gambar agar tidak terlalu besar */
+            height: auto;
+            width: auto;
+            border: 1px solid #ccc;
+            object-fit: cover; /* Memastikan gambar menutupi area tanpa distorsi besar */
+        }
+        
+        /* --- VIDEO PLAYER STYLES ADJUSTMENTS (PENYESUAIAN UKURAN VIDEO) --- */
+        .video-container-wrapper {
+            flex-grow: 1;
+            background-color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 5px; /* Tambahkan padding di sekitar video */
+        }
+        #mediaVideo {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* PENTING: Memastikan video terlihat penuh tanpa terpotong di dalam wadahnya */
+            background-color: black;
+        }
+
         /* --- STYLES FOR OTHER WINDOWS (Kept for completeness) --- */
         .birthday-title {
             font-size: 2.5rem;
@@ -511,31 +556,7 @@
         .gallery-content-wrapper {
             position: relative;
         }
-        .image-display-area {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            padding: 10px;
-            background-color: #808080;
-            min-height: 400px;
-        }
-        .polaroid {
-            background-color: white;
-            padding: 10px 10px 20px 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-            max-width: 90%;
-            max-height: 80%;
-            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-        }
-        .gallery-image {
-            display: block;
-            max-width: 100%;
-            max-height: 450px;
-            height: auto;
-            width: auto;
-            border: 1px solid #ccc;
-        }
+        
         .caption {
             text-align: center;
             font-size: 14px;
@@ -543,20 +564,6 @@
         }
         .navigation-buttons button {
             margin: 0 5px;
-        }
-        /* Video Player Styles */
-        .video-container-wrapper {
-            flex-grow: 1;
-            background-color: black;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        #mediaVideo {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            background-color: black;
         }
     </style>
 </head>
@@ -898,7 +905,7 @@ Love and best wishes,
                     <button class="w95-button" onclick="openVideoWindow('Video Kenangan', './vid1.mp4')">
                         Lihat Video
                     </button>
-                    <!-- Mengganti showMessageDialog dengan openPrintSimulation() -->
+                    <!-- Tombol Cetak yang memanggil simulasi cetak -->
                     <button class="w95-button" onclick="openPrintSimulation()">
                         Cetak
                     </button>
@@ -1288,7 +1295,7 @@ Love and best wishes,
         }
 
 
-        // --- FUNGSI JENDELA VIDEO PLAYER (Termasuk Fullscreen) ---
+        // --- FUNGSI JENDELA VIDEO PLAYER (Tanpa Fullscreen Otomatis) ---
         function openVideoWindow(videoName, videoSource) {
             closeGalleryWindow();
             const videoWindow = document.getElementById('video-window');
@@ -1301,17 +1308,14 @@ Love and best wishes,
             videoWindow.style.display = 'flex';
             focusWindow(videoWindow);
             
-            // Muat ulang video dan coba putar
+            // Muat ulang video dan coba putar (tanpa memaksa fullscreen)
             videoElement.load();
-            videoElement.play().then(() => {
-                // Berhasil diputar, masuk ke mode fullscreen
-                enterFullscreen(videoWindow);
-            }).catch(error => {
+            videoElement.play().catch(error => {
                 console.error("Autoplay/Play Gagal:", error);
                 let errorMessage = `Browser Anda mungkin memblokir putar otomatis. Silakan klik tombol play (▶) pada pemutar video.`;
                 
                 // Cek jika error 404/file tidak ditemukan
-                if (error.message && error.message.includes('404')) {
+                if (error.message && error.message.includes('404') || error.message.includes('file not found')) {
                      errorMessage = `File video <strong>'${videoSource.replace('./', '')}'</strong> tidak ditemukan. Pastikan Anda sudah mengunggahnya.`;
                 }
                 
@@ -1320,22 +1324,7 @@ Love and best wishes,
         }
         
         /**
-         * Memaksa elemen untuk masuk ke mode fullscreen.
-         */
-        function enterFullscreen(element) {
-            if (element.requestFullscreen) {
-                element.requestFullscreen();
-            } else if (element.mozRequestFullScreen) { /* Firefox */
-                element.mozRequestFullScreen();
-            } else if (element.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
-                element.webkitRequestFullscreen();
-            } else if (element.msRequestFullscreen) { /* IE/Edge */
-                element.msRequestFullscreen();
-            }
-        }
-        
-        /**
-         * Menutup jendela video dan keluar dari mode fullscreen.
+         * Menutup jendela video.
          */
         function closeVideoWindow() {
             const videoWindow = document.getElementById('video-window');
@@ -1343,17 +1332,6 @@ Love and best wishes,
             
             videoElement.pause();
             videoElement.src = ""; // Kosongkan src untuk menghemat memori
-            
-            // Keluar dari fullscreen jika aktif
-            if (document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement) {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                } else if (document.webkitExitFullscreen) { 
-                    document.webkitExitFullscreen();
-                } else if (document.msExitFullscreen) { 
-                    document.msExitFullscreen();
-                }
-            }
             
             videoWindow.style.display = 'none';
         }
