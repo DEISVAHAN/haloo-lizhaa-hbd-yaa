@@ -112,11 +112,13 @@
 
         /* --- Custom Window Styles --- */
         
-        /* Photo Strip Styles (NEW) */
+        /* Photo Strip Styles (FIXED DIMENSIONS) */
         .photo-strip-base {
+            /* Dimensi Konten: 90px x 380px */
             width: 90px;
             height: 380px;
-            padding: 10px 8px; /* Total size: 106px x 400px (Content + Padding) */
+            /* Padding: 10px T/B, 8px K/K. Total: 106px x 400px */
+            padding: 10px 8px; 
             border-radius: 12px;
             box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
             display: flex;
@@ -126,7 +128,7 @@
             overflow: hidden;
             margin: 0 5px;
             transition: transform 0.3s ease;
-            cursor: pointer; /* Agar terasa interaktif */
+            cursor: pointer; 
         }
         .photo-strip-base:hover {
             transform: scale(1.03) rotate(1deg);
@@ -1324,8 +1326,8 @@ Love and best wishes,
         
         /**
          * Mengonversi semua photo strip menjadi gambar PNG dan memicu unduhan.
-         * Telah diperbaiki dengan menambahkan dimensi width/height eksplisit ke html2canvas
-         * dan skala yang ditingkatkan (scale: 5) untuk mencegah masalah rasio aspek ("gepeng").
+         * Telah diperbaiki dengan hardcoding dimensi dasar (106x400) dan skala tinggi (5)
+         * untuk memaksa rasio aspek yang benar dan mencegah masalah "gepeng".
          */
         async function downloadStrips() {
             const strips = document.querySelectorAll('#photoStripContainer .photo-strip-base');
@@ -1339,33 +1341,25 @@ Love and best wishes,
             statusText.textContent = 'Memproses unduhan... Jangan tutup jendela ini.';
             
             let downloadCount = 0;
+            
+            // Dimensi dasar yang diketahui pasti dari CSS (Content 90x380 + Padding 8/10)
+            const KNOWN_BASE_WIDTH = 106; 
+            const KNOWN_BASE_HEIGHT = 400; 
+            const SCALE = 5;
 
             for (let i = 0; i < strips.length; i++) {
                 const strip = strips[i];
-                
-                // 1. Dapatkan dimensi aktual elemen (termasuk padding)
-                const width = strip.offsetWidth;
-                const height = strip.offsetHeight;
-
-                // DEBUGGING: Tampilkan dimensi untuk memverifikasi rasio
-                if (i === 0) {
-                     showMessageDialog('Debug Dimensi (Percobaan Akhir)', 
-                        `Dimensi Photo Strip ke-1 yang diambil: <strong>${width}px x ${height}px</strong>. 
-                        Rasio diharapkan: 106px x 400px (Content 90x380 + Padding 8/10). 
-                        Jika hasil masih gepeng, dimensi ini mungkin salah di browser Anda.`
-                    );
-                }
                 
                 // Hilangkan efek hover/transformasi sebelum mengonversi
                 strip.style.transform = 'none'; 
                 
                 await html2canvas(strip, { 
-                    scale: 5, // Skala yang DITINGKATKAN untuk resolusi dan akurasi yang lebih baik
+                    scale: SCALE, 
                     useCORS: true,
                     backgroundColor: null,
-                    // Tetapkan dimensi eksplisit yang terdeteksi
-                    width: width,
-                    height: height,
+                    // MEMAKSA DIMENSI: Ini mengatasi masalah aspek rasio yang tidak konsisten
+                    width: KNOWN_BASE_WIDTH,
+                    height: KNOWN_BASE_HEIGHT,
                 }).then(canvas => {
                     // Gunakan PNG untuk kualitas terbaik
                     const imageURL = canvas.toDataURL("image/png");
